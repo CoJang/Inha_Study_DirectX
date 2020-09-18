@@ -4,8 +4,13 @@
 class MyCube
 {
 private:
+	MyVector3 OriginVertex[8];
 	MyVector3 vertex[8];
+	
 	MyVector3 position;
+	MyVector3 dir;
+	float	  velocity;
+	float	  angle;
 
 	MyMatrix ScaleMat;
 	MyMatrix RotateMat;
@@ -23,5 +28,6 @@ public:
 	inline MyVector3 GetPos() { return position; };
 
 	void DrawLine(HDC hdc, MyVector3 & v1, MyVector3 & v2);
+	void DrawCube(HDC hdc);
 };
 

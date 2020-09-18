@@ -21,3 +21,12 @@
 // TODO: reference additional headers your program requires here
 #include "MyMatrix.h"
 #include "MyVector3.h"
+
+#include <iostream>
+using namespace std;
+
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif

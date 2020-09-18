@@ -98,7 +98,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static MyMatrix ViewMat;
 	static MyMatrix ProjMat;
 	static MyMatrix Viewport_Mat;
-	static MyVector3 CameraPos(0, 1, -5);
+	static MyVector3 CameraPos(0, 0, -5);
 	static MyVector3 CameraLookAt(0, 0, 0);
 	static MyVector3 CameraUp(0, 1, 0);
     switch (message)
@@ -106,14 +106,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		{
 			Cube = new MyCube;
-			Cube->InitCube(1, 1, 1, 0.3f);
+			Cube->InitCube(0, 0, 0, 1.0f);
 			
-			CameraPos.Normalize();
 			CameraLookAt = Cube->GetPos() - CameraPos;
 			CameraLookAt.Normalize();
 			ViewMat = MyMatrix::View(CameraPos, CameraLookAt, CameraUp);
-			ProjMat = MyMatrix::Projection(45, 4/3, 1, 1000);
-			Viewport_Mat = MyMatrix::Viewport(0, 0, 300, 300, 0, 1);
+			ProjMat = MyMatrix::Projection(90, 4/3.0f, 1, 1000);
+			Viewport_Mat = MyMatrix::Viewport(0, 0, 800, 600, 0, 1);
+
+			SetTimer(hWnd, 0, 33, NULL);
 		}
 		break;
     case WM_COMMAND:
@@ -139,11 +140,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
+			CameraLookAt = Cube->GetPos() - CameraPos;
+			CameraLookAt.Normalize();
+			ViewMat = MyMatrix::View(CameraPos, CameraLookAt, CameraUp);
 			Cube->Update(ViewMat * ProjMat * Viewport_Mat);
 			Cube->Render(hdc);
             EndPaint(hWnd, &ps);
         }
         break;
+	case WM_TIMER:
+		InvalidateRgn(hWnd, NULL, true);
+		break;
     case WM_DESTROY:
 		delete Cube;
         PostQuitMessage(0);

@@ -251,7 +251,7 @@ MyMatrix MyMatrix::ScaleMatrix(float x, float y, float z)
 
 MyMatrix MyMatrix::RotationX(float angle)
 {
-	MyMatrix RotMat(4);
+	MyMatrix RotMat = Identity(4);
 	RotMat[1][1] = cos(Deg2Rad(angle));  RotMat[1][2] = sin(Deg2Rad(angle));
 	RotMat[2][1] = -sin(Deg2Rad(angle)); RotMat[2][2] = cos(Deg2Rad(angle));
 	return RotMat;
@@ -259,7 +259,7 @@ MyMatrix MyMatrix::RotationX(float angle)
 
 MyMatrix MyMatrix::RotationY(float angle)
 {
-	MyMatrix RotMat(4);
+	MyMatrix RotMat = Identity(4);
 	RotMat[0][0] = cos(Deg2Rad(angle));  RotMat[0][2] = -sin(Deg2Rad(angle));
 	RotMat[2][0] = sin(Deg2Rad(angle)); RotMat[2][2] = cos(Deg2Rad(angle));
 	return RotMat;
@@ -267,7 +267,7 @@ MyMatrix MyMatrix::RotationY(float angle)
 
 MyMatrix MyMatrix::RotationZ(float angle)
 {
-	MyMatrix RotMat(4);
+	MyMatrix RotMat = Identity(4);
 	RotMat[0][0] = cos(Deg2Rad(angle));  RotMat[0][1] = sin(Deg2Rad(angle));
 	RotMat[1][1] = -sin(Deg2Rad(angle)); RotMat[1][1] = cos(Deg2Rad(angle));
 	return RotMat;
