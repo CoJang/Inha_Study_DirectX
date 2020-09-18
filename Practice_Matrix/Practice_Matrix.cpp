@@ -10,10 +10,12 @@ int main()
 	MyMatrix Matrix2(3);
 	MyMatrix Matrix3(3);
 
-	Matrix1[0][0] = 1;  Matrix1[0][1] = 7;  Matrix1[0][2] = 4;
-	Matrix1[1][0] = 0; Matrix1[1][1] = 9;  Matrix1[1][2] = 4;
-	Matrix1[2][0] = 8; Matrix1[2][1] = 8; Matrix1[2][2] = 2;
+	Matrix1[0][0] = 2;  Matrix1[0][1] = 0;  Matrix1[0][2] = 1;
+	Matrix1[1][0] = 0; Matrix1[1][1] = -1;  Matrix1[1][2] = -3;
+	Matrix1[2][0] = 0; Matrix1[2][1] = 0; Matrix1[2][2] = 1;
 	MyMatrix::PrintMatrix(Matrix1);
+
+	MyMatrix::PrintMatrix(MyMatrix::InverseMatrix(Matrix1));
 
 	Matrix3 = MyMatrix::InverseMatrix(Matrix1) * Matrix1;
 	MyMatrix::PrintMatrix(Matrix3);

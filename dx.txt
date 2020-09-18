@@ -1,0 +1,102 @@
+== 09 / 16 ==
+
+* 벡터의 위치가 달라도, "크기"와 "방향"이 같다면 같은 벡터라고 한다.
+* Dx 는 왼손 좌표계 ( z축이 모니터 안으로 들어가면 양수 )
+* 벡터의 표기 V(x, y, z, w)
+
+// 부동 소수점 수를 비교할 때 필요한 함수. 
+const float EPSILON = 0.0001f;
+bool Equals( float lhs, floa t rhs )
+{
+   return fabs( lhs - rhs ) < EPSILON ? true : false; 
+}
+
+* 벡터의 크기 계산 [ ||u|| = sqrt( u.x^2 + u.y^2 + u.z^2 ) ]
+* FLOAT D3DXVec3Length() return 벡터의 크기
+
+벡터의 정규화 : 벡터의 크기를 1로 만들어 단위 벡터로 만듦.
+* U / ||U||
+* D3DXVECTOR3 *D3DXVec3Normalize() return 정규화 된 벡터
+
+벡터의 합 : "같은 차원"의 벡터를 각 성분끼리 더하면 된다.
+벡터의 차 : "같은 차원"의 벡터를 각 성분끼리 빼면 된다.
+* 벡터의 차는 캐릭터를 바라보도록 할 때 쓸 수 있다.
+* 대상을 바라보는 캐릭터의 벡터 = [ 바라볼 대상 - 바라보는 캐릭터 ]
+
+벡터의 스칼라 곱 : 벡터의 각 성분에 스칼라를 곱하면 된다.
+* 음수를 곱해주는 경우, 벡터의 방향이 반전된다.(뒤돌기)
+
+== 벡터의 내적 == 
+* Dot Product
+* 벡터의 내적으로 생선된 값(스칼라)는 두 벡터의 각을 나타내는 값이다. (cos세타)
+방법 1. 각 성분들을 곱한 후, 모두 더해준다.
+방법 2. 두 벡터 크기의 곱 * 코사인 세타(두 벡터 사잇각) [ || u || * || v || * cos세타 ]
+
+따라서 내적 값이 0이라면 수직, 
+0보다 크다면 90도 보다 작고,
+0보다 작다면 90도 보다 크다.
+
+이를 응용하면 두 벡터의 사잇각을 구하고 싶을 때, 내적하면 된다.
+* D3DVec3Dot
+
+== 벡터의 외적 ==
+* Cross Product
+* 벡터의 외적으로 생성된 값(벡터)은 두 벡터에 모두 직각을 이루는 벡터이다.
+
+3성분 벡터의 외적
+C.x = A.y * B.z - A.z * B.y
+C.y = A.z * B.x - A.x * B.z
+C.z = A.x * B.y - A.y * B.x
+
+* D3DXVec3Cross
+
+== 09 / 18 ==
+
+4x4 행렬에서 w 가 1이면 점 이동, 0이면 벡터 이동이다.
+
+Local Space = 상대 좌표
+
+// 월드공간으로 옮기려면..
+SRT = World Matrix = Scale * Rotation * Translation
+
+ // 이동행렬     // 크기 변형 행렬      
+[1, 0, 0, 0]      [x, 0, 0, 0] 
+[0, 1, 0, 0]      [0, y, 0, 0]
+[0, 0, 1, 0]      [0, 0, z, 0]
+[x, y, z, 1]      [0, 0, 0, 1]
+
+  // x축 회전행렬		  // y축 회전행렬		  // z축 회전행렬
+[1,    0,	 0,	  0]	[cosθ, 0,  -sinθ, 0]	[ cosθ,  sinθ,  0,  0]
+[0,  cosθ,  sinθ, 0]	[0,    1,    0,   0]	[-sinθ,  cosθ,  0,  0]
+[0, -sinθ,  cosθ, 0]	[sinθ, 0,   cosθ, 0]	[  0,	  0,    1,  0]
+[0,    0,	 0,	  1]	[0,    0,	 0,	  1]	[  0,     0,	0,	1]
+
+
+View Matrix [ l = Look Vector, r = Right Vector, u = Up Vector ]
+
+	r.x			u.x			l.x		0
+	r.y			u.y			l.y		0
+	r.z			u.z			l.z		0
+-r dot eye  -u dot eye  -l dot eye  0
+
+
+Projection Matrix
+	 sy = cot(fovY / 2) => 1.0f / tanf(fovY / 2.0f)
+	 sx = sy / aspect
+ 
+	 sx     0         0           0
+	 0     sy         0           0 
+	 0      0     fz/(fz-nz)      1
+	 0      0  -fz*nz/(fz - nz)   0
+
+Viewport
+	  w / 2.0f,       0,             0,       0
+	     0,        -h/2.0f,          0,       0
+	     0,           0,	     maxz-minz,   0
+	 x+(w/2.0f),  y+(h/2.0f),       minz,     1
+
+
+
+
+
+

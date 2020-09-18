@@ -5,6 +5,8 @@
 #define Deg2Rad(x) (x * PI / 180)
 #define Rad2Deg(x) (x / PI * 180)
 
+class MyMatrix;
+
 class MyVector3
 {
 public:
@@ -25,5 +27,9 @@ public:
 	static float Angle(MyVector3 & v1, MyVector3 & v2);
 	float Length();
 	MyVector3 Normalize();
+
+	// >> :
+	static MyVector3 TransformCoord(MyVector3 & vec, MyMatrix & mat);  // 점 이동
+	static MyVector3 TransformNormal(MyVector3 & vec, MyMatrix & mat); // 벡터 이동
 };
 

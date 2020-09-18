@@ -29,7 +29,7 @@ float & MyMatrix::cRow::operator[](int index)
 MyMatrix::MyMatrix()
 	:Rows()
 {
-	Dimension = 1;
+	Dimension = 4;
 	Rows = new cRow[Dimension];
 
 	for (int i = 0; i < Dimension; i++)
@@ -217,6 +217,102 @@ MyMatrix MyMatrix::TransposeMatrix(MyMatrix & mat)
 	}
 
 	return temp;
+}
+
+MyMatrix MyMatrix::Identity(int dimension)
+{
+	MyMatrix idMat(dimension);
+	for (int i = 0; i < dimension; i++)
+		idMat[i][i] = 1;
+
+	return idMat;
+}
+
+MyMatrix MyMatrix::Translation(float x, float y, float z)
+{
+	MyMatrix TransMat = Identity(4);
+	TransMat[3][0] = x; TransMat[3][1] = y; TransMat[3][2] = z;
+	return TransMat;
+}
+
+MyMatrix MyMatrix::Translation(MyVector3& vec)
+{
+	MyMatrix TransMat = Identity(4);
+	TransMat[3][0] = vec.x; TransMat[3][1] = vec.y; TransMat[3][2] = vec.z;
+	return TransMat;
+}
+
+MyMatrix MyMatrix::ScaleMatrix(float x, float y, float z)
+{
+	MyMatrix ScaleMat = Identity(4);
+	ScaleMat[0][0] = x; ScaleMat[1][1] = y; ScaleMat[2][2] = z; ScaleMat[3][3] = 1;
+	return ScaleMat;
+}
+
+MyMatrix MyMatrix::RotationX(float angle)
+{
+	MyMatrix RotMat(4);
+	RotMat[1][1] = cos(Deg2Rad(angle));  RotMat[1][2] = sin(Deg2Rad(angle));
+	RotMat[2][1] = -sin(Deg2Rad(angle)); RotMat[2][2] = cos(Deg2Rad(angle));
+	return RotMat;
+}
+
+MyMatrix MyMatrix::RotationY(float angle)
+{
+	MyMatrix RotMat(4);
+	RotMat[0][0] = cos(Deg2Rad(angle));  RotMat[0][2] = -sin(Deg2Rad(angle));
+	RotMat[2][0] = sin(Deg2Rad(angle)); RotMat[2][2] = cos(Deg2Rad(angle));
+	return RotMat;
+}
+
+MyMatrix MyMatrix::RotationZ(float angle)
+{
+	MyMatrix RotMat(4);
+	RotMat[0][0] = cos(Deg2Rad(angle));  RotMat[0][1] = sin(Deg2Rad(angle));
+	RotMat[1][1] = -sin(Deg2Rad(angle)); RotMat[1][1] = cos(Deg2Rad(angle));
+	return RotMat;
+}
+
+// lookat = target - eye
+MyMatrix MyMatrix::View(MyVector3& eye, MyVector3& lookat, MyVector3& up)
+{
+	MyVector3 right = MyVector3::Cross(up, lookat);
+	MyVector3 newUp = MyVector3::Cross(lookat, right).Normalize();
+	
+	MyMatrix viewMat(4);
+	viewMat[0][0] = right.x; viewMat[0][1] = newUp.x; viewMat[0][2] = lookat.x;
+	viewMat[1][0] = right.y; viewMat[1][1] = newUp.y; viewMat[1][2] = lookat.y;
+	viewMat[2][0] = right.z; viewMat[2][1] = newUp.z; viewMat[2][2] = lookat.z;
+	viewMat[3][0] = MyVector3::Dot(right * -1, eye);
+	viewMat[3][1] = MyVector3::Dot(newUp * -1, eye);
+	viewMat[3][2] = MyVector3::Dot(lookat * -1, eye);
+
+	return viewMat;
+}
+
+MyMatrix MyMatrix::Projection(float fovY, float aspect, float nearz, float farz)
+{
+	float sy = 1.0f / tanf(Deg2Rad(fovY / 2.0f));
+	float sx = sy / aspect;
+
+	MyMatrix projMat(4);
+	projMat[0][0] = sx; projMat[0][1] = 0;  projMat[0][2] = 0;
+	projMat[1][0] = 0;  projMat[1][1] = sy; projMat[1][2] = 0;
+	projMat[2][0] = 0;  projMat[2][1] = 0;  projMat[2][2] = farz / (farz - nearz); projMat[2][3] = 1;
+	projMat[3][0] = 0;  projMat[3][1] = 0;  projMat[3][2] = -farz*nearz / (farz - nearz);
+
+	return projMat;
+}
+
+MyMatrix MyMatrix::Viewport(float x, float y, float w, float h, float minz, float maxz)
+{
+	MyMatrix viewMat(4);
+	viewMat[0][0] = w / 2.0f;		viewMat[0][1] = 0;			viewMat[0][2] = 0;
+	viewMat[1][0] = 0;				viewMat[1][1] = -h/2.0f;	viewMat[1][2] = 0;
+	viewMat[2][0] = 0;				viewMat[2][1] = 0;			viewMat[2][2] = maxz-minz;
+	viewMat[3][0] = x + (w/2.0f);	viewMat[3][1] = y+(h/2.0f); viewMat[3][2] = minz; viewMat[3][3] = 1;
+	
+	return viewMat;
 }
 
 float MyMatrix::Cofactor(int row, int col)

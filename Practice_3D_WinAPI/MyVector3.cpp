@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MyVector3.h"
-#include <math.h>
-
+#include <cmath>
 
 MyVector3::MyVector3()
 	: x(0.0f), y(0.0f), z(0.0f)
@@ -12,7 +11,6 @@ MyVector3::MyVector3(float _x, float _y, float _z)
 	:x(_x), y(_y), z(_z)
 {
 }
-
 
 MyVector3::~MyVector3()
 {
@@ -73,4 +71,29 @@ MyVector3 MyVector3::Normalize()
 {
 	*this = *this / Length();
 	return *this;
+}
+
+MyVector3 MyVector3::TransformCoord(MyVector3& vec, MyMatrix& mat)
+{
+	float w = 0;
+	MyVector3 moved(0, 0,0 );
+	moved.x = vec.x * mat[0][0] + vec.y * mat[1][0] + vec.z * mat[2][0] + 1.0 * mat[3][0];
+	moved.y = vec.x * mat[0][1] + vec.y * mat[1][1] + vec.z * mat[2][1] + 1.0 * mat[3][1];
+	moved.z = vec.x * mat[0][2] + vec.y * mat[1][2] + vec.z * mat[2][2] + 1.0 * mat[3][2];
+	w =       vec.x * mat[0][3] + vec.y * mat[1][3] + vec.z * mat[2][3] + 1.0 * mat[3][3];
+	moved.x = moved.x / w;
+	moved.y = moved.y / w;
+	moved.z = moved.z / w;
+	return moved;
+}
+
+MyVector3 MyVector3::TransformNormal(MyVector3& vec, MyMatrix& mat)
+
+{
+	MyVector3 moved = vec;
+	moved.x = vec.x * mat[0][0] + vec.y * mat[0][1] + vec.z * mat[0][2] + 0 * mat[0][3];
+	moved.y = vec.x * mat[1][0] + vec.y * mat[1][1] + vec.z * mat[1][2] + 0 * mat[1][3];
+	moved.z = vec.x * mat[2][0] + vec.y * mat[2][1] + vec.z * mat[2][2] + 0 * mat[2][3];
+
+	return moved;
 }
