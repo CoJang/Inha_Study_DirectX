@@ -140,8 +140,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
-			CameraLookAt = Cube->GetPos() - CameraPos;
-			CameraLookAt.Normalize();
+			//CameraLookAt = Cube->GetPos() - CameraPos;
+			//CameraLookAt.Normalize();
 			ViewMat = MyMatrix::View(CameraPos, CameraLookAt, CameraUp);
 			Cube->Update(ViewMat * ProjMat * Viewport_Mat);
 			Cube->Render(hdc);
