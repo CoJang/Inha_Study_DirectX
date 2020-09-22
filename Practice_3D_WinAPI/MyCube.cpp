@@ -29,15 +29,11 @@ void MyCube::InitCube(float pos_x, float pos_y, float pos_z, float cube_size)
 	ScaleMat = MyMatrix::ScaleMatrix(1, 1, 1);
 	RotateMat = MyMatrix::Identity(4);
 	TransMat = MyMatrix::Translation(0, 0, 0);
-	LeftRotMat = MyMatrix::Identity(4);
-	RightRotMat = MyMatrix::Identity(4);
 	WorldMat = MyMatrix::Identity(4);
 }
 
 void MyCube::Update(MyMatrix & viewport_mat)
 {
-	LeftRotMat = MyMatrix::RotationY(+5.0f);
-	RightRotMat = MyMatrix::RotationY(-5.0f);
 	velocity = 0;
 	
 	// 'W' = 0x57 'A' = 0x41 'S' = 0x53 'D' = 0x44
@@ -47,7 +43,7 @@ void MyCube::Update(MyMatrix & viewport_mat)
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		dir = MyVector3::TransformNormal(dir, LeftRotMat).Normalize();
+		dir = MyVector3::TransformNormal(dir, MyMatrix::RotationY(5)).Normalize();
 		angle -= 5.0f;
 	}
 	if (GetKeyState('S') & 0x8000)
@@ -56,7 +52,7 @@ void MyCube::Update(MyMatrix & viewport_mat)
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		dir = MyVector3::TransformNormal(dir, RightRotMat).Normalize();
+		dir = MyVector3::TransformNormal(dir, MyMatrix::RotationY(-5)).Normalize();
 		angle += 5.0f;
 	}
 	else
