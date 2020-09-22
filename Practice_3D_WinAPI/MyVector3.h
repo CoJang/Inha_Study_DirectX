@@ -18,6 +18,7 @@ public:
 	bool operator==(MyVector3 & vec);
 	bool operator!=(MyVector3 & vec);
 	MyVector3 operator+(MyVector3 & vec);
+	MyVector3 operator+=(MyVector3 & vec) { *this = *this + vec; return *this; }
 	MyVector3 operator-(MyVector3 & vec);
 	MyVector3 operator*(float k);
 	MyVector3 operator/(float k);

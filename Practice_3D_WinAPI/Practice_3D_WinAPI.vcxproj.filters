@@ -12,6 +12,18 @@
     <Filter Include="Base">
       <UniqueIdentifier>{a1e743ba-1a8b-4322-9373-e33e701a1739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MyMath">
+      <UniqueIdentifier>{ba37da9e-4679-4c42-9d5a-27d99302c401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{ce1f1264-17dc-4dc3-b8b0-e2f511133aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{4387b3c7-d43d-4bb0-92d1-a8482fa18537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{67820e37-2a67-4a81-83e4-4eecfc555cca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,13 +42,22 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="MyMatrix.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MyMath</Filter>
     </ClInclude>
     <ClInclude Include="MyVector3.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCamera.h">
+      <Filter>Source Files\Camera</Filter>
     </ClInclude>
     <ClInclude Include="MyCube.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGrid.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Source Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,13 +68,22 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="MyMatrix.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MyMath</Filter>
     </ClCompile>
     <ClCompile Include="MyVector3.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MyMath</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
     <ClCompile Include="MyCube.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGrid.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

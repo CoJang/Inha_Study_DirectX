@@ -2,7 +2,9 @@
 //
 
 #include "stdafx.h"
+#include "MyCamera.h"
 #include "MyCube.h"
+#include "GameScene.h"
 #include "Main.h"
 
 #define MAX_LOADSTRING 100
@@ -94,23 +96,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	static MyCube* Cube;
-	static MyMatrix ViewMat;
-	static MyMatrix ProjMat;
-	static MyMatrix Viewport_Mat;
-	static MyVector3 CameraPos(0, 0, -5);
-	static MyVector3 CameraLookAt(0, 0, 0);
-	static MyVector3 CameraUp(0, 1, 0);
+	static GameScene* MainGame;
+	
+	if(MainGame != NULL)
+	{
+		MainGame->WndProc(hWnd, message, wParam, lParam);
+	}
+	
     switch (message)
     {
 	case WM_CREATE:
 		{
-			Cube = new MyCube;
-			Cube->InitCube(0, 0, 0, 1.0f);
-			ViewMat = MyMatrix::View(CameraPos, CameraLookAt, CameraUp);
-			ProjMat = MyMatrix::Projection(90, 4/3.0f, 1, 1000);
-			Viewport_Mat = MyMatrix::Viewport(0, 0, 800, 600, 0, 1);
-
+			MainGame = new GameScene;
+			MainGame->InitGameScene(hWnd);
 			SetTimer(hWnd, 0, 33, NULL);
 		}
 		break;
@@ -124,7 +122,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
-				delete Cube;
+				delete MainGame;
                 DestroyWindow(hWnd);
                 break;
             default:
@@ -136,20 +134,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-			//CameraLookAt = Cube->GetPos() - CameraPos;
-			//CameraLookAt.Normalize();
-			ViewMat = MyMatrix::View(CameraPos, CameraLookAt, CameraUp);
-			Cube->Update(ViewMat * ProjMat * Viewport_Mat);
-			Cube->Render(hdc);
+
+			MainGame->Update();
+			MainGame->Render(hdc);
+    		
             EndPaint(hWnd, &ps);
         }
         break;
 	case WM_TIMER:
-		InvalidateRgn(hWnd, NULL, true);
+		InvalidateRgn(hWnd, NULL, false);
 		break;
     case WM_DESTROY:
-		delete Cube;
+		delete MainGame;
         PostQuitMessage(0);
         break;
     default:

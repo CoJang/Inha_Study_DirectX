@@ -28,7 +28,8 @@ void MainGame::InitMainGame()
 	BitmapImage = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
 	OldBitmapImage = (HBITMAP)SelectObject(FrontBuffer, BitmapImage);
 	ReleaseDC(g_hwnd, hdc);
-
+	
+#pragma region [Vertex Init]
 	//박스 위치
 	vec_Vertex.push_back(MyVector3(-1.0f, -1.0f, 1.0f));
 	vec_Vertex.push_back(MyVector3(-1.0f, 1.0f, 1.0f));
@@ -88,6 +89,7 @@ void MainGame::InitMainGame()
 	vec_Index.push_back(4);
 	vec_Index.push_back(3);
 	vec_Index.push_back(7);
+#pragma endregion [Vertex Init]
 
 	WorldMat = MyMatrix::Identity(4);
 	ViewMat = MyMatrix::Identity(4);

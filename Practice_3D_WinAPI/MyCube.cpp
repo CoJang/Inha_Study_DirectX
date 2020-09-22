@@ -2,12 +2,10 @@
 #include "MyCube.h"
 
 MyCube::MyCube()
-	:position(0, 0, 0), velocity(0.1f), dir(0, 0, -1),
+	:position(0, 0, 0), velocity(0.0f), dir(0, 0, -1),
 	angle(0.0f)
 {
-	ScaleMat = MyMatrix::ScaleMatrix(1, 1, 1);
-	RotateMat = MyMatrix::Identity(4);
-	TransMat = MyMatrix::Translation(0, 0, 0);
+
 }
 
 
@@ -27,38 +25,48 @@ void MyCube::InitCube(float pos_x, float pos_y, float pos_z, float cube_size)
 	OriginVertex[5] = { + cube_size, + cube_size, + cube_size };
 	OriginVertex[6] = { + cube_size, - cube_size, + cube_size };
 	OriginVertex[7] = { - cube_size, - cube_size, + cube_size };
-	
-	//WorldMat = S * R * T
-	//RotateMat = MyMatrix::RotationY(45);
-	//MyMatrix::PrintMatrix(RotateMat);
-	WorldMat = ScaleMat * RotateMat * TransMat;
+
+	ScaleMat = MyMatrix::ScaleMatrix(1, 1, 1);
+	RotateMat = MyMatrix::Identity(4);
+	TransMat = MyMatrix::Translation(0, 0, 0);
+	LeftRotMat = MyMatrix::Identity(4);
+	RightRotMat = MyMatrix::Identity(4);
+	WorldMat = MyMatrix::Identity(4);
 }
 
 void MyCube::Update(MyMatrix & viewport_mat)
 {
+	LeftRotMat = MyMatrix::RotationY(+5.0f);
+	RightRotMat = MyMatrix::RotationY(-5.0f);
+	velocity = 0;
+	
 	// 'W' = 0x57 'A' = 0x41 'S' = 0x53 'D' = 0x44
-	if(GetKeyState(0x57) & 0x8000)
+	if(GetKeyState('W') & 0x8000)
 	{
-		cout << "W key down!" << endl;
-		position.x += velocity;
+		velocity = 0.5f;
 	}
-	if (GetKeyState(0x41) & 0x8000)
+	if (GetKeyState('A') & 0x8000)
 	{
-		cout << "A key down!" << endl;
-		RotateMat = MyMatrix::RotationY(angle += 5.0f);
+		dir = MyVector3::TransformNormal(dir, LeftRotMat).Normalize();
+		angle -= 5.0f;
 	}
-	if (GetKeyState(0x53) & 0x8000)
+	if (GetKeyState('S') & 0x8000)
 	{
-		cout << "S key down!" << endl;
-		position.x -= velocity;
+		velocity = -0.5f;
 	}
-	if (GetKeyState(0x44) & 0x8000)
+	if (GetKeyState('D') & 0x8000)
 	{
-		cout << "D key down!" << endl;
-		RotateMat = MyMatrix::RotationY(angle -= 5.0f);
+		dir = MyVector3::TransformNormal(dir, RightRotMat).Normalize();
+		angle += 5.0f;
+	}
+	else
+	{
+		
 	}
 
+	position += dir * velocity;
 	TransMat = MyMatrix::Translation(position.x, position.y, position.z);
+	RotateMat = MyMatrix::RotationY(angle);
 	
 	WorldMat = ScaleMat * RotateMat * TransMat * viewport_mat;
 	
@@ -66,6 +74,8 @@ void MyCube::Update(MyMatrix & viewport_mat)
 	{
 		vertex[i] = MyVector3::TransformCoord(OriginVertex[i], WorldMat);
 	}
+	
+	//posVertex = MyVector3::TransformCoord(position, WorldMat);
 }
 
 void MyCube::Render(HDC hdc)
@@ -73,6 +83,8 @@ void MyCube::Render(HDC hdc)
 	for(int i = 0; i < 8; i++)
 		Rectangle(hdc, vertex[i].x - 2, vertex[i].y - 2, vertex[i].x + 2, vertex[i].y + 2);
 
+	//DrawLine(hdc, posVertex, MyVector3(posVertex.x, posVertex.y + 15, posVertex.z));
+	
 	DrawCube(hdc);
 }
 
