@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
+    <ClInclude Include="MainGame.h" />
     <ClInclude Include="MyCube.h" />
     <ClInclude Include="MyMatrix.h" />
     <ClInclude Include="MyVector3.h" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="MyCube.cpp" />
     <ClCompile Include="MyMatrix.cpp" />
     <ClCompile Include="MyVector3.cpp" />

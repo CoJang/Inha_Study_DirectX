@@ -12,6 +12,9 @@
     <Filter Include="Base">
       <UniqueIdentifier>{a1e743ba-1a8b-4322-9373-e33e701a1739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MyMath">
+      <UniqueIdentifier>{e6bb465c-66b5-406e-87ba-6084d8a68afa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -29,15 +32,16 @@
     <ClInclude Include="targetver.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="MyMatrix.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVector3.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyCube.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyMatrix.h">
+      <Filter>Source Files\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVector3.h">
+      <Filter>Source Files\MyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -46,13 +50,16 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="MyMatrix.cpp">
+    <ClCompile Include="MyCube.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMatrix.cpp">
+      <Filter>Source Files\MyMath</Filter>
     </ClCompile>
     <ClCompile Include="MyVector3.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MyMath</Filter>
     </ClCompile>
-    <ClCompile Include="MyCube.cpp">
+    <ClCompile Include="MainGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

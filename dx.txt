@@ -77,7 +77,7 @@ View Matrix [ l = Look Vector, r = Right Vector, u = Up Vector ]
 	r.x			u.x			l.x		0
 	r.y			u.y			l.y		0
 	r.z			u.z			l.z		0
--r dot eye  -u dot eye  -l dot eye  0
+-r dot eye  -u dot eye  -l dot eye  1
 
 
 Projection Matrix

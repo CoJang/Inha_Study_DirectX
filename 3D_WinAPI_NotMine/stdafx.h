@@ -21,9 +21,12 @@
 // TODO: reference additional headers your program requires here
 #include "MyMatrix.h"
 #include "MyVector3.h"
+#include "MainGame.h"
+
 
 #include <iostream>
 using namespace std;
+extern HWND g_hwnd;
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")

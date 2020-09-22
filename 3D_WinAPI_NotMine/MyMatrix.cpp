@@ -274,18 +274,19 @@ MyMatrix MyMatrix::RotationZ(float angle)
 }
 
 // lookat = target - eye
-MyMatrix MyMatrix::View(MyVector3& eye, MyVector3& lookat, MyVector3& up)
+MyMatrix MyMatrix::View(MyVector3& eye, MyVector3& target, MyVector3& up)
 {
-	MyVector3 right = MyVector3::Cross(up, lookat);
-	MyVector3 newUp = MyVector3::Cross(lookat, right).Normalize();
+	MyVector3 l = target - eye; l.Normalize();
+	MyVector3 right = MyVector3::Cross(up, l).Normalize();
+	MyVector3 newUp = MyVector3::Cross(l, right).Normalize();
 	
-	MyMatrix viewMat(4);
-	viewMat[0][0] = right.x; viewMat[0][1] = newUp.x; viewMat[0][2] = lookat.x;
-	viewMat[1][0] = right.y; viewMat[1][1] = newUp.y; viewMat[1][2] = lookat.y;
-	viewMat[2][0] = right.z; viewMat[2][1] = newUp.z; viewMat[2][2] = lookat.z;
-	viewMat[3][0] = MyVector3::Dot(right * -1, eye);
-	viewMat[3][1] = MyVector3::Dot(newUp * -1, eye);
-	viewMat[3][2] = MyVector3::Dot(lookat * -1, eye);
+	MyMatrix viewMat = Identity(4);
+	viewMat[0][0] = right.x; viewMat[0][1] = newUp.x; viewMat[0][2] = l.x;
+	viewMat[1][0] = right.y; viewMat[1][1] = newUp.y; viewMat[1][2] = l.y;
+	viewMat[2][0] = right.z; viewMat[2][1] = newUp.z; viewMat[2][2] = l.z;
+	viewMat[3][0] = -MyVector3::Dot(right, eye);
+	viewMat[3][1] = -MyVector3::Dot(newUp, eye);
+	viewMat[3][2] = -MyVector3::Dot(l, eye);
 
 	return viewMat;
 }
