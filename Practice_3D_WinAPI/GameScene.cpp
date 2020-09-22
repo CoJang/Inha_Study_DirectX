@@ -48,11 +48,11 @@ void GameScene::Update()
 {
 	GetClientRect(hWnd, &rc);
 
-	Cube->Update(Camera->GetVPVMat());
-	Grid->Update();
-	
 	Camera->SetTarget(Cube->GetPos());
 	Camera->Update(rc.right, rc.bottom);
+	
+	Cube->Update(Camera->GetVPVMat());
+	Grid->Update();
 }
 
 void GameScene::Render(HDC hdc)
@@ -85,40 +85,11 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			MousePos.x = LOWORD(lParam);
 			MousePos.y = HIWORD(lParam);
 			MyVector3 MoveCamPos = Camera->GetCameraPos();
-			MyMatrix RotateMat = MyMatrix::Identity(4);
-			float Angle = 1.0f;
-			POINT Gap = { abs(OldMousePos.x - MousePos.x), abs(OldMousePos.y - MousePos.y) };
 
-			if(Gap.x > Gap.y)
-			{
-				if (OldMousePos.x > MousePos.x)
-				{
-					RotateMat = MyMatrix::RotationY(-Angle);
-					MoveCamPos = MyVector3::TransformCoord(MoveCamPos, RotateMat);
-					Camera->SetCameraPos(MoveCamPos);
-				}
-				else
-				{
-					RotateMat = MyMatrix::RotationY(Angle);
-					MoveCamPos = MyVector3::TransformCoord(MoveCamPos, RotateMat);
-					Camera->SetCameraPos(MoveCamPos);
-				}
-			}
-			else
-			{
-				if (OldMousePos.y > MousePos.y)
-				{
-					RotateMat = MyMatrix::RotationX(Angle);
-					MoveCamPos = MyVector3::TransformCoord(MoveCamPos, RotateMat);
-					Camera->SetCameraPos(MoveCamPos);
-				}
-				else
-				{
-					RotateMat = MyMatrix::RotationX(-Angle);
-					MoveCamPos = MyVector3::TransformCoord(MoveCamPos, RotateMat);
-					Camera->SetCameraPos(MoveCamPos);
-				}
-			}
+			MoveCamPos = MyVector3::TransformCoord(MoveCamPos, MyMatrix::RotationY((OldMousePos.x - MousePos.x) * -0.1f));
+			Camera->SetCameraPos(MoveCamPos);
+			MoveCamPos = MyVector3::TransformCoord(MoveCamPos, MyMatrix::RotationX((OldMousePos.y - MousePos.y) * 0.2f));
+			Camera->SetCameraPos(MoveCamPos);
 		}
 		OldMousePos.x = LOWORD(lParam);
 		OldMousePos.y = HIWORD(lParam);
