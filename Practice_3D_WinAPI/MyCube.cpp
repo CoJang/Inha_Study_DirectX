@@ -70,8 +70,6 @@ void MyCube::Update(MyMatrix & viewport_mat)
 	{
 		vertex[i] = MyVector3::TransformCoord(OriginVertex[i], WorldMat);
 	}
-	
-	//posVertex = MyVector3::TransformCoord(position, WorldMat);
 }
 
 void MyCube::Render(HDC hdc)
@@ -79,8 +77,6 @@ void MyCube::Render(HDC hdc)
 	for(int i = 0; i < 8; i++)
 		Rectangle(hdc, vertex[i].x - 2, vertex[i].y - 2, vertex[i].x + 2, vertex[i].y + 2);
 
-	//DrawLine(hdc, posVertex, MyVector3(posVertex.x, posVertex.y + 15, posVertex.z));
-	
 	DrawCube(hdc);
 }
 

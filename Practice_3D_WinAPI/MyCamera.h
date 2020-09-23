@@ -20,7 +20,9 @@ public:
 	inline MyMatrix GetVPVMat() { return ViewMat * ProjMat * Viewport_Mat; }
 	inline MyMatrix GetVPMat() { return ViewMat * ProjMat;	}
 
-	inline MyVector3 GetCameraPos() { return CameraPos; }
+	inline MyVector3* GetCameraPos() { return &CameraPos; }
+	inline MyVector3* GetCameraTarget() { return &CameraTarget; }
+	inline MyVector3* GetCameraUp() { return &CameraUp; }
 	inline void SetCameraPos(MyVector3 pos) { CameraPos = pos; }
 	inline void SetTarget(MyVector3 pos) { CameraTarget = pos; }
 };

@@ -30,7 +30,7 @@ void MainGame::InitMainGame()
 	ReleaseDC(g_hwnd, hdc);
 	
 #pragma region [Vertex Init]
-	//박스 위치
+//박스 위치
 	vec_Vertex.push_back(MyVector3(-1.0f, -1.0f, 1.0f));
 	vec_Vertex.push_back(MyVector3(-1.0f, 1.0f, 1.0f));
 	vec_Vertex.push_back(MyVector3(1.0f, 1.0f, 1.0f));
@@ -97,6 +97,20 @@ void MainGame::InitMainGame()
 	ViewportMat = MyMatrix::Identity(4);
 }
 
+bool MainGame::IsBackFace(MyVector3& v1, MyVector3& v2, MyVector3& v3)
+{
+	MyVector3 v12 = v2 - v1;
+	MyVector3 v13 = v3 - v1;
+	MyVector3 NormalVector = MyVector3::Cross(v12, v13);
+
+	// 이미 Projection 변환까지 이루어져있다면, z+ 방향이 곧 바라보는 방향이다.
+	if (MyVector3::Dot(NormalVector, MyVector3(0, 0, 1)) <= 0.f)
+		return true;
+	else
+		return false;
+	
+}
+
 void MainGame::Update()
 {
 	RECT rc;
@@ -129,6 +143,8 @@ void MainGame::Render(HDC hdc)
 		v1 = MyVector3::TransformCoord(v1, WVP_Mat);
 		v2 = MyVector3::TransformCoord(v2, WVP_Mat);
 		v3 = MyVector3::TransformCoord(v3, WVP_Mat);
+
+		if (IsBackFace(v1, v2, v3)) continue;
 
 		v1 = MyVector3::TransformCoord(v1, ViewportMat);
 		v2 = MyVector3::TransformCoord(v2, ViewportMat);

@@ -20,6 +20,10 @@ private:
 	RECT rc;
 	POINT MousePos;
 	POINT OldMousePos;
+
+	MyVector3* CamPos;
+	MyVector3* CamTarget;
+	MyVector3* CamUp;
 public:
 	GameScene();
 	~GameScene();

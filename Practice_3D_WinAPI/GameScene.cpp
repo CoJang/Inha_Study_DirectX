@@ -38,6 +38,10 @@ void GameScene::InitGameScene(HWND hwnd)
 	Camera->InitCamera(rc.right, rc.bottom);
 	Camera->SetCameraPos({ 0, 10,-15 });
 
+	CamPos = Camera->GetCameraPos();
+	CamTarget = Camera->GetCameraTarget();
+	CamUp = Camera->GetCameraUp();
+
 	Grid = new MyGrid;
 	Grid->InitGrid();
 	Cube = new MyCube;
@@ -84,12 +88,9 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		{
 			MousePos.x = LOWORD(lParam);
 			MousePos.y = HIWORD(lParam);
-			MyVector3 MoveCamPos = Camera->GetCameraPos();
-
-			MoveCamPos = MyVector3::TransformCoord(MoveCamPos, MyMatrix::RotationY((OldMousePos.x - MousePos.x) * -0.1f));
-			Camera->SetCameraPos(MoveCamPos);
-			MoveCamPos = MyVector3::TransformCoord(MoveCamPos, MyMatrix::RotationX((OldMousePos.y - MousePos.y) * 0.2f));
-			Camera->SetCameraPos(MoveCamPos);
+			
+			*CamPos = MyVector3::TransformCoord(*CamPos, MyMatrix::RotationY((OldMousePos.x - MousePos.x) * -0.1f));
+			*CamPos = MyVector3::TransformCoord(*CamPos, MyMatrix::RotationX((OldMousePos.y - MousePos.y) * 0.2f));
 		}
 		OldMousePos.x = LOWORD(lParam);
 		OldMousePos.y = HIWORD(lParam);
@@ -98,10 +99,7 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		{
 			short Input = HIWORD(wParam);
 			Input /= 120;
-			MyVector3 MoveCamPos = Camera->GetCameraPos();
-			MoveCamPos.y += Input;
-			
-			Camera->SetCameraPos(MoveCamPos);
+			CamPos->y += Input;
 		}
 		break;
 	default:
