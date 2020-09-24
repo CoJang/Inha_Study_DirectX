@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include "DeviceManager.h"
+#include "MyGrid.h"
+#include "Box.h"
+#include "MyCamera.h"
 #include "GameScene.h"
 
 GameScene::GameScene()
@@ -8,62 +12,98 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	SafeDelete(Camera);
+	SafeDelete(Grid);
+	SafeDelete(Line);
+	SafeDelete(MovingBox);
+	DEVICEMANAGER->Destroy();
+}
+
+
+void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+	static POINT MousePos;
+	static POINT OldMousePos;
+	
+	switch (Msg)
+	{
+	case WM_MOUSEMOVE:
+		switch(wParam)
+		{
+		case MK_LBUTTON:
+			{
+				MousePos.x = LOWORD(lParam);
+				MousePos.y = HIWORD(lParam);
+
+				D3DXMATRIXA16 tempX, tempY;
+				D3DXVECTOR3 CameraPosition = *CamPos;
+				D3DXMatrixRotationY(&tempX, (OldMousePos.x - MousePos.x) * -0.01f);
+				D3DXMatrixRotationX(&tempY, (OldMousePos.y - MousePos.y) * 0.02f);
+				
+				D3DXVec3TransformCoord(CamPos, &CameraPosition, &(tempX * tempY));
+				break;
+			}
+		default:
+			break;
+		}
+		OldMousePos.x = LOWORD(lParam);
+		OldMousePos.y = HIWORD(lParam);
+		break;
+	case WM_MOUSEWHEEL:
+	{
+		short Input = HIWORD(wParam);
+		Input /= 120;
+		*CamFov += Input * 0.1f;
+	}
+	break;
+	default:
+		break;
+	}
 }
 
 void GameScene::InitGameScene()
 {
-	IDirect3D9* _d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+	Grid = new MyGrid;
+	Grid->Init();
 
-	D3DPRESENT_PARAMETERS d3dpp;
-	ZeroMemory(&d3dpp, sizeof(D3DPRESENT_PARAMETERS));
+	Line = new AxisLine;
+	Line->Init();
 
-	//d3dpp.BackBufferWidth = 800;
-	//d3dpp.BackBufferHeight = 600;
-	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
-	d3dpp.BackBufferCount = 1;
-	//d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
-	//d3dpp.MultiSampleQuality = 0;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.hDeviceWindow = g_hwnd;
-	d3dpp.Windowed = true;
-	d3dpp.EnableAutoDepthStencil = true;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
-	d3dpp.Flags = 0;
-	//d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	MovingBox = new Box;
+	MovingBox->Init();
 
-	Device = 0;
-	HRESULT hr = _d3d9->CreateDevice
-	(
-		D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		g_hwnd,
-		D3DCREATE_HARDWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&Device
-	);
+	Camera = new MyCamera;
+	Camera->Init();
 
-	if( FAILED(hr) )
-	{
-		::MessageBox(0, TEXT("CreateDevice() - FAILED!"), 0, 0);
-		return;
-	}
+	CamPos = Camera->GetCamPos();
+	CamTarget = Camera->GetCamTarget();
+	CamFov = Camera->GetCamFov();
+
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
 }
 
-void GameScene::Update()
+void GameScene::Update(float delta)
 {
+	Camera->Update(delta);
+	Grid->Update(delta);
+	Line->Update(delta);
+	MovingBox->Update(delta);
+	Camera->SetCamTarget(MovingBox->GetPos());
 }
 
 void GameScene::Render(float delta)
 {
-	if(Device)
+	if(DEVICE)
 	{
-		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x000000FF, 0, 1.0f);
+		DEVICE->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+		DEVICE->BeginScene();
 
-
-
-
+		Grid->Draw(delta);
+		Line->Draw(delta);
+		MovingBox->Draw(delta);
 		
-		Device->Present(0, 0, 0, 0);
+		DEVICE->EndScene();
+		DEVICE->Present(NULL, NULL, NULL, NULL);
 	}
 }
+

@@ -48,7 +48,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	g_MainGame = new GameScene;
 	g_MainGame->InitGameScene();
 
-	static float lastTime = (float)GetTickCount();
+	SYSTEMTIME LastTime;
+	GetLocalTime(&LastTime);
+	
+	static float lasttime = LastTime.wSecond * 1000 + LastTime.wMilliseconds;
+	float Timer = 0;
+	int Cnt = 0;
 	
     MSG msg;
 
@@ -69,18 +74,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			float curTime = (float)GetTickCount();
-			float DeltaTime = (curTime - lastTime) * 0.001f;
+			SYSTEMTIME CurTime;
+			GetLocalTime(&CurTime);
+			float curtime = CurTime.wSecond * 1000 + CurTime.wMilliseconds;
+			float deltatime = (curtime - lasttime) * 0.001f;
 			
-			g_MainGame->Update();
-			g_MainGame->Render(DeltaTime);
+			g_MainGame->Update(deltatime);
+			g_MainGame->Render(deltatime);
+			
+			Timer += deltatime;
+			Cnt++;
+			if(Timer > 1)
+			{
+				cout << "Frame : " << Cnt << endl;
+				Timer = 0;
+				Cnt = 0;
+			}
 
-			lastTime = curTime;
+			lasttime = curtime;
 		}
     }
 
-	if (g_MainGame)
-		delete g_MainGame;
+	SafeDelete(g_MainGame);
 
     return (int) msg.wParam;
 }
@@ -155,6 +170,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if(g_MainGame)
+	{
+		g_MainGame->WndProc(hWnd, message, wParam, lParam);
+	}
+	
     switch (message)
     {
     case WM_COMMAND:
