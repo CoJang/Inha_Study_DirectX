@@ -147,5 +147,50 @@ void Box::Draw(float delta)
 							vec_Vertexs.size() / 3,
 							&vec_Vertexs[8],
 							sizeof(PC_VERTEX));
+
+	
+	vector<PC_VERTEX> verIndex;
+	PC_VERTEX v;
+	v.c = 0xff0000;
+	v.p = D3DXVECTOR3(0, 0, 0);
+	verIndex.push_back(v);
+	v.c = 0xff0000;
+	v.p = D3DXVECTOR3(3, 0, 0);
+	verIndex.push_back(v);
+
+	v.c = 0x00ff00;
+	v.p = D3DXVECTOR3(0, 0, 0);
+	verIndex.push_back(v);
+	v.c = 0x00ff00;
+	v.p = D3DXVECTOR3(0, 3, 0);
+	verIndex.push_back(v);
+
+	v.c = 0x0000ff;
+	v.p = D3DXVECTOR3(0, 0, 0);
+	verIndex.push_back(v);
+	v.c = 0x0000ff;
+	v.p = D3DXVECTOR3(0, 0, 3);
+	verIndex.push_back(v);
+
+	v.c = 0xffffff;
+	v.p = D3DXVECTOR3(0, 0, 0);
+	verIndex.push_back(v);
+	v.c = 0xffffff;
+	v.p = MovePivot;
+	verIndex.push_back(v);
+	
+
+	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+	DEVICE->SetFVF(PC_VERTEX::FVF);
+
+	DEVICE->DrawPrimitiveUP
+	(
+		D3DPT_LINELIST,
+		verIndex.size() / 2,
+		&verIndex[0],
+		sizeof PC_VERTEX
+	);
+
+	
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);
 }

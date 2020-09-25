@@ -27,7 +27,6 @@ void BoxChar::Init()
 	D3DXVECTOR3 Pivot;
 	Pivot = D3DXVECTOR3(0, 0, 0);
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	Box* Body = new Box;
 	Body->Init(Pivot, D3DXVECTOR3(0.8f, 1.5f, 0.5f), D3DCOLOR_XRGB(0, 255, 255));
 	Bodies.push_back(Body);
@@ -35,37 +34,34 @@ void BoxChar::Init()
 	Box* Head = new Box;
 	Pivot = D3DXVECTOR3(0, 2, 0);
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	Head->Init(Pivot, D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DCOLOR_XRGB(255, 255, 255));
 	Bodies.push_back(Head);
 
 	Box* LeftArm = new Box;
-	Pivot = D3DXVECTOR3(1.2f, 0.5f, 0);
+	Pivot = D3DXVECTOR3(1.2f, 0.5f, 0); // »ó´ëÁÂÇ¥
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	LeftArm->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(255, 0, 0));
+	//LeftArm->SetPos(D3DXVECTOR3(Pivot.x, Pivot.y, Pivot.z));
 	Bodies.push_back(LeftArm);
-	cout << *BodyPivots[2] << endl;
-	Bodies[2]->SetPivot(D3DXVECTOR3(1.0f, -0.5f, 0));
+
+	Bodies[2]->SetPivot(D3DXVECTOR3(0.0f, Pivot.y - 3.0f, 0.0f));
+	//Bodies[2]->SetPivot(D3DXVECTOR3(1.0f, -0.5f, 0));
 
 	Box* RightArm = new Box;
 	Pivot = D3DXVECTOR3(-1.2f, 0.5f, 0);
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	RightArm->Init(Pivot, D3DXVECTOR3(0.4f, 0.7f, 0.5f), D3DCOLOR_XRGB(0, 0, 255));
 	Bodies.push_back(RightArm);
 
 	Box* LeftLeg = new Box;
 	Pivot = D3DXVECTOR3(0.4f, -2.5f, 0);
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	LeftLeg->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(255, 0, 0));
 	Bodies.push_back(LeftLeg);
 
 	Box* RightLeg = new Box;
 	Pivot = D3DXVECTOR3(-0.4f, -2.5f, 0);
 	BodyPivots.push_back(Pivot);
-	Pivot += position;
 	RightLeg->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(0, 0, 255));
 	Bodies.push_back(RightLeg);
    	
