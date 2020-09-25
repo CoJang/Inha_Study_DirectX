@@ -132,6 +132,7 @@ void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
 		D3DXMatrixRotationZ(&RotateMat, Angle);
 		break;
 	}
+	
 	D3DXMatrixTranslation(&TransMat, position.x - MovePivot.x, position.y - MovePivot.y, position.z - MovePivot.y);
 	
 	WorldMat *= RotateMat * TransMat * worldmat;
