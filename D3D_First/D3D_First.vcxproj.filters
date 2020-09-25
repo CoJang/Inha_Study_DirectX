@@ -49,6 +49,12 @@
       <Filter>Source Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="MyCamera.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxChar.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,7 +80,13 @@
     <ClCompile Include="Box.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="BoxChar.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
     <ClCompile Include="MyCamera.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

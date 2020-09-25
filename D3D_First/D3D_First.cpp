@@ -48,10 +48,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	g_MainGame = new GameScene;
 	g_MainGame->InitGameScene();
 
-	SYSTEMTIME LastTime;
-	GetLocalTime(&LastTime);
+	static LARGE_INTEGER LastTime;
+	QueryPerformanceCounter(&LastTime);
+	static float deltatime = 0;
 	
-	static float lasttime = LastTime.wSecond * 1000 + LastTime.wMilliseconds;
 	float Timer = 0;
 	int Cnt = 0;
 	
@@ -74,14 +74,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			SYSTEMTIME CurTime;
-			GetLocalTime(&CurTime);
-			float curtime = CurTime.wSecond * 1000 + CurTime.wMilliseconds;
-			float deltatime = (curtime - lasttime) * 0.001f;
-			
 			g_MainGame->Update(deltatime);
 			g_MainGame->Render(deltatime);
+
+			LARGE_INTEGER CurTime, frequency, DeltaTime;
+			QueryPerformanceFrequency(&frequency);
+			QueryPerformanceCounter(&CurTime);
+			DeltaTime.QuadPart = (CurTime.QuadPart - LastTime.QuadPart) * 1000000;
+			DeltaTime.QuadPart /= frequency.QuadPart;
 			
+			deltatime = DeltaTime.QuadPart * 0.000001f;
+
 			Timer += deltatime;
 			Cnt++;
 			if(Timer > 1)
@@ -91,7 +94,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				Cnt = 0;
 			}
 
-			lasttime = curtime;
+			LastTime = CurTime;
 		}
     }
 

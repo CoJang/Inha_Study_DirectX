@@ -146,11 +146,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
+    <ClInclude Include="BoxChar.h" />
     <ClInclude Include="D3D_First.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyGrid.h" />
+    <ClInclude Include="MyMath.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -158,11 +160,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="BoxChar.cpp" />
     <ClCompile Include="D3D_First.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyGrid.cpp" />
+    <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="Objects.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

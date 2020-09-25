@@ -13,7 +13,7 @@ public:
 	Objects();
 	virtual ~Objects();
 
-	virtual	void Init() = 0;
+	virtual	void Init() {}
 	virtual void Update(float delta) = 0;
 	virtual void Draw(float delta) = 0;
 };

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DeviceManager.h"
 #include "MyGrid.h"
-#include "Box.h"
+#include "BoxChar.h"
 #include "MyCamera.h"
 #include "GameScene.h"
 
@@ -15,7 +15,7 @@ GameScene::~GameScene()
 	SafeDelete(Camera);
 	SafeDelete(Grid);
 	SafeDelete(Line);
-	SafeDelete(MovingBox);
+	SafeDelete(Zemmin2);
 	DEVICEMANAGER->Destroy();
 }
 
@@ -64,13 +64,13 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 void GameScene::InitGameScene()
 {
 	Grid = new MyGrid;
-	Grid->Init();
+	Grid->Init(15, 1.0f);
 
 	Line = new AxisLine;
 	Line->Init();
 
-	MovingBox = new Box;
-	MovingBox->Init();
+	Zemmin2 = new BoxChar;
+	Zemmin2->Init();
 
 	Camera = new MyCamera;
 	Camera->Init();
@@ -87,8 +87,8 @@ void GameScene::Update(float delta)
 	Camera->Update(delta);
 	Grid->Update(delta);
 	Line->Update(delta);
-	MovingBox->Update(delta);
-	Camera->SetCamTarget(MovingBox->GetPos());
+	Zemmin2->Update(delta);
+	Camera->SetCamTarget(Zemmin2->GetPos());
 }
 
 void GameScene::Render(float delta)
@@ -100,7 +100,7 @@ void GameScene::Render(float delta)
 
 		Grid->Draw(delta);
 		Line->Draw(delta);
-		MovingBox->Draw(delta);
+		Zemmin2->Draw(delta);
 		
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);

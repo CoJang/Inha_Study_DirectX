@@ -54,6 +54,7 @@ struct PC_VERTEX
 	enum { FVF = D3DFVF_XYZ | D3DFVF_DIFFUSE };
 };
 
+#include "MyMath.h"
 #include "DeviceManager.h"
 
 #ifdef UNICODE

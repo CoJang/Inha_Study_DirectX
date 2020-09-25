@@ -11,11 +11,11 @@ MyGrid::~MyGrid()
 {
 }
 
-void MyGrid::Init()
+void MyGrid::Init(int lineNum, float cellsize)
 {
 	PC_VERTEX v;
-	int Num = 15;
-	float CellSize = 1.0f;
+	int Num = lineNum;
+	float CellSize = cellsize;
 	float MaxSize = Num * CellSize;
 	int Cnt = 0;
 	v.c = D3DCOLOR_XRGB(255, 255, 255);
@@ -24,8 +24,9 @@ void MyGrid::Init()
 		for (float y = -MaxSize; y <= Num * CellSize; y += CellSize)
 		{
 			if (x == 0 || y == 0) continue;
-			//if( Cnt % 5 == 0) v.c = D3DCOLOR_XRGB(255, 255, 255);
-			//else v.c = D3DCOLOR_XRGB(100, 100, 100);
+			
+			if(x  || y == 0) v.c = D3DCOLOR_XRGB(255, 255, 255);
+			else v.c = D3DCOLOR_XRGB(100, 100, 100);
 			
 			v.p = D3DXVECTOR3(x, 0, y);
 			vec_Vertexs.push_back(v);
@@ -89,6 +90,21 @@ void AxisLine::Init()
 
 	v.p = D3DXVECTOR3(0, 0, -axisLineSize);
 	vec_Vertexs.push_back(v);
+
+	Pyramid Gizmo;
+	D3DXMATRIXA16 RotMat;
+
+	D3DXMatrixRotationZ(&RotMat, D3DX_PI / 2.0f);
+	Gizmo.Init(D3DCOLOR_XRGB(255, 0, 0), RotMat);
+	vec_GizmoVector.push_back(Gizmo);
+
+	D3DXMatrixRotationZ(&RotMat, D3DX_PI);
+	Gizmo.Init(D3DCOLOR_XRGB(0, 255, 0), RotMat);
+	vec_GizmoVector.push_back(Gizmo);
+
+	D3DXMatrixRotationX(&RotMat, -D3DX_PI / 2.0f);
+	Gizmo.Init(D3DCOLOR_XRGB(0, 0, 255), RotMat);
+	vec_GizmoVector.push_back(Gizmo);
 }
 
 void AxisLine::Update(float delta)
@@ -103,4 +119,71 @@ void AxisLine::Draw(float delta)
 							vec_Vertexs.size() / 2,
 							&vec_Vertexs[0],
 							sizeof(PC_VERTEX));
+
+	for( Pyramid p : vec_GizmoVector )
+	{
+		p.Draw(delta);
+	}
+}
+
+Pyramid::Pyramid()
+{
+}
+
+Pyramid::~Pyramid()
+{
+}
+
+void Pyramid::Init(D3DCOLOR color, D3DXMATRIXA16& rotatemat)
+{
+	RotateMat = rotatemat;
+
+	PC_VERTEX v;
+	v.c = color;
+
+	v.p = D3DXVECTOR3(0, 0, 0); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, -1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, -1); vec_Vertexs.push_back(v);
+	
+	v.p = D3DXVECTOR3(0, 0, 0); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, 1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, -1); vec_Vertexs.push_back(v);
+	
+	v.p = D3DXVECTOR3(0, 0, 0); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, 1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, 1); vec_Vertexs.push_back(v);
+
+	v.p = D3DXVECTOR3(0, 0, 0); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, -1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, 1); vec_Vertexs.push_back(v);
+
+	v.p = D3DXVECTOR3(-1, -1, -1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, 1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, 1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(-1, -1, -1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, 1); vec_Vertexs.push_back(v);
+	v.p = D3DXVECTOR3(1, -1, -1); vec_Vertexs.push_back(v);
+	
+}
+
+void Pyramid::Update(float delta)
+{
+
+}
+
+void Pyramid::Draw(float delta)
+{
+	D3DXMatrixScaling(&ScaleMat, 0.1f, 2.0f, 0.1f);
+	WorldMat = ScaleMat * RotateMat * TransMat;
+
+	DEVICE->SetRenderState(D3DRS_CULLMODE, false);
+	
+	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+	DEVICE->SetFVF(PC_VERTEX::FVF);
+	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+							vec_Vertexs.size() / 3,
+							&vec_Vertexs[0],
+							sizeof(PC_VERTEX));
+	
+	DEVICE->SetRenderState(D3DRS_CULLMODE, true);
 }

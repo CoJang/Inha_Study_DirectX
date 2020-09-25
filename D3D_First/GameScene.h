@@ -2,7 +2,7 @@
 
 class MyGrid;
 class AxisLine;
-class Box;
+class BoxChar;
 class MyCamera;
 
 class GameScene
@@ -13,7 +13,7 @@ public:
 	
 private:
 	MyCamera* Camera;
-	Box* MovingBox;
+	BoxChar* Zemmin2;
 	MyGrid* Grid;
 	AxisLine* Line;
 

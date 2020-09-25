@@ -3,10 +3,11 @@
 
 
 Box::Box()
-	: angle(0.0f)
-	, velocity(0.0f)
-	, dir(0, 0, -1)
-	, position(0, 0, 0)
+	: position(0, 0, 0)
+	, MovePivot(0, 0, 0)
+	, Angle(0.0f)
+	, MaxAngle(0.0f)
+	, AnimDirection(0)
 {
 }
 
@@ -15,10 +16,12 @@ Box::~Box()
 {
 }
 
-void Box::Init()
+void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DCOLOR color)
 {
+	position = pos;
+	D3DXMatrixScaling(&ScaleMat, scale.x, scale.y, scale.z);
 	PC_VERTEX v;
-	v.c = D3DCOLOR_XRGB(0, 0, 255);
+	v.c = color;
 
 	v.p = D3DXVECTOR3(-1.0f, -1.0f, -1.0f);
 	vec_Vertexs.push_back(v);
@@ -46,11 +49,6 @@ void Box::Init()
 
 
 	// : front
-	vec_Vertexs[0].c = D3DCOLOR_XRGB(0, 255, 255);
-	vec_Vertexs[1].c = D3DCOLOR_XRGB(0, 255, 255);
-	vec_Vertexs[2].c = D3DCOLOR_XRGB(0, 255, 255);
-	vec_Vertexs[3].c = D3DCOLOR_XRGB(0, 255, 255);
-	
 	vec_Vertexs.push_back(vec_Vertexs[0]);
 	vec_Vertexs.push_back(vec_Vertexs[1]);
 	vec_Vertexs.push_back(vec_Vertexs[2]);
@@ -106,47 +104,47 @@ void Box::Init()
 
 void Box::Update(float delta)
 {
-	velocity = 0;
-	D3DXMATRIXA16 temp;
-	D3DXMatrixIdentity(&temp);
-
-	// 'W' = 0x57 'A' = 0x41 'S' = 0x53 'D' = 0x44
-	if (GetKeyState('W') & 0x8000)
-	{
-		velocity = 10.5f * delta;
-	}
-	if (GetKeyState('A') & 0x8000)
-	{
-		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&temp, -5.0f * delta));
-		angle -= 5.0f * delta;
-	}
-	if (GetKeyState('S') & 0x8000)
-	{
-		velocity = -8.5f * delta;
-	}
-	if (GetKeyState('D') & 0x8000)
-	{
-		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&temp, 5.0f * delta));
-		angle += 5.0f * delta;
-	}
-	else
-	{
-
-	}
-
-	position += dir * velocity;
 	D3DXMatrixTranslation(&TransMat, position.x, position.y, position.z);
-	D3DXMatrixRotationY(&RotateMat, angle);
 
 	WorldMat = ScaleMat * RotateMat * TransMat;
 }
 
+void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
+{
+	D3DXMATRIXA16 AxisMat;
+	D3DXMatrixIdentity(&AxisMat);
+	
+	D3DXMatrixTranslation(&AxisMat, MovePivot.x, MovePivot.y, MovePivot.z);
+	WorldMat = ScaleMat * AxisMat;
+
+	switch(RotateFlag)
+	{
+	case 'X':
+	case 'x':
+		D3DXMatrixRotationX(&RotateMat, Angle);
+		break;
+	case 'Y':
+	case 'y':
+		D3DXMatrixRotationY(&RotateMat, Angle);
+		break;
+	case 'Z':
+	case 'z':
+		D3DXMatrixRotationZ(&RotateMat, Angle);
+		break;
+	}
+	D3DXMatrixTranslation(&TransMat, position.x - MovePivot.x, position.y - MovePivot.y, position.z - MovePivot.y);
+	
+	WorldMat *= RotateMat * TransMat * worldmat;
+}
+
 void Box::Draw(float delta)
 {
+	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	DEVICE->SetFVF(PC_VERTEX::FVF);
 	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
 							vec_Vertexs.size() / 3,
 							&vec_Vertexs[8],
 							sizeof(PC_VERTEX));
+	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);
 }
