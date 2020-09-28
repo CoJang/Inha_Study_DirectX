@@ -87,6 +87,7 @@ void GameScene::Update(float delta)
 	Camera->Update(delta);
 	Grid->Update(delta);
 	Line->Update(delta);
+	Zemmin2->InputCheck(delta);
 	Zemmin2->Update(delta);
 	Camera->SetCamTarget(Zemmin2->GetPos());
 }

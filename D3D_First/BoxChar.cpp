@@ -4,10 +4,11 @@
 
 
 BoxChar::BoxChar()
-	:position(0, 3.5, 0)
+	:position(0, 4.1f, 0)
 	,angle(0.0f)
 	,velocity(0.0f)
 	,dir(0, 0, -1)
+	,state(IDLE)
 {
 }
 
@@ -25,97 +26,187 @@ BoxChar::~BoxChar()
 void BoxChar::Init()
 {
 	D3DXVECTOR3 Pivot;
+	D3DXVECTOR3 Scale;
+	
 	Pivot = D3DXVECTOR3(0, 0, 0);
-	BodyPivots.push_back(Pivot);
+	Scale = D3DXVECTOR3(0.8f, 1.5f, 0.5f);
 	Box* Body = new Box;
-	Body->Init(Pivot, D3DXVECTOR3(0.8f, 1.5f, 0.5f), D3DCOLOR_XRGB(0, 255, 255));
+	Body->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 255, 255));
 	Bodies.push_back(Body);
 
-	//Box* Head = new Box;
-	//Pivot = D3DXVECTOR3(0, 2, 0);
-	//BodyPivots.push_back(Pivot);
-	//Head->Init(Pivot, D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DCOLOR_XRGB(255, 255, 255));
-	//Bodies.push_back(Head);
+	Box* Head = new Box;
+	Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	Pivot = D3DXVECTOR3(0, 2.0f, 0);
+	Head->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
+	Bodies.push_back(Head);
 
 	Box* LeftArm = new Box;
 	Pivot = D3DXVECTOR3(1.2f, 0.5f, 0); // »ó´ëÁÂÇ¥
-	BodyPivots.push_back(Pivot);
-	LeftArm->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(255, 0, 0));
-	LeftArm->SetPivot(D3DXVECTOR3(0, -0.5f, 0));
+	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
+	LeftArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
+	LeftArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftArm);
 
 
 	Box* RightArm = new Box;
 	Pivot = D3DXVECTOR3(-1.2f, 0.5f, 0);
-	BodyPivots.push_back(Pivot);
-	RightArm->Init(Pivot, D3DXVECTOR3(0.4f, 1.5f, 0.5f), D3DCOLOR_XRGB(0, 0, 255));
-	RightArm->SetPivot(D3DXVECTOR3(0, -1.5f / 2, 0));
+	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
+	RightArm->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
+	RightArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(RightArm);
 
 	Box* LeftLeg = new Box;
-	Pivot = D3DXVECTOR3(0.4f, -2.5f, 0);
-	BodyPivots.push_back(Pivot);
-	LeftLeg->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(255, 0, 0));
+	Pivot = D3DXVECTOR3(0.4f, -2.6f, 0);
+	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
+	LeftLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
+	LeftLeg->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftLeg);
 
 	Box* RightLeg = new Box;
-	Pivot = D3DXVECTOR3(-0.4f, -2.5f, 0);
-	BodyPivots.push_back(Pivot);
-	RightLeg->Init(Pivot, D3DXVECTOR3(0.4f, 1.0f, 0.5f), D3DCOLOR_XRGB(0, 0, 255));
+	Pivot = D3DXVECTOR3(-0.4f, -2.6f, 0);
+	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
+	RightLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
+	RightLeg->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(RightLeg);
-   	
-	for (int i = 0; i < Bodies.size(); i++)
-	{
-		D3DXVECTOR3 newPos = D3DXVECTOR3(BodyPivots[i].x, BodyPivots[i].y, BodyPivots[i].z);
-		Bodies[i]->SetPos(newPos);
-		//if(i > 1)
-		//{
-		//	Bodies[i]->SetPivot(D3DXVECTOR3(Bodies[i]->GetPos().x / 2, Bodies[i]->GetPos().y / 2, 0));
-		//}
-	}
 }
 
-void BoxChar::Update(float delta)
+void BoxChar::InputCheck(float delta)
 {
 	velocity = 0;
-	D3DXMATRIXA16 temp;
-	D3DXMatrixIdentity(&temp);
-
+	bool IsKeyDown = false;
+	D3DXMATRIXA16 TempRot;
+	D3DXMatrixIdentity(&TempRot);
+	
 	// 'W' = 0x57 'A' = 0x41 'S' = 0x53 'D' = 0x44
 	if (GetKeyState('W') & 0x8000)
 	{
+		IsKeyDown = true;
 		velocity = 10.5f * delta;
+		state = WALK;
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&temp, -5.0f * delta));
+		IsKeyDown = true;
+		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&TempRot, -5.0f * delta));
 		angle -= 5.0f * delta;
 	}
 	if (GetKeyState('S') & 0x8000)
 	{
+		IsKeyDown = true;
 		velocity = -8.5f * delta;
+		state = WALK;
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&temp, 5.0f * delta));
+		IsKeyDown = true;
+		D3DXVec3TransformNormal(&dir, &dir, D3DXMatrixRotationY(&TempRot, 5.0f * delta));
 		angle += 5.0f * delta;
 	}
 
-	D3DXVec3Normalize(&dir, &dir);
+	if(!IsKeyDown)
+	{
+		state = IDLE;
+	}
 
+	D3DXVec3Normalize(&dir, &dir);
+}
+
+void BoxChar::Update(float delta)
+{
 	position += dir * velocity;
 	D3DXMatrixTranslation(&TransMat, position.x, position.y, position.z);
 	D3DXMatrixRotationY(&RotateMat, angle);
 
 	WorldMat = ScaleMat * RotateMat * TransMat;
-
-	static float tempAngle = 0;
-	tempAngle += 5.0f * delta;
-	Bodies[1]->SetAngle(tempAngle, 'x');
-	Bodies[2]->SetAngle(tempAngle, 'x');
 	
-	for(int i = 0; i < Bodies.size(); i++)
+	switch(state)
 	{
+	case IDLE:
+		IdleAnim(delta);
+		break;
+	case WALK:
+		WalkAnim(delta);
+		break;
+	case RUN:
+		RunAnim(delta);
+		break;
+	}
+}
+
+void BoxChar::IdleAnim(float delta)
+{
+	float speed = 5.0f;
+
+	for (int i = 0; i < Bodies.size(); i++)
+	{
+		float AngleX = Bodies[i]->GetAngleX();
+
+		if(fabs(AngleX) > EPSILON)
+		{
+			if(AngleX > EPSILON)
+			{
+				Bodies[i]->SetAngleX(Bodies[i]->GetAngleX() - speed * delta);
+			}
+			else if(AngleX < EPSILON)
+			{
+				Bodies[i]->SetAngleX(Bodies[i]->GetAngleX() + speed * delta);
+			}
+		}
+
+		Bodies[i]->Update(delta, WorldMat);
+	}
+}
+
+void BoxChar::WalkAnim(float delta)
+{
+	float speed = 5.0f;
+	float MaxAngle = 1.0f;
+
+	static vector<float> AnimAngle = 
+	{
+		0.0f,  // Body
+		0.0f,  // Head	
+		1.0f,  // Left Arm
+		-1.0f,  // Right Arm
+		-1.0f,  // Left Leg	
+		1.0f   // Right Leg
+	};
+									
+	for (int i = 0; i < Bodies.size(); i++)
+	{
+		if(fabs(Bodies[i]->GetAngleX()) > MaxAngle)
+		{
+			AnimAngle[i] *= -1;
+		}
+				
+		Bodies[i]->SetAngleX(Bodies[i]->GetAngleX() + AnimAngle[i] * speed * delta);
+		Bodies[i]->Update(delta, WorldMat);
+	}
+}
+
+void BoxChar::RunAnim(float delta)
+{
+	float speed = 5.0f;
+	float MaxAngle = 1.5f;
+	
+	static vector<float> AnimAngle =
+	{
+		0.0f,  // Body
+		0.0f,  // Head	
+		1.0f,  // Left Arm
+		-1.0f,  // Right Arm
+		-1.0f,  // Left Leg	
+		1.0f   // Right Leg
+	};
+	
+	for (int i = 0; i < Bodies.size(); i++)
+	{
+		if (fabs(Bodies[i]->GetAngleX()) > MaxAngle)
+		{
+			AnimAngle[i] *= -1;
+		}
+
+		Bodies[i]->SetAngleX(Bodies[i]->GetAngleX() + AnimAngle[i] * speed * delta);
 		Bodies[i]->Update(delta, WorldMat);
 	}
 }

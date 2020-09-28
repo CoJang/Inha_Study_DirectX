@@ -3,9 +3,9 @@
 
 
 Box::Box()
-	: position(0, 0, 0)
+	: Position(0, 0, 0)
 	, MovePivot(0, 0, 0)
-	, Angle(0.0f)
+	, RotateAngle(0, 0, 0)
 	, MaxAngle(0.0f)
 	, AnimDirection(0)
 {
@@ -18,8 +18,9 @@ Box::~Box()
 
 void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DCOLOR color)
 {
-	position = pos;
-	D3DXMatrixScaling(&ScaleMat, scale.x, scale.y, scale.z);
+	Position = pos;
+	Scale = scale;
+	D3DXMatrixScaling(&ScaleMat, Scale.x, Scale.y, Scale.z);
 	PC_VERTEX v;
 	v.c = color;
 
@@ -104,7 +105,7 @@ void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DCOLOR color)
 
 void Box::Update(float delta)
 {
-	D3DXMatrixTranslation(&TransMat, position.x, position.y, position.z);
+	D3DXMatrixTranslation(&TransMat, Position.x, Position.y, Position.z);
 
 	WorldMat = ScaleMat * RotateMat * TransMat;
 }
@@ -115,26 +116,20 @@ void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
 	D3DXMatrixIdentity(&AxisMat);
 	
 	D3DXMatrixTranslation(&AxisMat, MovePivot.x, MovePivot.y, MovePivot.z);
-	WorldMat = ScaleMat * AxisMat;
-	//WorldMat = AxisMat * ScaleMat;
+	//WorldMat = ScaleMat * AxisMat;
+	WorldMat = AxisMat * ScaleMat;
 
-	D3DXMatrixTranslation(&TransMat, position.x - MovePivot.x, position.y - MovePivot.y, position.z - MovePivot.z);
+	D3DXMatrixTranslation(&TransMat, Position.x - MovePivot.x, Position.y - MovePivot.y, Position.z - MovePivot.z);
 
-	switch (RotateFlag)
-	{
-	case 'X':
-	case 'x':
-		D3DXMatrixRotationX(&RotateMat, Angle);
-		break;
-	case 'Y':
-	case 'y':
-		D3DXMatrixRotationY(&RotateMat, Angle);
-		break;
-	case 'Z':
-	case 'z':
-		D3DXMatrixRotationZ(&RotateMat, Angle);
-		break;
-	}
+	D3DXMATRIXA16 XRotMat, YRotMat, ZRotMat;
+	D3DXMatrixIdentity(&XRotMat);
+	D3DXMatrixIdentity(&YRotMat);
+	D3DXMatrixIdentity(&ZRotMat);
+
+	D3DXMatrixRotationX(&XRotMat, RotateAngle.x);
+	D3DXMatrixRotationY(&YRotMat, RotateAngle.y);
+	D3DXMatrixRotationZ(&ZRotMat, RotateAngle.z);
+	RotateMat = XRotMat * YRotMat * ZRotMat;
 	
 	WorldMat *= RotateMat * TransMat * worldmat;
 	//  ÆÈÅ¥ºêsrt * ÆÈ¿ùµåsrt * ¿ùµåsrt
@@ -151,43 +146,34 @@ void Box::Draw(float delta)
 							&vec_Vertexs[8],
 							sizeof(PC_VERTEX));
 
-	
-	vector<PC_VERTEX> verIndex;
-	PC_VERTEX v;
-
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(0, 0, 0);
-	verIndex.push_back(v);
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(MovePivot.x * 3, 0, 0);
-	verIndex.push_back(v);
-
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(0, 0, 0);
-	verIndex.push_back(v);
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(0, -MovePivot.y * 3, 0);
-	verIndex.push_back(v);
-
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(0, 0, 0);
-	verIndex.push_back(v);
-	v.c = 0xffffff;
-	v.p = D3DXVECTOR3(0, 0, MovePivot.z * 3);
-	verIndex.push_back(v);
-	
-
-	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-	DEVICE->SetFVF(PC_VERTEX::FVF);
-
-	DEVICE->DrawPrimitiveUP
-	(
-		D3DPT_LINELIST,
-		verIndex.size() / 2,
-		&verIndex[0],
-		sizeof PC_VERTEX
-	);
-
-	
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);
+	
+	//vector<PC_VERTEX> verIndex;
+	//PC_VERTEX v;
+
+	//v.c = 0xffffff;
+	//v.p = D3DXVECTOR3(0, 0, 0);
+	//verIndex.push_back(v);
+	//v.c = 0xffffff;
+	//v.p = D3DXVECTOR3(MovePivot.x * 3, -MovePivot.y * 3, MovePivot.z * 3);
+	//verIndex.push_back(v);
+
+	//v.c = 0xffffff;
+	//v.p = D3DXVECTOR3(0, 0, 0);
+	//verIndex.push_back(v);
+	//v.c = 0xffffff;
+	//v.p = D3DXVECTOR3(MovePivot.x * 3, 0, -MovePivot.y * 3);
+	//verIndex.push_back(v);
+	
+
+	//DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+	//DEVICE->SetFVF(PC_VERTEX::FVF);
+
+	//DEVICE->DrawPrimitiveUP
+	//(
+	//	D3DPT_LINELIST,
+	//	verIndex.size() / 2,
+	//	&verIndex[0],
+	//	sizeof PC_VERTEX
+	//);
 }

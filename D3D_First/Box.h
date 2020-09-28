@@ -4,12 +4,13 @@
 class Box : public Objects
 {
 private:
-	D3DXVECTOR3 position;
+	D3DXVECTOR3 Position;
+	D3DXVECTOR3 Scale;
 	D3DXVECTOR3 MovePivot;
+	D3DXVECTOR3 RotateAngle;
 
 	int RotateFlag;
 	float MaxAngle;
-	float Angle;
 	int AnimDirection;
 public:
 	Box();
@@ -20,12 +21,22 @@ public:
 	void Update(float delta, D3DXMATRIXA16 & worldmat);
 	void Draw(float delta);
 
-	inline D3DXVECTOR3 & GetPos() { return position; }
-	inline void SetPos(D3DXVECTOR3 & pos) { position = pos; }
+	inline D3DXVECTOR3 & GetPos() { return Position; }
+	inline void SetPos(D3DXVECTOR3 & pos) { Position = pos; }
 	inline void SetPivot(D3DXVECTOR3 pivot) { MovePivot = pivot; }
-	inline void SetAngle(float angle, char axis) { Angle = angle; RotateFlag = axis; }
 	inline void SetMaxAngle(float angle) { MaxAngle = angle; }
 	inline void SetAnimDir(int dir) { AnimDirection = dir; }
+	
+	inline void SetAngleX(float x) { RotateAngle.x = x; }
+	inline void SetAngleY(float y) { RotateAngle.y = y; }
+	inline void SetAngleZ(float z) { RotateAngle.z = z; }
+	inline void SetAngle(float x, float y, float z) { RotateAngle = D3DXVECTOR3(x, y, z); }
+	inline void SetAngle(D3DXVECTOR3 angle) { RotateAngle = angle; }
+
+	inline D3DXVECTOR3 GetAngle() { return RotateAngle; }
+	inline float GetAngleX() { return RotateAngle.x; }
+	inline float GetAngleY() { return RotateAngle.y; }
+	inline float GetAngleZ() { return RotateAngle.z; }
 	
 	inline D3DXMATRIXA16 & GetWorldMat() { return WorldMat; }
 };
