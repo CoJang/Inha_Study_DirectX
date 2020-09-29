@@ -47,6 +47,8 @@ void MyGrid::Update(float delta)
 
 void MyGrid::Draw(float delta)
 {
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	
 	D3DXMATRIXA16 WorldMat;
 	D3DXMatrixIdentity(&WorldMat);
 
@@ -56,6 +58,8 @@ void MyGrid::Draw(float delta)
 							vec_Vertexs.size() / 2,
 							&vec_Vertexs[0],
 							sizeof(PC_VERTEX));
+	
+	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }
 
 AxisLine::AxisLine()
@@ -113,6 +117,8 @@ void AxisLine::Update(float delta)
 
 void AxisLine::Draw(float delta)
 {
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	DEVICE->SetFVF(PC_VERTEX::FVF);
 	DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
@@ -124,6 +130,8 @@ void AxisLine::Draw(float delta)
 	{
 		p.Draw(delta);
 	}
+
+	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }
 
 Pyramid::Pyramid()
@@ -173,10 +181,12 @@ void Pyramid::Update(float delta)
 
 void Pyramid::Draw(float delta)
 {
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	DEVICE->SetRenderState(D3DRS_CULLMODE, false);
+	
 	D3DXMatrixScaling(&ScaleMat, 0.1f, 2.0f, 0.1f);
 	WorldMat = ScaleMat * RotateMat * TransMat;
 
-	DEVICE->SetRenderState(D3DRS_CULLMODE, false);
 	
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	DEVICE->SetFVF(PC_VERTEX::FVF);
@@ -185,5 +195,7 @@ void Pyramid::Draw(float delta)
 							&vec_Vertexs[0],
 							sizeof(PC_VERTEX));
 	
+
 	DEVICE->SetRenderState(D3DRS_CULLMODE, true);
+	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }

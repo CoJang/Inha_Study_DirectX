@@ -45,6 +45,16 @@ extern HWND g_hwnd;
 					return &instance; \
 				}
 
+#define  Synthesize(varType, varName, FunName)\
+   protected: varType varName ; \
+   public: inline varType Get##FunName(void) const { return varName; } \
+   public: inline void Set##FunName(varType var) { varName = var; }
+
+#define Synthesize_pass_by_Ref(varType, varName, FunName)\
+   protected: varType varName; \
+   public: inline varType & Get##FunName(void)  { return varName; } \
+   public: inline void Set##FunName(varType & var) { varName = var; }
+
 // point & color
 struct PC_VERTEX
 {
@@ -52,6 +62,24 @@ struct PC_VERTEX
 	D3DCOLOR	c;
 
 	enum { FVF = D3DFVF_XYZ | D3DFVF_DIFFUSE };
+};
+
+// point & normal & texture
+struct PNT_VERTEX
+{
+	D3DXVECTOR3 p;
+	D3DXVECTOR3 n;
+	D3DXVECTOR2	t;
+
+	enum { FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 };
+};
+
+struct PT_VERTEX
+{
+	D3DXVECTOR3 p;
+	D3DXVECTOR2	t;
+
+	enum { FVF = D3DFVF_XYZ | D3DFVF_TEX1 };
 };
 
 #include "MyMath.h"

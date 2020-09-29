@@ -27,10 +27,11 @@ void BoxChar::Init()
 {
 	D3DXVECTOR3 Pivot;
 	D3DXVECTOR3 Scale;
+	D3DXCOLOR color;
 	
+	Box* Body = new Box;
 	Pivot = D3DXVECTOR3(0, 0, 0);
 	Scale = D3DXVECTOR3(0.8f, 1.5f, 0.5f);
-	Box* Body = new Box;
 	Body->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 255, 255));
 	Bodies.push_back(Body);
 
@@ -46,7 +47,6 @@ void BoxChar::Init()
 	LeftArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
 	LeftArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftArm);
-
 
 	Box* RightArm = new Box;
 	Pivot = D3DXVECTOR3(-1.2f, 0.5f, 0);
@@ -214,6 +214,7 @@ void BoxChar::RunAnim(float delta)
 void BoxChar::Draw(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);
+
 	for( Box* B : Bodies )
 	{
 		B->Draw(delta);

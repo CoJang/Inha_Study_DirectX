@@ -7,6 +7,7 @@
 
 GameScene::GameScene()
 {
+	m_pTexture = NULL;
 }
 
 
@@ -16,6 +17,7 @@ GameScene::~GameScene()
 	SafeDelete(Grid);
 	SafeDelete(Line);
 	SafeDelete(Zemmin2);
+	SafeRelease(m_pTexture);
 	DEVICEMANAGER->Destroy();
 }
 
@@ -63,6 +65,8 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 void GameScene::InitGameScene()
 {
+	SetLight();
+
 	Grid = new MyGrid;
 	Grid->Init(15, 1.0f);
 
@@ -79,7 +83,39 @@ void GameScene::InitGameScene()
 	CamTarget = Camera->GetCamTarget();
 	CamFov = Camera->GetCamFov();
 
-	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	{
+		D3DXCreateTextureFromFile(DEVICE, TEXT("metal_01-18.png"), &m_pTexture);
+		
+		PT_VERTEX v;
+		v.p = D3DXVECTOR3(0, 0, 0);
+		v.t = D3DXVECTOR2(0, 1);
+		vec_Vertex.push_back(v);
+
+		v.p = D3DXVECTOR3(0, 1, 0);
+		v.t = D3DXVECTOR2(0, 0);
+		vec_Vertex.push_back(v);
+
+		v.p = D3DXVECTOR3(1, 1, 0);
+		v.t = D3DXVECTOR2(1, 0);
+		vec_Vertex.push_back(v);
+	}
+}
+
+void GameScene::SetLight()
+{
+	D3DLIGHT9 stLight;
+	ZeroMemory(&stLight, sizeof(D3DLIGHT9));
+	stLight.Type = D3DLIGHT_DIRECTIONAL;
+	stLight.Ambient = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	stLight.Diffuse = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	stLight.Specular = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+
+	D3DXVECTOR3 Dir(0.0f, -1.0f, -1.0f);
+	D3DXVec3Normalize(&Dir, &Dir);
+
+	stLight.Direction = Dir;
+	DEVICE->SetLight(0, &stLight);
+	DEVICE->LightEnable(0, true);
 }
 
 void GameScene::Update(float delta)
@@ -102,9 +138,29 @@ void GameScene::Render(float delta)
 		Grid->Draw(delta);
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
+
+		//DrawTexture(delta);
 		
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);
 	}
+}
+
+void GameScene::DrawTexture(float delta)
+{
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+
+	D3DXMATRIXA16 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	DEVICE->SetTransform(D3DTS_WORLD, &matWorld);
+	DEVICE->SetTexture(0, m_pTexture);
+	DEVICE->SetFVF(PT_VERTEX::FVF);
+	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+							vec_Vertex.size() / 3,
+							&vec_Vertex[0],
+							sizeof(PT_VERTEX));
+
+	DEVICE->SetTexture(0, NULL);
+	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }
 

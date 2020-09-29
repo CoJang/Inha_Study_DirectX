@@ -1,13 +1,14 @@
 #pragma once
 #include "Objects.h"
 
-class Box : public Objects
+class Box : public Objects_PNT
 {
-private:
+protected:
 	D3DXVECTOR3 Position;
 	D3DXVECTOR3 Scale;
 	D3DXVECTOR3 MovePivot;
 	D3DXVECTOR3 RotateAngle;
+	D3DMATERIAL9 material;
 
 	int RotateFlag;
 	float MaxAngle;
@@ -16,7 +17,7 @@ public:
 	Box();
 	~Box();
 
-	void Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DCOLOR color);
+	void Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color);
 	void Update(float delta);
 	void Update(float delta, D3DXMATRIXA16 & worldmat);
 	void Draw(float delta);
@@ -40,4 +41,3 @@ public:
 	
 	inline D3DXMATRIXA16 & GetWorldMat() { return WorldMat; }
 };
-
