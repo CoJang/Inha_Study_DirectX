@@ -21,9 +21,13 @@ void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color)
 	Position = pos;
 	Scale = scale;
 	ZeroMemory(&material, sizeof(D3DMATERIAL9));
-	material.Ambient = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
-	material.Diffuse = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
-	material.Specular = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
+	//material.Diffuse = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
+	//material.Ambient = D3DXCOLOR(color.r * 0.6f, color.g * 0.6f, color.b * 0.6f, 1.0f);
+	//material.Specular = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
+
+	material.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	material.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	material.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	
 	D3DXMatrixScaling(&ScaleMat, Scale.x, Scale.y, Scale.z);
 
@@ -41,15 +45,16 @@ void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color)
 	vertex.p = D3DXVECTOR3(1.0f, -1.0f, -1.0f);
 	vec.push_back(vertex);
 
+	//4
 	vertex.p = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
 	vec.push_back(vertex);
-
+	//5
 	vertex.p = D3DXVECTOR3(-1.0f, 1.0f, 1.0f);
 	vec.push_back(vertex);
-
+	//6
 	vertex.p = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	vec.push_back(vertex);
-
+	//7
 	vertex.p = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
 	vec.push_back(vertex);
 
@@ -125,9 +130,25 @@ void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color)
 
 void Box::Update(float delta)
 {
-	D3DXMatrixTranslation(&TransMat, Position.x, Position.y, Position.z);
+	D3DXMATRIXA16 AxisMat;
+	D3DXMatrixIdentity(&AxisMat);
 
-	WorldMat = ScaleMat * RotateMat * TransMat;
+	D3DXMatrixTranslation(&AxisMat, MovePivot.x, MovePivot.y, MovePivot.z);
+	WorldMat = AxisMat * ScaleMat;
+
+	D3DXMatrixTranslation(&TransMat, Position.x - MovePivot.x, Position.y - MovePivot.y, Position.z - MovePivot.z);
+
+	D3DXMATRIXA16 XRotMat, YRotMat, ZRotMat;
+	D3DXMatrixIdentity(&XRotMat);
+	D3DXMatrixIdentity(&YRotMat);
+	D3DXMatrixIdentity(&ZRotMat);
+
+	D3DXMatrixRotationX(&XRotMat, RotateAngle.x);
+	D3DXMatrixRotationY(&YRotMat, RotateAngle.y);
+	D3DXMatrixRotationZ(&ZRotMat, RotateAngle.z);
+	RotateMat = XRotMat * YRotMat * ZRotMat;
+
+	WorldMat *= RotateMat * TransMat;
 }
 
 void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
@@ -136,7 +157,6 @@ void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
 	D3DXMatrixIdentity(&AxisMat);
 	
 	D3DXMatrixTranslation(&AxisMat, MovePivot.x, MovePivot.y, MovePivot.z);
-	//WorldMat = ScaleMat * AxisMat;
 	WorldMat = AxisMat * ScaleMat;
 
 	D3DXMatrixTranslation(&TransMat, Position.x - MovePivot.x, Position.y - MovePivot.y, Position.z - MovePivot.z);
@@ -152,14 +172,11 @@ void Box::Update(float delta, D3DXMATRIXA16 & worldmat)
 	RotateMat = XRotMat * YRotMat * ZRotMat;
 	
 	WorldMat *= RotateMat * TransMat * worldmat;
-	//  ÆÈÅ¥ºêsrt * ÆÈ¿ùµåsrt * ¿ùµåsrt
-	//  ÆÈÅ¥ºêst * ÆÈ¿ùµå rt * ¿ùµå srt
 }
 
 void Box::Draw(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, false);
-	
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);
 
 	DEVICE->SetMaterial(&material);
@@ -169,26 +186,6 @@ void Box::Draw(float delta)
 							vec_Vertexs.size() / 3,
 							&vec_Vertexs[0],
 							sizeof(PNT_VERTEX));
-
-
-	//PC_VERTEX v;
-	//std::vector<PC_VERTEX> normalVector;
-	//v.c = D3DCOLOR_XRGB(255, 255, 255);
-
-	//v.p = D3DXVECTOR3(0, 0, 0);
-	//normalVector.push_back(v);
-	//
-	//v.p = vec_Vertexs[0].n * 5;
-	//normalVector.push_back(v);
-
-	//DEVICE->SetRenderState(D3DRS_LIGHTING, false);
-	//
-	//DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-	//DEVICE->SetFVF(PC_VERTEX::FVF);
-	//DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
-	//						normalVector.size() / 2,
-	//						&normalVector[0],
-	//						sizeof(PC_VERTEX));
 
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);

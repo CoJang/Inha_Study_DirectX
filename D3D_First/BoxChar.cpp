@@ -1,5 +1,10 @@
 #include "stdafx.h"
-#include "Box.h"
+#include "BCBody.h"
+#include "BCHead.h"
+#include "BCLeftArm.h"
+#include "BCRightArm.h"
+#include "BCLeftLeg.h"
+#include "BCRightLeg.h"
 #include "BoxChar.h"
 
 
@@ -25,44 +30,46 @@ BoxChar::~BoxChar()
 
 void BoxChar::Init()
 {
+	D3DXCreateTextureFromFile(DEVICE, TEXT("texture/2020_10_03_duck-15410994.png"), &Texture);
+
 	D3DXVECTOR3 Pivot;
 	D3DXVECTOR3 Scale;
 	D3DXCOLOR color;
 	
-	Box* Body = new Box;
+	BCBody* Body = new BCBody;
 	Pivot = D3DXVECTOR3(0, 0, 0);
 	Scale = D3DXVECTOR3(0.8f, 1.5f, 0.5f);
 	Body->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 255, 255));
 	Bodies.push_back(Body);
 
-	Box* Head = new Box;
+	BCHead* Head = new BCHead;
 	Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-	Pivot = D3DXVECTOR3(0, 2.0f, 0);
+	Pivot = D3DXVECTOR3(0, 2.5f, 0);
 	Head->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	Bodies.push_back(Head);
 
-	Box* LeftArm = new Box;
+	BCLeftArm* LeftArm = new BCLeftArm;
 	Pivot = D3DXVECTOR3(1.2f, 0.5f, 0); // »ó´ëÁÂÇ¥
 	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
 	LeftArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
 	LeftArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftArm);
 
-	Box* RightArm = new Box;
+	BCRightArm* RightArm = new BCRightArm;
 	Pivot = D3DXVECTOR3(-1.2f, 0.5f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
 	RightArm->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
 	RightArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(RightArm);
 
-	Box* LeftLeg = new Box;
+	BCLeftLeg* LeftLeg = new BCLeftLeg;
 	Pivot = D3DXVECTOR3(0.4f, -2.6f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
 	LeftLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
 	LeftLeg->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftLeg);
 
-	Box* RightLeg = new Box;
+	BCRightLeg* RightLeg = new BCRightLeg;
 	Pivot = D3DXVECTOR3(-0.4f, -2.6f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
 	RightLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
@@ -160,7 +167,7 @@ void BoxChar::IdleAnim(float delta)
 void BoxChar::WalkAnim(float delta)
 {
 	float speed = 5.0f;
-	float MaxAngle = 1.0f;
+	float MaxAngle = 1.5f;
 
 	static vector<float> AnimAngle = 
 	{
@@ -176,6 +183,11 @@ void BoxChar::WalkAnim(float delta)
 	{
 		if(fabs(Bodies[i]->GetAngleX()) > MaxAngle)
 		{
+			if(Bodies[i]->GetAngleX() > 0)
+				Bodies[i]->SetAngleX(MaxAngle);
+			else
+				Bodies[i]->SetAngleX(-MaxAngle);
+			
 			AnimAngle[i] *= -1;
 		}
 				
@@ -214,10 +226,12 @@ void BoxChar::RunAnim(float delta)
 void BoxChar::Draw(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);
+	DEVICE->SetTexture(0, Texture);
 
 	for( Box* B : Bodies )
 	{
 		B->Draw(delta);
 	}
+	DEVICE->SetTexture(0, NULL);
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);
 }
