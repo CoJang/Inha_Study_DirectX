@@ -21,7 +21,7 @@ void Box::Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color)
 	Position = pos;
 	Scale = scale;
 	ZeroMemory(&material, sizeof(D3DMATERIAL9));
-	material.Ambient = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
+	material.Ambient = D3DXCOLOR(color.r * 0.5f, color.g * 0.5f, color.b * 0.5f, 1.0f);
 	material.Diffuse = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
 	material.Specular = D3DXCOLOR(color.r, color.g, color.b, 1.0f);
 	
