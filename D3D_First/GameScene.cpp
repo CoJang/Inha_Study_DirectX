@@ -98,12 +98,12 @@ void GameScene::SetLight()
 	FlashLight.SetSpecularColor(D3DXCOLOR(0.0f, 0.8f, 0.0f, 1.0f));
 	FlashLight.SetDirection(D3DXVECTOR3(0, 1, 0));
 	FlashLight.SetPosition(D3DXVECTOR3(0, 5, 0));
-	FlashLight.SetRange(7.0f);
+	FlashLight.SetRange(10.0f);
 	//FlashLight.SetLightState(false);
 
-	Torch.SetDiffuseColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
-	Torch.SetAmbientColor(D3DXCOLOR(0.0f, 0.0f, 0.8f, 1.0f));
-	Torch.SetSpecularColor(D3DXCOLOR(0.0f, 0.0f, 0.8f, 1.0f));
+	Torch.SetDiffuseColor(D3DXCOLOR(0.0f, 0.0f, 5.0f, 1.0f));
+	Torch.SetAmbientColor(D3DXCOLOR(0.0f, 0.0f, 0.3f, 1.0f));
+	Torch.SetSpecularColor(D3DXCOLOR(0.0f, 0.0f, 0.3f, 1.0f));
 	Torch.SetPosition(D3DXVECTOR3(10, 3, 10));
 	Torch.SetRange(5.0f);
 	//Torch.SetLightState(false);
@@ -142,9 +142,15 @@ void GameScene::Update(float delta)
 
 	if (GetKeyState(VK_NUMPAD8) & 0x8000)
 	{
-		D3DXVECTOR3 pos = FlashLight.GetPosition();
-		pos = D3DXVECTOR3(pos.x, pos.y, pos.z + delta);
-		FlashLight.SetPosition(pos);
+		//D3DXVECTOR3 pos = FlashLight.GetPosition();
+		D3DXVECTOR3 dir = FlashLight.GetDirection();
+		D3DXMATRIXA16 RotMat;
+		D3DXMatrixIdentity(&RotMat);
+		D3DXMatrixRotationX(&RotMat, 1.0f);
+		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
+		
+		//dir = D3DXVECTOR3(dir.x, dir.y, dir.z + 1.0f);
+		FlashLight.SetDirection(dir);
 	}
 
 	if (GetKeyState(VK_NUMPAD4) & 0x8000)
@@ -166,7 +172,7 @@ void GameScene::Update(float delta)
 	static float moveDir = -1.0f;
 	SunTimer += delta;
 	
-	if(SunTimer > 1.0f)
+	//if(SunTimer > 1.0f)
 	{
 		D3DXVECTOR3 dir = Sun.GetDirection();
 
@@ -191,7 +197,7 @@ void GameScene::Render(float delta)
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
 
-		FlashLight.DrawGizmo(delta);
+		//FlashLight.DrawGizmo(delta);
 		Torch.DrawGizmo(delta);
 
 		DEVICE->EndScene();

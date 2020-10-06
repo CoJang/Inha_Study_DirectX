@@ -51,6 +51,10 @@ SpotLight::SpotLight(DWORD index)
 	LightSrc.Specular = Specular;
 	LightSrc.Range = Range;
 
+	LightSrc.Attenuation2 = 0.05f;
+	LightSrc.Phi = PI / 2;
+	LightSrc.Theta = PI / 4;
+
 	D3DXVec3Normalize(&LightSrcDir, &LightSrcDir);
 
 	LightSrc.Direction = LightSrcDir;
@@ -86,9 +90,9 @@ void SpotLight::DrawGizmo(float delta)
 DotLight::DotLight(DWORD index)
 	:Range(1.0f)
 	,LightSrcPos(0, 0, 0)
-	, Attenuation0(0.0f)
-	, Attenuation1(0.01f)
-	, Attenuation2(0.01f)
+	, Attenuation0(0.1f)
+	, Attenuation1(0.1f)
+	, Attenuation2(0.15f)
 {
 	ID = index;
 	LightSrc.Type = D3DLIGHT_POINT;
