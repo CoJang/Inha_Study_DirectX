@@ -157,6 +157,7 @@
     <ClInclude Include="BoxChar.h" />
     <ClInclude Include="D3D_First.h" />
     <ClInclude Include="DeviceManager.h" />
+    <ClInclude Include="MyLight.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyGrid.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="BoxChar.cpp" />
     <ClCompile Include="D3D_First.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
+    <ClCompile Include="MyLight.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyGrid.cpp" />

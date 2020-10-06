@@ -3,9 +3,11 @@
 #include "MyGrid.h"
 #include "BoxChar.h"
 #include "MyCamera.h"
+
 #include "GameScene.h"
 
 GameScene::GameScene()
+	:Sun(0)
 {
 	m_pTexture = NULL;
 }
@@ -103,29 +105,54 @@ void GameScene::InitGameScene()
 
 void GameScene::SetLight()
 {
-	D3DLIGHT9 stLight;
-	ZeroMemory(&stLight, sizeof(D3DLIGHT9));
-	stLight.Type = D3DLIGHT_DIRECTIONAL;
-	stLight.Ambient = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-	stLight.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	stLight.Specular = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-
-	D3DXVECTOR3 Dir(0.0f, -1.0f, -1.0f);
-	D3DXVec3Normalize(&Dir, &Dir);
-
-	stLight.Direction = Dir;
-	DEVICE->SetLight(0, &stLight);
-	DEVICE->LightEnable(0, true);
+	Sun.SetAmbientColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
+	Sun.SetDiffuseColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	Sun.SetSpecularColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
 }
 
 void GameScene::Update(float delta)
 {
+	Sun.LightUpdate(delta);
+	
 	Camera->Update(delta);
 	Grid->Update(delta);
 	Line->Update(delta);
 	Zemmin2->InputCheck(delta);
 	Zemmin2->Update(delta);
 	Camera->SetCamTarget(Zemmin2->GetPos());
+
+
+	if (GetKeyState(VK_ADD) & 0x8000)
+	{
+		D3DXVECTOR3 dir = Sun.GetDirection();
+		Sun.SetDirection(D3DXVECTOR3(dir.x, dir.y + 5.0f * delta, dir.z));
+		cout << dir.y << endl;
+	}
+
+	if (GetKeyState(VK_SUBTRACT) & 0x8000)
+	{
+		D3DXVECTOR3 dir = Sun.GetDirection();
+		Sun.SetDirection(D3DXVECTOR3(dir.x, dir.y - 5.0f * delta, dir.z));
+		cout << dir.y << endl;
+	}
+
+	
+	static float SunTimer = 0;
+	static float moveDir = -1.0f;
+	SunTimer += delta;
+	
+	if(SunTimer > 1.0f)
+	{
+		D3DXVECTOR3 dir = Sun.GetDirection();
+
+		D3DXMATRIXA16 RotMat;
+		D3DXMatrixIdentity(&RotMat);
+		D3DXMatrixRotationZ(&RotMat, 0.5f);
+		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
+	
+		Sun.SetDirection(dir);
+		SunTimer = 0;
+	}
 }
 
 void GameScene::Render(float delta)

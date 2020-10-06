@@ -2,57 +2,6 @@
     WIN32 APPLICATION : D3D_First Project Overview
 ========================================================================
 
-AppWizard has created this D3D_First application for you.
-
-This file contains a summary of what you will find in each of the files that
-make up your D3D_First application.
-
-
-D3D_First.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-D3D_First.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
-
-D3D_First.cpp
-    This is the main application source file.
-
-/////////////////////////////////////////////////////////////////////////////
-AppWizard has created the following resources:
-
-D3D_First.rc
-    This is a listing of all of the Microsoft Windows resources that the
-    program uses.  It includes the icons, bitmaps, and cursors that are stored
-    in the RES subdirectory.  This file can be directly edited in Microsoft
-    Visual C++.
-
-Resource.h
-    This is the standard header file, which defines new resource IDs.
-    Microsoft Visual C++ reads and updates this file.
-
-D3D_First.ico
-    This is an icon file, which is used as the application's icon (32x32).
-    This icon is included by the main resource file D3D_First.rc.
-
-small.ico
-    This is an icon file, which contains a smaller version (16x16)
-    of the application's icon. This icon is included by the main resource
-    file D3D_First.rc.
-
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
-
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named D3D_First.pch and a precompiled types file named StdAfx.obj.
-
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
 
@@ -60,3 +9,10 @@ AppWizard uses "TODO:" comments to indicate parts of the source code you
 should add to or customize.
 
 /////////////////////////////////////////////////////////////////////////////
+
+TODO:
+		//1. 그리드에 노말 넣어서 라이트 적용.
+		2. Directional Light 해뜨고 지도록 하기
+		3. Spot Light 키 입력에 따라 방향 조정
+		4. Point Light 범위를 조정 할 수 있도록.
+		5. 락 라이트의 위치를 표시 해 줄것.

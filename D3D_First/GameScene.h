@@ -5,6 +5,8 @@ class AxisLine;
 class BoxChar;
 class MyCamera;
 
+#include "MyLight.h"
+
 class GameScene
 {
 public:
@@ -19,11 +21,12 @@ private:
 
 	LPDIRECT3DTEXTURE9 m_pTexture;
 	std::vector<PT_VERTEX> vec_Vertex;
-	
 
 	D3DXVECTOR3* CamPos;
 	D3DXVECTOR3* CamTarget;
 	float* CamFov;
+
+	DirLight Sun;
 public:
 	void WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 	

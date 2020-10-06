@@ -30,7 +30,7 @@ BoxChar::~BoxChar()
 
 void BoxChar::Init()
 {
-	D3DXCreateTextureFromFile(DEVICE, TEXT("texture/2020_10_03_duck-15410994.png"), &Texture);
+	D3DXCreateTextureFromFile(DEVICE, TEXT("texture/5173c405cba4b429.png"), &Texture);
 
 	D3DXVECTOR3 Pivot;
 	D3DXVECTOR3 Scale;
@@ -167,7 +167,7 @@ void BoxChar::IdleAnim(float delta)
 void BoxChar::WalkAnim(float delta)
 {
 	float speed = 5.0f;
-	float MaxAngle = 1.5f;
+	float MaxAngle = 1.0f;
 
 	static vector<float> AnimAngle = 
 	{
@@ -199,7 +199,7 @@ void BoxChar::WalkAnim(float delta)
 void BoxChar::RunAnim(float delta)
 {
 	float speed = 5.0f;
-	float MaxAngle = 1.5f;
+	float MaxAngle = 1.0f;
 	
 	static vector<float> AnimAngle =
 	{
@@ -215,11 +215,16 @@ void BoxChar::RunAnim(float delta)
 	{
 		if (fabs(Bodies[i]->GetAngleX()) > MaxAngle)
 		{
+			if (Bodies[i]->GetAngleX() > 0)
+				Bodies[i]->SetAngleX(MaxAngle);
+			else
+				Bodies[i]->SetAngleX(-MaxAngle);
+			
 			AnimAngle[i] *= -1;
 		}
 
 		Bodies[i]->SetAngleX(Bodies[i]->GetAngleX() + AnimAngle[i] * speed * delta);
-		Bodies[i]->Update(delta, WorldMat);
+		Bodies[i]->Update(delta);
 	}
 }
 

@@ -1,8 +1,10 @@
 #pragma once
 #include "Objects.h"
 
-class MyGrid : public Objects
+class MyGrid : public Objects_PNT
 {
+private:
+	D3DMATERIAL9 material;
 public:
 	MyGrid();
 	~MyGrid();

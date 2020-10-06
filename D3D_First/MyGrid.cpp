@@ -13,20 +13,23 @@ MyGrid::~MyGrid()
 
 void MyGrid::Init(int lineNum, float cellsize)
 {
-	PC_VERTEX v;
+	ZeroMemory(&material, sizeof(D3DMATERIAL9));
+	float blightness = 0.5f;
+	material.Diffuse = D3DXCOLOR(blightness, blightness, blightness, 1.0f);
+	material.Ambient = D3DXCOLOR(blightness, blightness, blightness, 1.0f);
+	material.Specular = D3DXCOLOR(blightness, blightness, blightness, 1.0f);
+	
+	PNT_VERTEX v;
 	int Num = lineNum;
 	float CellSize = cellsize;
 	float MaxSize = Num * CellSize;
 	int Cnt = 0;
-	v.c = D3DCOLOR_XRGB(255, 255, 255);
+	v.n = D3DXVECTOR3(0, 1, 0);
 
 	for (float x = -MaxSize; x <= Num * CellSize; x += CellSize)
 		for (float y = -MaxSize; y <= Num * CellSize; y += CellSize)
 		{
 			if (x == 0 || y == 0) continue;
-			
-			if(x  || y == 0) v.c = D3DCOLOR_XRGB(255, 255, 255);
-			else v.c = D3DCOLOR_XRGB(100, 100, 100);
 			
 			v.p = D3DXVECTOR3(x, 0, y);
 			vec_Vertexs.push_back(v);
@@ -47,19 +50,20 @@ void MyGrid::Update(float delta)
 
 void MyGrid::Draw(float delta)
 {
-	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	//DEVICE->SetRenderState(D3DRS_LIGHTING, false);
 	
 	D3DXMATRIXA16 WorldMat;
 	D3DXMatrixIdentity(&WorldMat);
 
+	DEVICE->SetMaterial(&material);
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-	DEVICE->SetFVF(PC_VERTEX::FVF);
+	DEVICE->SetFVF(PNT_VERTEX::FVF);
 	DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
 							vec_Vertexs.size() / 2,
 							&vec_Vertexs[0],
-							sizeof(PC_VERTEX));
+							sizeof(PNT_VERTEX));
 	
-	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
+	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }
 
 AxisLine::AxisLine()
