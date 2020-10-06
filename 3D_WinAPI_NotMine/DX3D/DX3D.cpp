@@ -1,25 +1,29 @@
-// Practice_3D_WinAPI.cpp : Defines the entry point for the application.
+// DX3D.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
-#include "MyCube.h"
-#include "Main.h"
-#include "MainGame.h"
+#include "DX3D.h"
+#include "cMainGame.h"
 
 #define MAX_LOADSTRING 100
 
-HWND g_hwnd;
-MainGame* g_pMainGame;
-#define TIMER_ID 100
-
+// Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+// Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+// >> : 
+cMainGame*	g_pMainGame; 
+HWND		g_hWnd; 
+// << : 
+
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -31,40 +35,60 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // TODO: Place code here.
 
+    // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_PRACTICE_3D_WINAPI, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_DX3D, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
+    // Perform application initialization:
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PRACTICE_3D_WINAPI));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DX3D));
 
-	g_pMainGame = new MainGame;
-	g_pMainGame->InitMainGame();
-	SetTimer(g_hwnd, TIMER_ID, 100, NULL);
+	// >>  :
+	g_pMainGame = new cMainGame; 
+	g_pMainGame->Setup(); 
+	// << : 
 
     MSG msg;
 
-    while (GetMessage(&msg, nullptr, 0, 0))
+    // Main message loop:
+    while (true)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+		if( PeekMessage(&msg , NULL , 0 , 0 , PM_REMOVE) )
+		{
+			if (msg.message == WM_QUIT)
+			{
+				break; 
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
         }
+		else
+		{
+			g_pMainGame->Update(); 
+			g_pMainGame->Render(); 
+		}
     }
 
-	KillTimer(g_hwnd, TIMER_ID);
-	delete g_pMainGame;
+	SafeDelete(g_pMainGame); 
 
     return (int) msg.wParam;
 }
 
 
 
+//
+//  FUNCTION: MyRegisterClass()
+//
+//  PURPOSE: Registers the window class.
+//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -76,16 +100,26 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_PRACTICE_3D_WINAPI));
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_DX3D));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_PRACTICE_3D_WINAPI);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_DX3D);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
 }
 
+//
+//   FUNCTION: InitInstance(HINSTANCE, int)
+//
+//   PURPOSE: Saves instance handle and creates main window
+//
+//   COMMENTS:
+//
+//        In this function, we save the instance handle in a global variable and
+//        create and display the main program window.
+//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
@@ -97,33 +131,33 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    {
       return FALSE;
    }
-   g_hwnd = hWnd;
 
+   // >> : 
+   g_hWnd = hWnd; 
+   // << : 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
-
 
    return TRUE;
 }
 
+//
+//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  PURPOSE:  Processes messages for the main window.
+//
+//  WM_COMMAND  - process the application menu
+//  WM_PAINT    - Paint the main window
+//  WM_DESTROY  - post a quit message and return
+//
+//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if(g_pMainGame)
-	{
-		g_pMainGame->WndProc(hWnd, message, wParam, lParam);
-	}
+	if (g_pMainGame)
+		g_pMainGame->WndProc(hWnd, message, wParam, lParam); 
 
     switch (message)
     {
-	case WM_CREATE:
-		{
-		}
-		break;
-	case WM_TIMER:
-		if (g_pMainGame)
-			g_pMainGame->Update();
-		InvalidateRgn(hWnd, NULL, false);
-		break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -145,10 +179,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-    		
-			if (g_pMainGame)
-				g_pMainGame->Render(hdc);
-    		
+            // TODO: Add any drawing code that uses hdc here...
             EndPaint(hWnd, &ps);
         }
         break;

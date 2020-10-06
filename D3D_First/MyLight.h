@@ -1,4 +1,5 @@
 #pragma once
+#include "Box.h"
 
 class MyLight
 {
@@ -44,7 +45,9 @@ class SpotLight : public MyLight
 private:
 	D3DXVECTOR3 LightSrcDir;
 	D3DXVECTOR3 LightSrcPos;
-	
+	float Range;
+
+	Box Gizmo;
 public:
 	SpotLight(DWORD index);
 	~SpotLight() = default;
@@ -57,6 +60,9 @@ public:
 	
 	inline D3DXVECTOR3 GetPosition() { return LightSrcPos; }
 	inline void SetPosition(D3DXVECTOR3 pos) { LightSrcPos = pos; }
+
+	inline float GetRange() { return Range; }
+	inline void SetRange(float range) { Range = range; }
 };
 
 class DotLight : public MyLight
@@ -65,8 +71,11 @@ private:
 	D3DXVECTOR3 LightSrcPos;
 	float Range;
 
+	float Attenuation0;
 	float Attenuation1;
 	float Attenuation2;
+
+	Box Gizmo;
 public:
 	DotLight(DWORD index);
 	~DotLight() = default;

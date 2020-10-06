@@ -8,8 +8,9 @@
 
 GameScene::GameScene()
 	:Sun(0)
+	,FlashLight(1)
+	,Torch(2)
 {
-	m_pTexture = NULL;
 }
 
 
@@ -19,7 +20,6 @@ GameScene::~GameScene()
 	SafeDelete(Grid);
 	SafeDelete(Line);
 	SafeDelete(Zemmin2);
-	SafeRelease(m_pTexture);
 	DEVICEMANAGER->Destroy();
 }
 
@@ -70,7 +70,7 @@ void GameScene::InitGameScene()
 	SetLight();
 
 	Grid = new MyGrid;
-	Grid->Init(15, 1.0f);
+	Grid->Init(30, 0.5f);
 
 	Line = new AxisLine;
 	Line->Init();
@@ -84,35 +84,36 @@ void GameScene::InitGameScene()
 	CamPos = Camera->GetCamPos();
 	CamTarget = Camera->GetCamTarget();
 	CamFov = Camera->GetCamFov();
-
-	{
-		D3DXCreateTextureFromFile(DEVICE, TEXT("texture/metal_01-18.png"), &m_pTexture);
-		
-		PT_VERTEX v;
-		v.p = D3DXVECTOR3(0, 0, 0);
-		v.t = D3DXVECTOR2(0, 1);
-		vec_Vertex.push_back(v);
-
-		v.p = D3DXVECTOR3(0, 1, 0);
-		v.t = D3DXVECTOR2(0, 0);
-		vec_Vertex.push_back(v);
-
-		v.p = D3DXVECTOR3(1, 1, 0);
-		v.t = D3DXVECTOR2(1, 0);
-		vec_Vertex.push_back(v);
-	}
 }
 
 void GameScene::SetLight()
 {
-	Sun.SetAmbientColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
 	Sun.SetDiffuseColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	Sun.SetAmbientColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
 	Sun.SetSpecularColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
+	//Sun.SetLightState(false);
+
+	FlashLight.SetDiffuseColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+	FlashLight.SetAmbientColor(D3DXCOLOR(0.0f, 0.8f, 0.0f, 1.0f));
+	FlashLight.SetSpecularColor(D3DXCOLOR(0.0f, 0.8f, 0.0f, 1.0f));
+	FlashLight.SetDirection(D3DXVECTOR3(0, 1, 0));
+	FlashLight.SetPosition(D3DXVECTOR3(0, 5, 0));
+	FlashLight.SetRange(7.0f);
+	//FlashLight.SetLightState(false);
+
+	Torch.SetDiffuseColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	Torch.SetAmbientColor(D3DXCOLOR(0.0f, 0.0f, 0.8f, 1.0f));
+	Torch.SetSpecularColor(D3DXCOLOR(0.0f, 0.0f, 0.8f, 1.0f));
+	Torch.SetPosition(D3DXVECTOR3(10, 3, 10));
+	Torch.SetRange(5.0f);
+	//Torch.SetLightState(false);
 }
 
 void GameScene::Update(float delta)
 {
 	Sun.LightUpdate(delta);
+	FlashLight.LightUpdate(delta);
+	Torch.LightUpdate(delta);
 	
 	Camera->Update(delta);
 	Grid->Update(delta);
@@ -124,16 +125,40 @@ void GameScene::Update(float delta)
 
 	if (GetKeyState(VK_ADD) & 0x8000)
 	{
-		D3DXVECTOR3 dir = Sun.GetDirection();
-		Sun.SetDirection(D3DXVECTOR3(dir.x, dir.y + 5.0f * delta, dir.z));
-		cout << dir.y << endl;
+		Torch.SetRange(Torch.GetRange() + delta);
 	}
 
 	if (GetKeyState(VK_SUBTRACT) & 0x8000)
 	{
-		D3DXVECTOR3 dir = Sun.GetDirection();
-		Sun.SetDirection(D3DXVECTOR3(dir.x, dir.y - 5.0f * delta, dir.z));
-		cout << dir.y << endl;
+		Torch.SetRange(Torch.GetRange() - delta);
+	}
+
+	if (GetKeyState(VK_NUMPAD2) & 0x8000)
+	{
+		D3DXVECTOR3 pos = FlashLight.GetPosition();
+		pos = D3DXVECTOR3(pos.x, pos.y, pos.z - delta);
+		FlashLight.SetPosition(pos);
+	}
+
+	if (GetKeyState(VK_NUMPAD8) & 0x8000)
+	{
+		D3DXVECTOR3 pos = FlashLight.GetPosition();
+		pos = D3DXVECTOR3(pos.x, pos.y, pos.z + delta);
+		FlashLight.SetPosition(pos);
+	}
+
+	if (GetKeyState(VK_NUMPAD4) & 0x8000)
+	{
+		D3DXVECTOR3 pos = FlashLight.GetPosition();
+		pos = D3DXVECTOR3(pos.x - delta, pos.y, pos.z );
+		FlashLight.SetPosition(pos);
+	}
+
+	if (GetKeyState(VK_NUMPAD6) & 0x8000)
+	{
+		D3DXVECTOR3 pos = FlashLight.GetPosition();
+		pos = D3DXVECTOR3(pos.x + delta, pos.y, pos.z);
+		FlashLight.SetPosition(pos);
 	}
 
 	
@@ -147,7 +172,7 @@ void GameScene::Update(float delta)
 
 		D3DXMATRIXA16 RotMat;
 		D3DXMatrixIdentity(&RotMat);
-		D3DXMatrixRotationZ(&RotMat, 0.5f);
+		D3DXMatrixRotationZ(&RotMat, 1.0f * delta);
 		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
 	
 		Sun.SetDirection(dir);
@@ -166,28 +191,11 @@ void GameScene::Render(float delta)
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
 
-		DrawTexture(delta);
-		
+		FlashLight.DrawGizmo(delta);
+		Torch.DrawGizmo(delta);
+
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);
 	}
-}
-
-void GameScene::DrawTexture(float delta)
-{
-	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
-
-	D3DXMATRIXA16 matWorld;
-	D3DXMatrixIdentity(&matWorld);
-	DEVICE->SetTransform(D3DTS_WORLD, &matWorld);
-	DEVICE->SetTexture(0, m_pTexture);
-	DEVICE->SetFVF(PT_VERTEX::FVF);
-	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
-							vec_Vertex.size() / 3,
-							&vec_Vertex[0],
-							sizeof(PT_VERTEX));
-
-	DEVICE->SetTexture(0, NULL);
-	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
 }
 

@@ -19,14 +19,13 @@ private:
 	MyGrid* Grid;
 	AxisLine* Line;
 
-	LPDIRECT3DTEXTURE9 m_pTexture;
-	std::vector<PT_VERTEX> vec_Vertex;
-
 	D3DXVECTOR3* CamPos;
 	D3DXVECTOR3* CamTarget;
 	float* CamFov;
 
 	DirLight Sun;
+	SpotLight FlashLight;
+	DotLight Torch;
 public:
 	void WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 	
@@ -34,7 +33,5 @@ public:
 	void SetLight();
 	void Update(float delta);
 	void Render(float delta);
-
-	void DrawTexture(float delta);
 };
 

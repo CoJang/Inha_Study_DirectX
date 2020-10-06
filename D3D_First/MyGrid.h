@@ -5,6 +5,7 @@ class MyGrid : public Objects_PNT
 {
 private:
 	D3DMATERIAL9 material;
+	std::vector<PC_VERTEX> vec_pc_vertices;
 public:
 	MyGrid();
 	~MyGrid();

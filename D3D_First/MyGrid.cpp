@@ -19,29 +19,55 @@ void MyGrid::Init(int lineNum, float cellsize)
 	material.Ambient = D3DXCOLOR(blightness, blightness, blightness, 1.0f);
 	material.Specular = D3DXCOLOR(blightness, blightness, blightness, 1.0f);
 	
+	//PC_VERTEX pcv;
+	//int Num = lineNum;
+	//float CellSize = cellsize;
+	//float MaxSize = Num * CellSize;
+	//int Cnt = 0;
+	//// set color code
+
+	//for (float x = -MaxSize; x <= Num * CellSize; x += CellSize)
+	//	for (float y = -MaxSize; y <= Num * CellSize; y += CellSize)
+	//	{
+	//		if (x == 0 || y == 0) continue;
+	//		
+	//		pcv.p = D3DXVECTOR3(x, 0, y);
+	//		vec_pc_vertices.push_back(pcv);
+	//		pcv.p = D3DXVECTOR3(x, 0, MaxSize);
+	//		vec_pc_vertices.push_back(pcv);
+
+	//		pcv.p = D3DXVECTOR3(x, 0, y);
+	//		vec_pc_vertices.push_back(pcv);
+	//		pcv.p = D3DXVECTOR3(MaxSize, 0, y);
+	//		vec_pc_vertices.push_back(pcv);
+	//		Cnt++;
+	//	}
+
+	
+	float Max = lineNum * cellsize;
+	float Min = -Max;
 	PNT_VERTEX v;
-	int Num = lineNum;
-	float CellSize = cellsize;
-	float MaxSize = Num * CellSize;
-	int Cnt = 0;
 	v.n = D3DXVECTOR3(0, 1, 0);
-
-	for (float x = -MaxSize; x <= Num * CellSize; x += CellSize)
-		for (float y = -MaxSize; y <= Num * CellSize; y += CellSize)
+	
+	for (int i = 0; i < lineNum * 2; ++i)
+	{
+		for (int j = 0; j < lineNum * 2; ++j)
 		{
-			if (x == 0 || y == 0) continue;
-			
-			v.p = D3DXVECTOR3(x, 0, y);
+			v.p = D3DXVECTOR3{ Min + j * cellsize, 0, Max - i * cellsize };
 			vec_Vertexs.push_back(v);
-			v.p = D3DXVECTOR3(x, 0, MaxSize);
+			v.p = D3DXVECTOR3{ Min + j * cellsize + cellsize, 0, Max - i * cellsize };
+			vec_Vertexs.push_back(v);
+			v.p = D3DXVECTOR3{ Min + j * cellsize, 0, Max - i * cellsize - cellsize };
 			vec_Vertexs.push_back(v);
 
-			v.p = D3DXVECTOR3(x, 0, y);
+			v.p = D3DXVECTOR3{ Min + j * cellsize, 0, Max - i * cellsize - cellsize };
 			vec_Vertexs.push_back(v);
-			v.p = D3DXVECTOR3(MaxSize, 0, y);
+			v.p = D3DXVECTOR3{ Min + j * cellsize + cellsize, 0, Max - i * cellsize };
 			vec_Vertexs.push_back(v);
-			Cnt++;
+			v.p = D3DXVECTOR3{ Min + j * cellsize + cellsize, 0, Max - i * cellsize - cellsize };
+			vec_Vertexs.push_back(v);
 		}
+	}
 }
 
 void MyGrid::Update(float delta)
@@ -58,8 +84,8 @@ void MyGrid::Draw(float delta)
 	DEVICE->SetMaterial(&material);
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	DEVICE->SetFVF(PNT_VERTEX::FVF);
-	DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
-							vec_Vertexs.size() / 2,
+	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+							vec_Vertexs.size() / 3,
 							&vec_Vertexs[0],
 							sizeof(PNT_VERTEX));
 	

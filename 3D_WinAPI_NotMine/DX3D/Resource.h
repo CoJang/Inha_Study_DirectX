@@ -1,18 +1,18 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by Practice_3D_WinAPI.rc
+// Used by DX3D.rc
 //
 
 #define IDS_APP_TITLE			103
 
 #define IDR_MAINFRAME			128
-#define IDD_PRACTICE_3D_WINAPI_DIALOG	102
+#define IDD_DX3D_DIALOG	102
 #define IDD_ABOUTBOX			103
 #define IDM_ABOUT				104
 #define IDM_EXIT				105
-#define IDI_PRACTICE_3D_WINAPI			107
+#define IDI_DX3D			107
 #define IDI_SMALL				108
-#define IDC_PRACTICE_3D_WINAPI			109
+#define IDC_DX3D			109
 #define IDC_MYICON				2
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
