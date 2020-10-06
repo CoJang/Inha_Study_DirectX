@@ -147,6 +147,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BCBody.h" />
+    <ClInclude Include="BCHead.h" />
+    <ClInclude Include="BCLeftArm.h" />
+    <ClInclude Include="BCLeftLeg.h" />
+    <ClInclude Include="BCRightArm.h" />
+    <ClInclude Include="BCRightLeg.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="BoxChar.h" />
     <ClInclude Include="D3D_First.h" />
@@ -161,6 +167,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BCBody.cpp" />
+    <ClCompile Include="BCHead.cpp" />
+    <ClCompile Include="BCLeftArm.cpp" />
+    <ClCompile Include="BCLeftLeg.cpp" />
+    <ClCompile Include="BCRightArm.cpp" />
+    <ClCompile Include="BCRightLeg.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="BoxChar.cpp" />
     <ClCompile Include="D3D_First.cpp" />

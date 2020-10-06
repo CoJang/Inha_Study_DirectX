@@ -84,7 +84,7 @@ void GameScene::InitGameScene()
 	CamFov = Camera->GetCamFov();
 
 	{
-		D3DXCreateTextureFromFile(DEVICE, TEXT("metal_01-18.png"), &m_pTexture);
+		D3DXCreateTextureFromFile(DEVICE, TEXT("texture/metal_01-18.png"), &m_pTexture);
 		
 		PT_VERTEX v;
 		v.p = D3DXVECTOR3(0, 0, 0);
@@ -107,7 +107,7 @@ void GameScene::SetLight()
 	ZeroMemory(&stLight, sizeof(D3DLIGHT9));
 	stLight.Type = D3DLIGHT_DIRECTIONAL;
 	stLight.Ambient = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
-	stLight.Diffuse = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
+	stLight.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	stLight.Specular = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 
 	D3DXVECTOR3 Dir(0.0f, -1.0f, -1.0f);
@@ -139,7 +139,7 @@ void GameScene::Render(float delta)
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
 
-		//DrawTexture(delta);
+		DrawTexture(delta);
 		
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);

@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{d046be30-3dd2-41fe-bf3f-556fb523d134}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Objects\BoxChar">
+      <UniqueIdentifier>{a714a623-cee6-4917-8b8d-20d3297d1431}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -51,11 +54,29 @@
     <ClInclude Include="MyCamera.h">
       <Filter>Source Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="BoxChar.h">
-      <Filter>Source Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="MyMath.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxChar.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCLeftArm.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCBody.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCHead.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCRightArm.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCLeftLeg.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="BCRightLeg.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,14 +101,32 @@
     <ClCompile Include="Box.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="BoxChar.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="MyCamera.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="MyMath.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxChar.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCLeftArm.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCBody.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCHead.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCRightArm.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCLeftLeg.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="BCRightLeg.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

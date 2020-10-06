@@ -18,7 +18,8 @@ private:
 	D3DXVECTOR3 dir;
 	float		velocity;
 	float		angle;
-
+	
+	LPDIRECT3DTEXTURE9 Texture;
 	std::vector<Box*> Bodies;
 public:
 	BoxChar();
