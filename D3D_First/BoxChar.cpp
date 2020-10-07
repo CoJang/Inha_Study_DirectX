@@ -30,7 +30,8 @@ BoxChar::~BoxChar()
 
 void BoxChar::Init()
 {
-	D3DXCreateTextureFromFile(DEVICE, TEXT("texture/5173c405cba4b429.png"), &Texture);
+	TexturePath = TEXT("texture/5173c405cba4b429.png");
+	D3DXCreateTextureFromFile(DEVICE, TexturePath, &Texture);
 
 	D3DXVECTOR3 Pivot;
 	D3DXVECTOR3 Scale;

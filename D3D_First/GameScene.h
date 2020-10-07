@@ -14,15 +14,25 @@ public:
 	~GameScene();
 	
 private:
-	MyCamera* Camera;
-	BoxChar* Zemmin2;
+// temp
+	vector<PNT_VERTEX> loadeddata;
+	D3DMATERIAL9 loadedmaterial;
+	
+// giomatric objects
 	MyGrid* Grid;
 	AxisLine* Line;
+	
+// charactors
+	BoxChar* Zemmin2;
+	BoxChar* Bot_Zemmin2;
 
+// cam
+	MyCamera* Camera;
 	D3DXVECTOR3* CamPos;
 	D3DXVECTOR3* CamTarget;
 	float* CamFov;
-
+	
+// light
 	DirLight Sun;
 	SpotLight FlashLight;
 	DotLight Torch;

@@ -3,6 +3,7 @@
 #include "MyGrid.h"
 #include "BoxChar.h"
 #include "MyCamera.h"
+#include "OBJ_Loader.h"
 
 #include "GameScene.h"
 
@@ -11,6 +12,7 @@ GameScene::GameScene()
 	,FlashLight(1)
 	,Torch(2)
 {
+	ReadData(loadeddata, loadedmaterial, "Data/box.obj");
 }
 
 
@@ -20,6 +22,7 @@ GameScene::~GameScene()
 	SafeDelete(Grid);
 	SafeDelete(Line);
 	SafeDelete(Zemmin2);
+	SafeDelete(Bot_Zemmin2);
 	DEVICEMANAGER->Destroy();
 }
 
@@ -78,6 +81,11 @@ void GameScene::InitGameScene()
 	Zemmin2 = new BoxChar;
 	Zemmin2->Init();
 
+	Bot_Zemmin2 = new BoxChar;
+	Bot_Zemmin2->Init();
+	Bot_Zemmin2->SetPos(D3DXVECTOR3(5, 4.1f, 5));
+	Bot_Zemmin2->SetTexture(TEXT("texture/78075e030cd39335.png"));
+
 	Camera = new MyCamera;
 	Camera->Init();
 
@@ -118,8 +126,11 @@ void GameScene::Update(float delta)
 	Camera->Update(delta);
 	Grid->Update(delta);
 	Line->Update(delta);
+	
 	Zemmin2->InputCheck(delta);
 	Zemmin2->Update(delta);
+
+	Bot_Zemmin2->Update(delta);
 	Camera->SetCamTarget(Zemmin2->GetPos());
 
 
@@ -196,9 +207,22 @@ void GameScene::Render(float delta)
 		Grid->Draw(delta);
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
+		Bot_Zemmin2->Draw(delta);
 
-		//FlashLight.DrawGizmo(delta);
+		FlashLight.DrawGizmo(delta);
 		Torch.DrawGizmo(delta);
+
+		{
+			D3DXMATRIXA16 WorldMat;
+			D3DXMatrixIdentity(&WorldMat);
+
+			DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+			DEVICE->SetFVF(PNT_VERTEX::FVF);
+			DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+										loadeddata.size() / 3,
+										&loadeddata[0],
+										sizeof(PNT_VERTEX));
+		}
 
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);

@@ -20,6 +20,8 @@ private:
 	float		angle;
 	
 	LPDIRECT3DTEXTURE9 Texture;
+	LPCWSTR TexturePath;
+	
 	std::vector<Box*> Bodies;
 public:
 	BoxChar();
@@ -35,6 +37,12 @@ public:
 	void RunAnim(float delta);
 
 	inline D3DXVECTOR3 & GetPos() { return position; }
+	inline void SetPos(D3DXVECTOR3 pos) { position = pos; }
 
+	inline void SetTexture(LPCWSTR path)
+	{
+		TexturePath = path;
+		D3DXCreateTextureFromFile(DEVICE, TexturePath, &Texture);
+	}
 };
 
