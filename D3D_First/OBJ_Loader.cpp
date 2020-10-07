@@ -89,6 +89,14 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, const char
 
 int LoadMaterial(D3DMATERIAL9& material, const char* srcFile)
 {
+	LPDIRECT3DTEXTURE9 Texture;
+	D3DXCreateTextureFromFileA(DEVICE, srcFile, &Texture);
+
+	ZeroMemory(&material, sizeof(D3DMATERIAL9));
+	material.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	material.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	material.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	
 	return 0;
 }
 
