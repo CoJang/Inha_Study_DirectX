@@ -198,7 +198,7 @@ void BezierCurve::Init()
 	vector<PC_VERTEX> vertex;
 	
 	PC_VERTEX v;
-	v.c = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+	v.c = D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f);
 
 	D3DXMATRIXA16 rotationMat;
 	D3DXMatrixIdentity(&rotationMat);
@@ -213,14 +213,39 @@ void BezierCurve::Init()
 		vertex.push_back(v);
 	}
 
-	for(int i = 0; i < 5; i++)
+	// for문을 사용하기 쉽게하기 위함
+	v.p = D3DXVECTOR3(0, 0.1f, 10);
+	vertex.push_back(v);
+
+	vec_Straight = vertex;
+
+
+	float n = 2;
+	float alpha = 0;
+	float beta = 0;
+	v.c = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+	// 2차 베지어 곡선
+	// P(t) = (1-t)^2 * A + 2t(1-t) * B + t^2 * C 단 0 <= t <= 1
+
+	vector<PC_VERTEX> CurveVertex;
+	
+	for(int i = 0; i < 3; i++)
 	{
-		vec_Straight.push_back(vertex[i]);
-		vec_Straight.push_back(vertex[i + 1]);
+		for(float t = 0.0f; t <= 1; t += 1.0f / n)
+		{
+			alpha = 1 - t;
+			beta = alpha * alpha;
+
+			v.p = beta * vertex[i * 2].p
+				  + (2 * t) * (alpha) * vertex[i * 2 + 1].p
+				  + (t * t) * vertex[i * 2 + 2].p;
+
+			vec_Vertexs.push_back(v);
+		}
 	}
 
-	vec_Straight.push_back(vertex[5]);
-	vec_Straight.push_back(vertex[0]);
+	cout << vec_Vertexs.size() << endl;
 }
 
 void BezierCurve::Update(float delta)
@@ -238,9 +263,14 @@ void BezierCurve::Draw(float delta)
 
 	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	DEVICE->SetFVF(PC_VERTEX::FVF);
-	DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
-							vec_Straight.size() / 2,
+	DEVICE->DrawPrimitiveUP(D3DPT_LINESTRIP,
+							vec_Straight.size() - 1,
 							&vec_Straight[0],
+							sizeof(PC_VERTEX));
+
+	DEVICE->DrawPrimitiveUP(D3DPT_LINESTRIP,
+							vec_Vertexs.size() - 1,
+							&vec_Vertexs[0],
 							sizeof(PC_VERTEX));
 
 
