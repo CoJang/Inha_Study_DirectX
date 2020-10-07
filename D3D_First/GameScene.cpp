@@ -12,7 +12,7 @@ GameScene::GameScene()
 	,FlashLight(1)
 	,Torch(2)
 {
-	ReadData(loadeddata, loadedmaterial, "Data/box.obj");
+	ReadData(loadeddata, loadedmaterial, loadedtexture,"Data/box.obj");
 }
 
 
@@ -85,6 +85,10 @@ void GameScene::InitGameScene()
 	Bot_Zemmin2->Init();
 	Bot_Zemmin2->SetPos(D3DXVECTOR3(5, 4.1f, 5));
 	Bot_Zemmin2->SetTexture(TEXT("texture/78075e030cd39335.png"));
+	Bot_Zemmin2->SetLook(D3DXVECTOR3(0, 0, 0));
+
+	bc = new BezierCurve;
+	bc->Init();
 
 	Camera = new MyCamera;
 	Camera->Init();
@@ -212,17 +216,23 @@ void GameScene::Render(float delta)
 		FlashLight.DrawGizmo(delta);
 		Torch.DrawGizmo(delta);
 
-		{
-			D3DXMATRIXA16 WorldMat;
-			D3DXMatrixIdentity(&WorldMat);
+		//{
+		//	D3DXMATRIXA16 WorldMat;
+		//	D3DXMatrixIdentity(&WorldMat);
+		//	
+		//	DEVICE->SetMaterial(&loadedmaterial);
+		//	DEVICE->SetTexture(0, loadedtexture);
+		//	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+		//	DEVICE->SetFVF(PNT_VERTEX::FVF);
+		//	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+		//								loadeddata.size() / 3,
+		//								&loadeddata[0],
+		//								sizeof(PNT_VERTEX));
 
-			DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-			DEVICE->SetFVF(PNT_VERTEX::FVF);
-			DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
-										loadeddata.size() / 3,
-										&loadeddata[0],
-										sizeof(PNT_VERTEX));
-		}
+		//	DEVICE->SetTexture(0, NULL);
+		//}
+		
+		bc->Draw(delta);
 
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);

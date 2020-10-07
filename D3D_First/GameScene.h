@@ -4,6 +4,7 @@ class MyGrid;
 class AxisLine;
 class BoxChar;
 class MyCamera;
+class BezierCurve;
 
 #include "MyLight.h"
 
@@ -17,6 +18,8 @@ private:
 // temp
 	vector<PNT_VERTEX> loadeddata;
 	D3DMATERIAL9 loadedmaterial;
+	LPDIRECT3DTEXTURE9 loadedtexture;
+	BezierCurve* bc;
 	
 // giomatric objects
 	MyGrid* Grid;

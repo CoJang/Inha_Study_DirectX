@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "MyGrid.h"
 
-
-MyGrid::MyGrid()
-{
-}
-
-
-MyGrid::~MyGrid()
-{
-}
-
 void MyGrid::Init(int lineNum, float cellsize)
 {
 	ZeroMemory(&material, sizeof(D3DMATERIAL9));
@@ -70,9 +60,6 @@ void MyGrid::Init(int lineNum, float cellsize)
 	}
 }
 
-void MyGrid::Update(float delta)
-{
-}
 
 void MyGrid::Draw(float delta)
 {
@@ -90,14 +77,6 @@ void MyGrid::Draw(float delta)
 							sizeof(PNT_VERTEX));
 	
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
-}
-
-AxisLine::AxisLine()
-{
-}
-
-AxisLine::~AxisLine()
-{
 }
 
 void AxisLine::Init()
@@ -141,9 +120,6 @@ void AxisLine::Init()
 	vec_GizmoVector.push_back(Gizmo);
 }
 
-void AxisLine::Update(float delta)
-{
-}
 
 void AxisLine::Draw(float delta)
 {
@@ -162,14 +138,6 @@ void AxisLine::Draw(float delta)
 	}
 
 	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
-}
-
-Pyramid::Pyramid()
-{
-}
-
-Pyramid::~Pyramid()
-{
 }
 
 void Pyramid::Init(D3DCOLOR color, D3DXMATRIXA16& rotatemat)
@@ -204,11 +172,6 @@ void Pyramid::Init(D3DCOLOR color, D3DXMATRIXA16& rotatemat)
 	
 }
 
-void Pyramid::Update(float delta)
-{
-
-}
-
 void Pyramid::Draw(float delta)
 {
 	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
@@ -225,6 +188,61 @@ void Pyramid::Draw(float delta)
 							&vec_Vertexs[0],
 							sizeof(PC_VERTEX));
 	
+
+	DEVICE->SetRenderState(D3DRS_CULLMODE, true);
+	DEVICE->SetRenderState(D3DRS_LIGHTING, true);
+}
+
+void BezierCurve::Init()
+{
+	vector<PC_VERTEX> vertex;
+	
+	PC_VERTEX v;
+	v.c = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+	D3DXMATRIXA16 rotationMat;
+	D3DXMatrixIdentity(&rotationMat);
+	D3DXMatrixRotationY(&rotationMat, Deg2Rad(60));
+	
+	v.p = D3DXVECTOR3(0, 0.1f, 10);
+	vertex.push_back(v);
+
+	for(int i = 0; i < 5; i++)
+	{
+		D3DXVec3TransformCoord(&v.p, &v.p, &rotationMat);
+		vertex.push_back(v);
+	}
+
+	for(int i = 0; i < 5; i++)
+	{
+		vec_Straight.push_back(vertex[i]);
+		vec_Straight.push_back(vertex[i + 1]);
+	}
+
+	vec_Straight.push_back(vertex[5]);
+	vec_Straight.push_back(vertex[0]);
+}
+
+void BezierCurve::Update(float delta)
+{
+}
+
+void BezierCurve::Draw(float delta)
+{
+	DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	DEVICE->SetRenderState(D3DRS_CULLMODE, false);
+
+	//D3DXMatrixScaling(&ScaleMat, 0.1f, 2.0f, 0.1f);
+	WorldMat = ScaleMat * RotateMat * TransMat;
+
+
+	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+	DEVICE->SetFVF(PC_VERTEX::FVF);
+	DEVICE->DrawPrimitiveUP(D3DPT_LINELIST,
+							vec_Straight.size() / 2,
+							&vec_Straight[0],
+							sizeof(PC_VERTEX));
+
 
 	DEVICE->SetRenderState(D3DRS_CULLMODE, true);
 	DEVICE->SetRenderState(D3DRS_LIGHTING, true);

@@ -3,7 +3,7 @@
 #include <fstream>
 #include "OBJ_Loader.h"
 
-int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, const char * srcFile)
+int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, LPDIRECT3DTEXTURE9 & texture, const char * srcFile)
 {
 	FILE* SrcFile = fopen(srcFile, "rb");
 
@@ -57,7 +57,7 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, const char
 		}
 	}
 
-	cout << "while break!" << endl;
+	//cout << "while break!" << endl;
 
 	int index[9] = {0};
 	PNT_VERTEX v;
@@ -81,21 +81,55 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, const char
 
 	fclose(SrcFile);
 	
-	LoadMaterial(material, MaterialPath.c_str());
+	LoadMaterial(material, texture, MaterialPath.c_str());
 	
 
 	return 0;
 }
 
-int LoadMaterial(D3DMATERIAL9& material, const char* srcFile)
+int LoadMaterial(D3DMATERIAL9 & material, LPDIRECT3DTEXTURE9 & texture, const char* srcFile)
 {
-	LPDIRECT3DTEXTURE9 Texture;
-	D3DXCreateTextureFromFileA(DEVICE, srcFile, &Texture);
-
 	ZeroMemory(&material, sizeof(D3DMATERIAL9));
-	material.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	material.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	material.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	
+	FILE* SrcFile = fopen(srcFile, "rb");
+	if(SrcFile == NULL)
+	{
+		cout << "Material File Open Failed! " << endl;
+		return 1;
+	}
+	char buff[256] = { 0 };
+	float x(0.0f), y(0.0f), z(0.0f);
+	string TexturePath = srcFile;
+	
+	while (fscanf_s(SrcFile, "%s %f %f %f\n", &buff, sizeof(buff), &x, &y, &z) != EOF)
+	{
+		if(buff[0] == 'K')
+		{
+			switch(buff[1])
+			{
+			case 'a':
+				material.Ambient = D3DXCOLOR(x, y, z, 1.0f);
+				break;
+			case 'd':
+				material.Diffuse = D3DXCOLOR(x, y, z, 1.0f);
+				break;
+			case 's':
+				material.Specular = D3DXCOLOR(x, y, z, 1.0f);
+				break;
+			}
+		}
+
+		if(strcmp(buff, "map_Kd") == 0)
+		{
+			fscanf_s(SrcFile, "%s \n", &buff, sizeof(buff));
+			string ObjFileName = strrchr(TexturePath.c_str(), '/') + 1;
+			string Path(TexturePath.c_str(), TexturePath.size() - ObjFileName.size());
+			Path += buff;
+			TexturePath = Path;
+		}
+	}
+
+	D3DXCreateTextureFromFileA(DEVICE, TexturePath.c_str(), &texture);
 	
 	return 0;
 }

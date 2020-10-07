@@ -229,6 +229,17 @@ void BoxChar::RunAnim(float delta)
 	}
 }
 
+void BoxChar::SetLook(D3DXVECTOR3 target)
+{
+	D3DXMATRIXA16 LookAtMat;
+	D3DXMatrixIdentity(&LookAtMat);
+
+	D3DXVECTOR3 UpVector = D3DXVECTOR3(0, 1, 0);
+
+	D3DXMatrixLookAtLH(&RotateMat, &position, &target, &UpVector);
+	D3DXVec3TransformNormal(&dir, &dir, &LookAtMat);
+}
+
 void BoxChar::Draw(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);

@@ -44,5 +44,7 @@ public:
 		TexturePath = path;
 		D3DXCreateTextureFromFile(DEVICE, TexturePath, &Texture);
 	}
+
+	void SetLook(D3DXVECTOR3 target);
 };
 
