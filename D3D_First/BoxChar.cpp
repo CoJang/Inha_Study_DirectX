@@ -244,8 +244,7 @@ void BoxChar::Draw(float delta)
 
 
 BoxCharBot::BoxCharBot()
-	:LookForced(false)
-	,Speed(0)
+	:Speed(0)
 	,Dest(0, 0, 0)
 	,DestIndex(0)
 {
@@ -253,28 +252,21 @@ BoxCharBot::BoxCharBot()
 
 void BoxCharBot::Update(float delta)
 {
-	float dist = D3DXVec3Length(&(position - Dest));
-
 	if (fabs(position.x - Dest.x) < EPSILON && fabs(position.z - Dest.z) < EPSILON)
 	{
 		position.x = Dest.x; position.z = Dest.z;
 		SetState(IDLE, 0);
-		//SetLook(-Dest);
 		SetLook(DestList[DestIndex++ % DestList.size()]);
 	}
 	else
 	{
-		SetLook(Dest);
 		SetState(WALK, 5.0f);
-		cout << dist << endl;
 	}
 	
 	velocity = Speed * delta;
 	position += dir * velocity;
 	D3DXMatrixTranslation(&TransMat, position.x, position.y, position.z);
-	WorldMat *= TransMat;
-	D3DXMatrixRotationY(&RotateMat, angle);
-
+	WorldMat = RotateMat * TransMat;
 	
 	switch (state)
 	{
@@ -305,8 +297,7 @@ void BoxCharBot::SetLook(D3DXVECTOR3 target)
 	dir.x = LookAtMat._31; dir.y = LookAtMat._32; dir.z = LookAtMat._33;
 	D3DXVec3Normalize(&dir, &-dir);
 
-	WorldMat = LookAtMat;
-	LookForced = true;
+	RotateMat = LookAtMat;
 }
 
 void BoxCharBot::SetState(AnimState anim_state, float speed)

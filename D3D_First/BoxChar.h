@@ -51,7 +51,6 @@ public:
 class BoxCharBot : public BoxChar
 {
 private:
-	bool LookForced;
 	float Speed;
 	D3DXVECTOR3 Dest;
 

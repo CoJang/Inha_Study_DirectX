@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include <istream>
 #include <fstream>
+
+#include "MtlTex.h"
+#include "Group.h"
 #include "OBJ_Loader.h"
 
 int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, LPDIRECT3DTEXTURE9 & texture, const char * srcFile)
@@ -22,8 +25,7 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, LPDIRECT3D
 	float x(0), y(0), z(0);
 
 	while(fscanf_s(SrcFile, "%s %f %f %f \n", &buff, sizeof(buff), &x, &y, &z) != EOF)
-	{
-		if (strcmp(buff, "usemtl") == 0) break;
+	{		
 		if (strcmp(buff, "mtllib") == 0)
 		{
 			fscanf_s(SrcFile, "%s\n", &buff, sizeof(buff));
@@ -33,8 +35,19 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, LPDIRECT3D
 			Path += buff;
 			MaterialPath = Path;
 		}
+		/////////////////////////////////////////////
+		else if(buff[0] == 'g')
+		{
+			//if(!vec_Vertex.empty())
+			//{
+			//	Group* group = new Group;
+			//	group->SetVertex(vec_Vertex);
+			//	group->SetMat(mapMltTex[MtlName]);
+			//}
+		}
+		/////////////////////////////////////////////
 		
-		if(buff[0] == 'v')
+		else if(buff[0] == 'v')
 		{
 			switch(buff[1])
 			{
@@ -55,6 +68,12 @@ int ReadData(vector<PNT_VERTEX> & containor, D3DMATERIAL9 & material, LPDIRECT3D
 			x = 0; y = 0; z = 0;
 			ZeroMemory(&buff, sizeof(buff));
 		}
+		///////////////////////////////////////
+		else if (strcmp(buff, "usemtl") == 0)
+		{
+			//break;
+		}
+		///////////////////////////////////////
 	}
 
 	//cout << "while break!" << endl;
@@ -132,5 +151,22 @@ int LoadMaterial(D3DMATERIAL9 & material, LPDIRECT3DTEXTURE9 & texture, const ch
 	D3DXCreateTextureFromFileA(DEVICE, TexturePath.c_str(), &texture);
 	
 	return 0;
+}
+
+void ObjLoader::Load(std::vector<Group*>& vec_Group, char* folder, char* file)
+{
+	
+}
+
+void ObjLoader::LoadMtlLib(char* folder, char* file)
+{
+	string Path(folder);
+	Path += ('/' + file);
+
+	FILE* SrcFile = fopen(Path.c_str(), "rb");
+
+	
+	//if (feof(SrcFile)) break;
+	
 }
 

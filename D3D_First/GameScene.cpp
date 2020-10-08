@@ -12,7 +12,7 @@ GameScene::GameScene()
 	,FlashLight(1)
 	,Torch(2)
 {
-	ReadData(loadeddata, loadedmaterial, loadedtexture,"Data/box.obj");
+	ReadData(loadeddata, loadedmaterial, loadedtexture,"Data/map.obj");
 }
 
 
@@ -223,21 +223,21 @@ void GameScene::Render(float delta)
 		FlashLight.DrawGizmo(delta);
 		Torch.DrawGizmo(delta);
 
-		//{
-		//	D3DXMATRIXA16 WorldMat;
-		//	D3DXMatrixIdentity(&WorldMat);
-		//	
-		//	DEVICE->SetMaterial(&loadedmaterial);
-		//	DEVICE->SetTexture(0, loadedtexture);
-		//	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-		//	DEVICE->SetFVF(PNT_VERTEX::FVF);
-		//	DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
-		//								loadeddata.size() / 3,
-		//								&loadeddata[0],
-		//								sizeof(PNT_VERTEX));
+		{
+			D3DXMATRIXA16 WorldMat;
+			D3DXMatrixIdentity(&WorldMat);
+			
+			DEVICE->SetMaterial(&loadedmaterial);
+			DEVICE->SetTexture(0, loadedtexture);
+			DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
+			DEVICE->SetFVF(PNT_VERTEX::FVF);
+			DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+										loadeddata.size() / 3,
+										&loadeddata[0],
+										sizeof(PNT_VERTEX));
 
-		//	DEVICE->SetTexture(0, NULL);
-		//}
+			DEVICE->SetTexture(0, NULL);
+		}
 		
 		bc->Draw(delta);
 

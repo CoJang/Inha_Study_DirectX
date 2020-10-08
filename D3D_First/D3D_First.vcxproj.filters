@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Objects\BoxChar">
       <UniqueIdentifier>{a714a623-cee6-4917-8b8d-20d3297d1431}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Obj">
+      <UniqueIdentifier>{94be9256-8e38-441d-b824-4c5a0a955fa1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,8 +84,23 @@
     <ClInclude Include="MyLight.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MtlTex.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjData.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Group.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
     <ClInclude Include="OBJ_Loader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,8 +155,23 @@
     <ClCompile Include="MyLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ObjData.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="MtlTex.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Group.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
     <ClCompile Include="OBJ_Loader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,7 @@ extern HWND g_hwnd;
 
 #define SafeRelease(p) { if(p) p->Release(); p = NULL; }
 #define SafeDelete(p) { if(p) delete p; p = NULL; }
+#define SafeAddRef(p) { if (p) p->AddRef(); }
 #define Singletone(class_name) \
 		private : \
 			class_name(void) ; \
@@ -54,6 +55,19 @@ extern HWND g_hwnd;
    protected: varType varName; \
    public: inline varType & Get##FunName(void)  { return varName; } \
    public: inline void Set##FunName(varType & var) { varName = var; }
+
+#define Synthesize_Add_Ref(varType, varName, funName) \
+	protected: varType varName; \
+	public : virtual varType Get##funName(void) const { return varName; } \
+	public : virtual void  Set##funName(varType var) \
+	{ \
+		if(varName != var) \
+		{ \
+			SafeAddRef(var); \
+			SafeRelease(varName); \
+			varName = var; \
+		} \
+	}
 
 // point & color
 struct PC_VERTEX
@@ -84,6 +98,9 @@ struct PT_VERTEX
 
 #include "MyMath.h"
 #include "DeviceManager.h"
+#include "ObjData.h"
+#include "ObjectManager.h"
+#include "TextureManager.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
