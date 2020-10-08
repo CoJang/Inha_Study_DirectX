@@ -219,8 +219,7 @@ void BezierCurve::Init()
 
 	vec_Straight = vertex;
 
-
-	float n = 2;
+	float n = 8;
 	float alpha = 0;
 	float beta = 0;
 	v.c = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
@@ -228,8 +227,6 @@ void BezierCurve::Init()
 	// 2차 베지어 곡선
 	// P(t) = (1-t)^2 * A + 2t(1-t) * B + t^2 * C 단 0 <= t <= 1
 
-	vector<PC_VERTEX> CurveVertex;
-	
 	for(int i = 0; i < 3; i++)
 	{
 		for(float t = 0.0f; t <= 1; t += 1.0f / n)
@@ -248,9 +245,6 @@ void BezierCurve::Init()
 	cout << vec_Vertexs.size() << endl;
 }
 
-void BezierCurve::Update(float delta)
-{
-}
 
 void BezierCurve::Draw(float delta)
 {

@@ -47,7 +47,9 @@ public:
 	~BezierCurve() = default;
 
 	void Init();
-	void Update(float delta);
+	void Update(float delta) {};
 	void Draw(float delta);
+
+	inline vector<PC_VERTEX> & GetVertexList() { return vec_Vertexs; }
 };
 

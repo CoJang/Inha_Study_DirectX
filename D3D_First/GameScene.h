@@ -3,6 +3,7 @@
 class MyGrid;
 class AxisLine;
 class BoxChar;
+class BoxCharBot;
 class MyCamera;
 class BezierCurve;
 
@@ -27,7 +28,7 @@ private:
 	
 // charactors
 	BoxChar* Zemmin2;
-	BoxChar* Bot_Zemmin2;
+	BoxCharBot* Bot_Zemmin2;
 
 // cam
 	MyCamera* Camera;

@@ -60,7 +60,9 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 		short Input = HIWORD(wParam);
 		Input /= 120;
-		*CamFov += Input * 0.1f;
+		//*CamFov += Input * 0.1f;
+		CamPos->y += Input;
+		CamPos->z += Input;
 	}
 	break;
 	default:
@@ -81,14 +83,16 @@ void GameScene::InitGameScene()
 	Zemmin2 = new BoxChar;
 	Zemmin2->Init();
 
-	Bot_Zemmin2 = new BoxChar;
+	bc = new BezierCurve;
+	bc->Init();
+
+	Bot_Zemmin2 = new BoxCharBot;
 	Bot_Zemmin2->Init();
 	Bot_Zemmin2->SetPos(D3DXVECTOR3(5, 4.1f, 5));
 	Bot_Zemmin2->SetTexture(TEXT("texture/78075e030cd39335.png"));
+	Bot_Zemmin2->SetDestList(bc->GetVertexList());
 	Bot_Zemmin2->SetLook(D3DXVECTOR3(0, 0, 0));
-
-	bc = new BezierCurve;
-	bc->Init();
+	Bot_Zemmin2->SetState(AnimState::WALK, 5.0f);
 
 	Camera = new MyCamera;
 	Camera->Init();
@@ -135,6 +139,8 @@ void GameScene::Update(float delta)
 	Zemmin2->Update(delta);
 
 	Bot_Zemmin2->Update(delta);
+	//Bot_Zemmin2->SetLook(Zemmin2->GetPos());
+	
 	Camera->SetCamTarget(Zemmin2->GetPos());
 
 
@@ -211,6 +217,7 @@ void GameScene::Render(float delta)
 		Grid->Draw(delta);
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
+		
 		Bot_Zemmin2->Draw(delta);
 
 		FlashLight.DrawGizmo(delta);

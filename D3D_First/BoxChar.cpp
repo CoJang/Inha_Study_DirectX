@@ -126,7 +126,7 @@ void BoxChar::Update(float delta)
 	D3DXMatrixRotationY(&RotateMat, angle);
 
 	WorldMat = ScaleMat * RotateMat * TransMat;
-	
+
 	switch(state)
 	{
 	case IDLE:
@@ -229,17 +229,6 @@ void BoxChar::RunAnim(float delta)
 	}
 }
 
-void BoxChar::SetLook(D3DXVECTOR3 target)
-{
-	D3DXMATRIXA16 LookAtMat;
-	D3DXMatrixIdentity(&LookAtMat);
-
-	D3DXVECTOR3 UpVector = D3DXVECTOR3(0, 1, 0);
-
-	D3DXMatrixLookAtLH(&RotateMat, &position, &target, &UpVector);
-	D3DXVec3TransformNormal(&dir, &dir, &LookAtMat);
-}
-
 void BoxChar::Draw(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, false);
@@ -251,4 +240,85 @@ void BoxChar::Draw(float delta)
 	}
 	DEVICE->SetTexture(0, NULL);
 	//DEVICE->SetRenderState(D3DRS_CULLMODE, true);
+}
+
+
+BoxCharBot::BoxCharBot()
+	:LookForced(false)
+	,Speed(0)
+	,Dest(0, 0, 0)
+	,DestIndex(0)
+{
+}
+
+void BoxCharBot::Update(float delta)
+{
+	float dist = D3DXVec3Length(&(position - Dest));
+
+	if (fabs(position.x - Dest.x) < EPSILON && fabs(position.z - Dest.z) < EPSILON)
+	{
+		position.x = Dest.x; position.z = Dest.z;
+		SetState(IDLE, 0);
+		//SetLook(-Dest);
+		SetLook(DestList[DestIndex++ % DestList.size()]);
+	}
+	else
+	{
+		SetLook(Dest);
+		SetState(WALK, 5.0f);
+		cout << dist << endl;
+	}
+	
+	velocity = Speed * delta;
+	position += dir * velocity;
+	D3DXMatrixTranslation(&TransMat, position.x, position.y, position.z);
+	WorldMat *= TransMat;
+	D3DXMatrixRotationY(&RotateMat, angle);
+
+	
+	switch (state)
+	{
+	case IDLE:
+		IdleAnim(delta);
+		break;
+	case WALK:
+		WalkAnim(delta);
+		break;
+	case RUN:
+		RunAnim(delta);
+		break;
+	}
+}
+
+void BoxCharBot::SetLook(D3DXVECTOR3 target)
+{
+	Dest = target;
+	D3DXVECTOR3 LookAt = position - (target - position);
+	D3DXMATRIXA16 LookAtMat;
+	D3DXMatrixIdentity(&LookAtMat);
+
+	LookAt.y = position.y;
+	D3DXMatrixLookAtLH(&LookAtMat, &position, &LookAt, &D3DXVECTOR3(0, 1, 0));
+	LookAtMat._41 = LookAtMat._42 = LookAtMat._43 = 0.0f;
+	D3DXMatrixTranspose(&LookAtMat, &LookAtMat);
+
+	dir.x = LookAtMat._31; dir.y = LookAtMat._32; dir.z = LookAtMat._33;
+	D3DXVec3Normalize(&dir, &-dir);
+
+	WorldMat = LookAtMat;
+	LookForced = true;
+}
+
+void BoxCharBot::SetState(AnimState anim_state, float speed)
+{
+	state = anim_state;
+	Speed = speed;
+}
+
+void BoxCharBot::SetDestList(vector<PC_VERTEX>& vertexlist)
+{
+	for(int i = 0; i < vertexlist.size(); i++)
+	{
+		DestList.push_back(vertexlist[i].p);
+	}
 }

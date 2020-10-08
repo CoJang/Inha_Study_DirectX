@@ -12,7 +12,7 @@ enum AnimState
 
 class BoxChar : public Objects
 {
-private:
+protected:
 	AnimState   state;
 	D3DXVECTOR3 position;
 	D3DXVECTOR3 dir;
@@ -45,6 +45,26 @@ public:
 		D3DXCreateTextureFromFile(DEVICE, TexturePath, &Texture);
 	}
 
+	
+};
+
+class BoxCharBot : public BoxChar
+{
+private:
+	bool LookForced;
+	float Speed;
+	D3DXVECTOR3 Dest;
+
+	int DestIndex;
+	vector<D3DXVECTOR3> DestList;
+public:
+	BoxCharBot();
+	~BoxCharBot() = default;
+
+	void Update(float delta);
+
 	void SetLook(D3DXVECTOR3 target);
+	void SetState(AnimState anim_state, float speed);
+	void SetDestList(vector<PC_VERTEX> & vertexlist);
 };
 
