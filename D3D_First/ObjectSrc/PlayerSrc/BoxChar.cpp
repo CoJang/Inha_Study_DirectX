@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "ObjectSrc/PlayerSrc/BCBody.h"
-#include "ObjectSrc/PlayerSrc/BCHead.h"
-#include "ObjectSrc/PlayerSrc/BCLeftArm.h"
-#include "ObjectSrc/PlayerSrc/BCRightArm.h"
-#include "ObjectSrc/PlayerSrc/BCLeftLeg.h"
-#include "ObjectSrc/PlayerSrc/BCRightLeg.h"
-#include "ObjectSrc/PlayerSrc/BoxChar.h"
+#include "BCBody.h"
+#include "BCHead.h"
+#include "BCLeftArm.h"
+#include "BCRightArm.h"
+#include "BCLeftLeg.h"
+#include "BCRightLeg.h"
+#include "BoxChar.h"
 
 
 BoxChar::BoxChar()
@@ -256,11 +256,14 @@ void BoxCharBot::Update(float delta)
 	{
 		position.x = Dest.x; position.z = Dest.z;
 		SetState(IDLE, 0);
-		SetLook(DestList[DestIndex++ % DestList.size()]);
+		DestIndex = (DestIndex + 1) % DestList.size();
+		SetLook(DestList[DestIndex]);
 	}
 	else
 	{
 		SetState(WALK, 5.0f);
+		//SetLook(DestList[DestIndex]);
+		//cout << 
 	}
 	
 	velocity = Speed * delta;

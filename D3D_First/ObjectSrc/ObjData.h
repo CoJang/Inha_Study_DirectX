@@ -1,4 +1,5 @@
 #pragma once
+
 class ObjData
 {
 protected:
@@ -9,6 +10,6 @@ public:
 
 	virtual void AddRef();
 	virtual void Release();
-	
+
 };
 

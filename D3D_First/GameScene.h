@@ -1,4 +1,6 @@
 #pragma once
+#include "LightSrc/MyLight.h"
+//#include "ObjectSrc/Group.h"
 
 class MyGrid;
 class AxisLine;
@@ -7,7 +9,7 @@ class BoxCharBot;
 class MyCamera;
 class BezierCurve;
 
-#include "MyLight.h"
+class Group;
 
 class GameScene
 {
@@ -17,10 +19,8 @@ public:
 	
 private:
 // temp
-	vector<PNT_VERTEX> loadeddata;
-	D3DMATERIAL9 loadedmaterial;
-	LPDIRECT3DTEXTURE9 loadedtexture;
 	BezierCurve* bc;
+	vector<Group*> vecGroup;
 	
 // giomatric objects
 	MyGrid* Grid;

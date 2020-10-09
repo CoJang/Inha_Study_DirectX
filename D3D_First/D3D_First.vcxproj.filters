@@ -22,6 +22,15 @@
     <Filter Include="Source Files\Obj">
       <UniqueIdentifier>{94be9256-8e38-441d-b824-4c5a0a955fa1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Obj\Manager">
+      <UniqueIdentifier>{a6f78b23-4b93-4ab3-a37d-7796351179dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Manager">
+      <UniqueIdentifier>{c92ac460-d442-457f-b7bc-b17bc2998ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Light">
+      <UniqueIdentifier>{b60548f7-7fba-4ef2-8b33-c81c825f6c11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -42,65 +51,65 @@
     <ClInclude Include="GameScene.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Source Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGrid.h">
-      <Filter>Source Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>Source Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="MyCamera.h">
       <Filter>Source Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectSrc\ObjectManager.h">
+      <Filter>Source Files\Obj\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\TextureManager.h">
+      <Filter>Source Files\Obj\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\OBJ_Loader.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\ObjData.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\Group.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\MtlTex.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCBody.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCHead.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftArm.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftLeg.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightArm.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightLeg.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectSrc\PlayerSrc\BoxChar.h">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClInclude>
     <ClInclude Include="MyMath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BoxChar.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCLeftArm.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCBody.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCHead.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCRightArm.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCLeftLeg.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="BCRightLeg.h">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClInclude>
-    <ClInclude Include="MyLight.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MtlTex.h">
-      <Filter>Source Files\Obj</Filter>
+    <ClInclude Include="ManagerSrc\DeviceManager.h">
+      <Filter>Source Files\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Source Files\Obj</Filter>
+    <ClInclude Include="LightSrc\MyLight.h">
+      <Filter>Source Files\Light</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Source Files\Obj</Filter>
+    <ClInclude Include="ObjectSrc\MyGrid.h">
+      <Filter>Source Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="ObjData.h">
-      <Filter>Source Files\Obj</Filter>
+    <ClInclude Include="ObjectSrc\Box.h">
+      <Filter>Source Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Group.h">
-      <Filter>Source Files\Obj</Filter>
-    </ClInclude>
-    <ClInclude Include="OBJ_Loader.h">
-      <Filter>Source Files\Obj</Filter>
+    <ClInclude Include="ObjectSrc\Objects.h">
+      <Filter>Source Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,65 +122,65 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceManager.cpp">
+    <ClCompile Include="MyMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyGrid.cpp">
-      <Filter>Source Files\Objects</Filter>
+    <ClCompile Include="ObjectSrc\ObjectManager.cpp">
+      <Filter>Source Files\Obj\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Objects.cpp">
-      <Filter>Source Files\Objects</Filter>
+    <ClCompile Include="ObjectSrc\TextureManager.cpp">
+      <Filter>Source Files\Obj\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Source Files\Objects</Filter>
+    <ClCompile Include="ObjectSrc\OBJ_Loader.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\ObjData.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\Group.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\MtlTex.cpp">
+      <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCBody.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCHead.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftArm.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftLeg.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightArm.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightLeg.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectSrc\PlayerSrc\BoxChar.cpp">
+      <Filter>Source Files\Objects\BoxChar</Filter>
     </ClCompile>
     <ClCompile Include="MyCamera.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="MyMath.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ManagerSrc\DeviceManager.cpp">
+      <Filter>Source Files\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="BoxChar.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
+    <ClCompile Include="LightSrc\MyLight.cpp">
+      <Filter>Source Files\Light</Filter>
     </ClCompile>
-    <ClCompile Include="BCLeftArm.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
+    <ClCompile Include="ObjectSrc\MyGrid.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="BCBody.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
+    <ClCompile Include="ObjectSrc\Box.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="BCHead.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClCompile>
-    <ClCompile Include="BCRightArm.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClCompile>
-    <ClCompile Include="BCLeftLeg.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClCompile>
-    <ClCompile Include="BCRightLeg.cpp">
-      <Filter>Source Files\Objects\BoxChar</Filter>
-    </ClCompile>
-    <ClCompile Include="MyLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjData.cpp">
-      <Filter>Source Files\Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="MtlTex.cpp">
-      <Filter>Source Files\Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>Source Files\Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Source Files\Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="Group.cpp">
-      <Filter>Source Files\Obj</Filter>
-    </ClCompile>
-    <ClCompile Include="OBJ_Loader.cpp">
-      <Filter>Source Files\Obj</Filter>
+    <ClCompile Include="ObjectSrc\Objects.cpp">
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

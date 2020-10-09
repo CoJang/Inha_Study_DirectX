@@ -1,5 +1,4 @@
 #pragma once
-#include "ObjData.h"
 
 class MtlTex : public ObjData
 {

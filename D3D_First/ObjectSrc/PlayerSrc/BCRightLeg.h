@@ -1,5 +1,5 @@
 #pragma once
-#include "Box.h"
+#include "../Box.h"
 
 class BCRightLeg : public Box
 {

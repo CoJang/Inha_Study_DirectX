@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "MtlTex.h"
 #include "Group.h"
 
 Group::Group()

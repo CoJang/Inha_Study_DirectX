@@ -147,61 +147,61 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BCBody.h" />
-    <ClInclude Include="BCHead.h" />
-    <ClInclude Include="BCLeftArm.h" />
-    <ClInclude Include="BCLeftLeg.h" />
-    <ClInclude Include="BCRightArm.h" />
-    <ClInclude Include="BCRightLeg.h" />
-    <ClInclude Include="Box.h" />
-    <ClInclude Include="BoxChar.h" />
     <ClInclude Include="D3D_First.h" />
-    <ClInclude Include="DeviceManager.h" />
-    <ClInclude Include="Group.h" />
-    <ClInclude Include="MtlTex.h" />
-    <ClInclude Include="MyLight.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="LightSrc\MyLight.h" />
+    <ClInclude Include="ManagerSrc\DeviceManager.h" />
     <ClInclude Include="MyCamera.h" />
-    <ClInclude Include="MyGrid.h" />
     <ClInclude Include="MyMath.h" />
-    <ClInclude Include="ObjData.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Objects.h" />
-    <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="ObjectSrc\Box.h" />
+    <ClInclude Include="ObjectSrc\Group.h" />
+    <ClInclude Include="ObjectSrc\MtlTex.h" />
+    <ClInclude Include="ObjectSrc\MyGrid.h" />
+    <ClInclude Include="ObjectSrc\ObjData.h" />
+    <ClInclude Include="ObjectSrc\ObjectManager.h" />
+    <ClInclude Include="ObjectSrc\Objects.h" />
+    <ClInclude Include="ObjectSrc\OBJ_Loader.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCBody.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCHead.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftArm.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftLeg.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightArm.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightLeg.h" />
+    <ClInclude Include="ObjectSrc\PlayerSrc\BoxChar.h" />
+    <ClInclude Include="ObjectSrc\TextureManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BCBody.cpp" />
-    <ClCompile Include="BCHead.cpp" />
-    <ClCompile Include="BCLeftArm.cpp" />
-    <ClCompile Include="BCLeftLeg.cpp" />
-    <ClCompile Include="BCRightArm.cpp" />
-    <ClCompile Include="BCRightLeg.cpp" />
-    <ClCompile Include="Box.cpp" />
-    <ClCompile Include="BoxChar.cpp" />
     <ClCompile Include="D3D_First.cpp" />
-    <ClCompile Include="DeviceManager.cpp" />
-    <ClCompile Include="Group.cpp" />
-    <ClCompile Include="MtlTex.cpp" />
-    <ClCompile Include="MyLight.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="LightSrc\MyLight.cpp" />
+    <ClCompile Include="ManagerSrc\DeviceManager.cpp" />
     <ClCompile Include="MyCamera.cpp" />
-    <ClCompile Include="MyGrid.cpp" />
     <ClCompile Include="MyMath.cpp" />
-    <ClCompile Include="ObjData.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Objects.cpp" />
-    <ClCompile Include="OBJ_Loader.cpp" />
+    <ClCompile Include="ObjectSrc\Box.cpp" />
+    <ClCompile Include="ObjectSrc\Group.cpp" />
+    <ClCompile Include="ObjectSrc\MtlTex.cpp" />
+    <ClCompile Include="ObjectSrc\MyGrid.cpp" />
+    <ClCompile Include="ObjectSrc\ObjData.cpp" />
+    <ClCompile Include="ObjectSrc\ObjectManager.cpp" />
+    <ClCompile Include="ObjectSrc\Objects.cpp" />
+    <ClCompile Include="ObjectSrc\OBJ_Loader.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCBody.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCHead.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftArm.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftLeg.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightArm.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightLeg.cpp" />
+    <ClCompile Include="ObjectSrc\PlayerSrc\BoxChar.cpp" />
+    <ClCompile Include="ObjectSrc\TextureManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D3D_First.rc" />

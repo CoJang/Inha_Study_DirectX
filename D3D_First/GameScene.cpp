@@ -1,9 +1,10 @@
 #include "stdafx.h"
-#include "DeviceManager.h"
-#include "MyGrid.h"
-#include "BoxChar.h"
+#include "ObjectSrc/MyGrid.h"
+#include "ObjectSrc/PlayerSrc/BoxChar.h"
 #include "MyCamera.h"
-#include "OBJ_Loader.h"
+
+#include "ObjectSrc/Group.h"
+#include "ObjectSrc/OBJ_Loader.h"
 
 #include "GameScene.h"
 
@@ -12,7 +13,6 @@ GameScene::GameScene()
 	,FlashLight(1)
 	,Torch(2)
 {
-	ReadData(loadeddata, loadedmaterial, loadedtexture,"Data/map.obj");
 }
 
 
@@ -82,9 +82,14 @@ void GameScene::InitGameScene()
 
 	Zemmin2 = new BoxChar;
 	Zemmin2->Init();
+	
+	{
+		bc = new BezierCurve;
+		bc->Init();
 
-	bc = new BezierCurve;
-	bc->Init();
+		ObjLoader Loader;
+		Loader.Load(vecGroup, "Data", "map.obj");
+	}
 
 	Bot_Zemmin2 = new BoxCharBot;
 	Bot_Zemmin2->Init();
@@ -224,22 +229,22 @@ void GameScene::Render(float delta)
 		Torch.DrawGizmo(delta);
 
 		{
-			D3DXMATRIXA16 WorldMat;
-			D3DXMatrixIdentity(&WorldMat);
-			
-			DEVICE->SetMaterial(&loadedmaterial);
-			DEVICE->SetTexture(0, loadedtexture);
-			DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
-			DEVICE->SetFVF(PNT_VERTEX::FVF);
-			DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
-										loadeddata.size() / 3,
-										&loadeddata[0],
-										sizeof(PNT_VERTEX));
+			D3DXMATRIXA16 matWorld, matS, matR;
+			D3DXMatrixScaling(&matS, 0.1f, 0.1f, 0.1f);
+			D3DXMatrixRotationX(&matR, -D3DX_PI / 2.0F);
 
-			DEVICE->SetTexture(0, NULL);
+			matWorld = matS * matR;
+			DEVICE->SetTransform(D3DTS_WORLD, &matWorld);
+
+			for each (auto p in vecGroup)
+			{
+				p->Render(delta);
+			}
+			//D3DXIntersectTri(v1, v2, v3, rayPos, rayDir, u, v, f);
+			
+			bc->Draw(delta);
 		}
 		
-		bc->Draw(delta);
 
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);

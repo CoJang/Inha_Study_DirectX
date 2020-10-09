@@ -1,13 +1,13 @@
 #pragma once
-#include "Box.h"
+#include "../Box.h"
 
-class BCLeftLeg : public Box
+class BCBody : public Box
 {
 private:
 	D3DXMATRIXA16* ParentWorldMat;
 public:
-	BCLeftLeg();
-	~BCLeftLeg();
+	BCBody();
+	~BCBody();
 
 	void Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color);
 	void Update(float delta);

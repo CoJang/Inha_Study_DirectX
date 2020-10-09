@@ -1,6 +1,6 @@
 #pragma once
-#include "ObjData.h"
 #include "MtlTex.h"
+
 
 class Group : public ObjData
 {

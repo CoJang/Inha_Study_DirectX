@@ -97,10 +97,10 @@ struct PT_VERTEX
 };
 
 #include "MyMath.h"
-#include "DeviceManager.h"
-#include "ObjData.h"
-#include "ObjectManager.h"
-#include "TextureManager.h"
+#include "ManagerSrc/DeviceManager.h"
+#include "ObjectSrc/ObjData.h"
+#include "ObjectSrc/ObjectManager.h"
+#include "ObjectSrc/TextureManager.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
