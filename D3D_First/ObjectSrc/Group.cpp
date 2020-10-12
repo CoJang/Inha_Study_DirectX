@@ -24,4 +24,9 @@ void Group::Render(float delta)
 							vec_Vertex.size() / 3,
 							&vec_Vertex[0],
 							sizeof(PNT_VERTEX));
+
+	if (mtlTex)
+	{
+		DEVICE->SetTexture(0, NULL);
+	}
 }

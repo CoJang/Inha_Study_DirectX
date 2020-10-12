@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B482281B-FE35-4C83-A531-128BE6D55C36}</ProjectGuid>
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{03C939A6-7FB4-47EF-B000-D5848B9DDC78}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>D3D_First</RootNamespace>
+    <RootNamespace>DxConsole</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,6 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -84,44 +87,53 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>false</SDLCheck>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -129,90 +141,28 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="DxConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionManager.h" />
-    <ClInclude Include="D3D_First.h" />
-    <ClInclude Include="GameScene.h" />
-    <ClInclude Include="LightSrc\MyLight.h" />
-    <ClInclude Include="ManagerSrc\DeviceManager.h" />
-    <ClInclude Include="MyCamera.h" />
-    <ClInclude Include="MyMath.h" />
-    <ClInclude Include="ObjectSrc\Box.h" />
-    <ClInclude Include="ObjectSrc\Group.h" />
-    <ClInclude Include="ObjectSrc\MtlTex.h" />
-    <ClInclude Include="ObjectSrc\MyGrid.h" />
-    <ClInclude Include="ObjectSrc\ObjData.h" />
-    <ClInclude Include="ObjectSrc\ObjectManager.h" />
-    <ClInclude Include="ObjectSrc\Objects.h" />
-    <ClInclude Include="ObjectSrc\OBJ_Loader.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCBody.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCHead.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftArm.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCLeftLeg.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightArm.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BCRightLeg.h" />
-    <ClInclude Include="ObjectSrc\PlayerSrc\BoxChar.h" />
-    <ClInclude Include="ObjectSrc\TextureManager.h" />
-    <ClInclude Include="objUnit.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CollisionManager.cpp" />
-    <ClCompile Include="D3D_First.cpp" />
-    <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="LightSrc\MyLight.cpp" />
-    <ClCompile Include="ManagerSrc\DeviceManager.cpp" />
-    <ClCompile Include="MyCamera.cpp" />
-    <ClCompile Include="MyMath.cpp" />
-    <ClCompile Include="ObjectSrc\Box.cpp" />
-    <ClCompile Include="ObjectSrc\Group.cpp" />
-    <ClCompile Include="ObjectSrc\MtlTex.cpp" />
-    <ClCompile Include="ObjectSrc\MyGrid.cpp" />
-    <ClCompile Include="ObjectSrc\ObjData.cpp" />
-    <ClCompile Include="ObjectSrc\ObjectManager.cpp" />
-    <ClCompile Include="ObjectSrc\Objects.cpp" />
-    <ClCompile Include="ObjectSrc\OBJ_Loader.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCBody.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCHead.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftArm.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCLeftLeg.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightArm.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BCRightLeg.cpp" />
-    <ClCompile Include="ObjectSrc\PlayerSrc\BoxChar.cpp" />
-    <ClCompile Include="ObjectSrc\TextureManager.cpp" />
-    <ClCompile Include="objUnit.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="D3D_First.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="D3D_First.ico" />
-    <Image Include="small.ico" />
+    <ClInclude Include="DxConsole.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,6 +10,7 @@ class MyCamera;
 class BezierCurve;
 
 class Group;
+class objUnit;
 
 class GameScene
 {
@@ -20,7 +21,9 @@ public:
 private:
 // temp
 	BezierCurve* bc;
-	vector<Group*> vecGroup;
+	//vector<Group*> vecGroup;
+	objUnit* map_surface;
+	D3DXVECTOR3 OldCharPos;
 	
 // giomatric objects
 	MyGrid* Grid;
@@ -45,7 +48,10 @@ public:
 	
 	void InitGameScene();
 	void SetLight();
+	void InputCheck(float delta);
 	void Update(float delta);
 	void Render(float delta);
+
+	float MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain);
 };
 

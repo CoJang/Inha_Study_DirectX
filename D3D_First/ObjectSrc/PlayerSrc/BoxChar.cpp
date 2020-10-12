@@ -263,7 +263,7 @@ void BoxCharBot::Update(float delta)
 	{
 		SetState(WALK, 5.0f);
 		//SetLook(DestList[DestIndex]);
-		//cout << 
+		//cout << fabs(position.x - Dest.x) << " " << fabs(position.z - Dest.z) << endl;
 	}
 	
 	velocity = Speed * delta;

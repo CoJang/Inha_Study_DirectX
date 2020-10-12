@@ -4,7 +4,7 @@
 #include "MyCamera.h"
 
 #include "ObjectSrc/Group.h"
-#include "ObjectSrc/OBJ_Loader.h"
+#include "objUnit.h"
 
 #include "GameScene.h"
 
@@ -23,6 +23,7 @@ GameScene::~GameScene()
 	SafeDelete(Line);
 	SafeDelete(Zemmin2);
 	SafeDelete(Bot_Zemmin2);
+	SafeDelete(map_surface);
 	DEVICEMANAGER->Destroy();
 }
 
@@ -82,13 +83,17 @@ void GameScene::InitGameScene()
 
 	Zemmin2 = new BoxChar;
 	Zemmin2->Init();
+	OldCharPos = Zemmin2->GetPos();
+	//Zemmin2->SetPos(Zemmin2->GetPos() + D3DXVECTOR3(0, 3.6f, 0));
 	
 	{
 		bc = new BezierCurve;
 		bc->Init();
 
-		ObjLoader Loader;
-		Loader.Load(vecGroup, "Data", "map.obj");
+		map_surface = new objUnit;
+		map_surface->Init("Data", "map_surface.obj");
+		map_surface->SetScale(0.1f, 0.1f, 0.1f);
+		map_surface->SetAngleX(Deg2Rad(-90));
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -130,25 +135,10 @@ void GameScene::SetLight()
 	//Torch.SetLightState(false);
 }
 
-void GameScene::Update(float delta)
+void GameScene::InputCheck(float delta)
 {
-	Sun.LightUpdate(delta);
-	FlashLight.LightUpdate(delta);
-	Torch.LightUpdate(delta);
-	
-	Camera->Update(delta);
-	Grid->Update(delta);
-	Line->Update(delta);
-	
 	Zemmin2->InputCheck(delta);
-	Zemmin2->Update(delta);
-
-	Bot_Zemmin2->Update(delta);
-	//Bot_Zemmin2->SetLook(Zemmin2->GetPos());
 	
-	Camera->SetCamTarget(Zemmin2->GetPos());
-
-
 	if (GetKeyState(VK_ADD) & 0x8000)
 	{
 		Torch.SetRange(Torch.GetRange() + delta);
@@ -174,7 +164,7 @@ void GameScene::Update(float delta)
 		D3DXMatrixIdentity(&RotMat);
 		D3DXMatrixRotationX(&RotMat, 1.0f);
 		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
-		
+
 		//dir = D3DXVECTOR3(dir.x, dir.y, dir.z + 1.0f);
 		FlashLight.SetDirection(dir);
 	}
@@ -182,7 +172,7 @@ void GameScene::Update(float delta)
 	if (GetKeyState(VK_NUMPAD4) & 0x8000)
 	{
 		D3DXVECTOR3 pos = FlashLight.GetPosition();
-		pos = D3DXVECTOR3(pos.x - delta, pos.y, pos.z );
+		pos = D3DXVECTOR3(pos.x - delta, pos.y, pos.z);
 		FlashLight.SetPosition(pos);
 	}
 
@@ -192,11 +182,42 @@ void GameScene::Update(float delta)
 		pos = D3DXVECTOR3(pos.x + delta, pos.y, pos.z);
 		FlashLight.SetPosition(pos);
 	}
+}
+
+void GameScene::Update(float delta)
+{
+	InputCheck(delta);
+	
+	Sun.LightUpdate(delta);
+	FlashLight.LightUpdate(delta);
+	Torch.LightUpdate(delta);
+	
+	Camera->Update(delta);
+	Grid->Update(delta);
+	Line->Update(delta);
+	
+	
+	Zemmin2->Update(delta);
+
+	Bot_Zemmin2->Update(delta);
+	
+	Camera->SetCamTarget(Zemmin2->GetPos());
+
+	map_surface->Update(delta);
+	
+	
+	if(OldCharPos != Zemmin2->GetPos())
+	{
+		MapCheck(Zemmin2->GetPos(), map_surface->GetGroups());
+		OldCharPos = Zemmin2->GetPos();
+	}
+
+
 
 	
-	static float SunTimer = 0;
-	static float moveDir = -1.0f;
-	SunTimer += delta;
+	//static float SunTimer = 0;
+	//static float moveDir = -1.0f;
+	//SunTimer += delta;
 	
 	//if(SunTimer > 1.0f)
 	{
@@ -208,7 +229,7 @@ void GameScene::Update(float delta)
 		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
 	
 		Sun.SetDirection(dir);
-		SunTimer = 0;
+		//SunTimer = 0;
 	}
 }
 
@@ -219,6 +240,8 @@ void GameScene::Render(float delta)
 		DEVICE->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 		DEVICE->BeginScene();
 
+		map_surface->Render(delta);
+		
 		Grid->Draw(delta);
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
@@ -229,18 +252,6 @@ void GameScene::Render(float delta)
 		Torch.DrawGizmo(delta);
 
 		{
-			D3DXMATRIXA16 matWorld, matS, matR;
-			D3DXMatrixScaling(&matS, 0.1f, 0.1f, 0.1f);
-			D3DXMatrixRotationX(&matR, -D3DX_PI / 2.0F);
-
-			matWorld = matS * matR;
-			DEVICE->SetTransform(D3DTS_WORLD, &matWorld);
-
-			for each (auto p in vecGroup)
-			{
-				p->Render(delta);
-			}
-			//D3DXIntersectTri(v1, v2, v3, rayPos, rayDir, u, v, f);
 			
 			bc->Draw(delta);
 		}
@@ -249,5 +260,41 @@ void GameScene::Render(float delta)
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);
 	}
+}
+
+float GameScene::MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain)
+{
+	float U(0), V(0), Dist(0);
+	bool IsHit = false;
+
+	D3DXVECTOR3 TempPos = charpos + D3DXVECTOR3(0, 0.1f, 0);
+	D3DXVECTOR3 TempDir = D3DXVECTOR3(0, -1, 0);
+	
+	for (int groupNum = 0; groupNum < terrain.size(); groupNum++)
+	{
+		for (int i = 0; i < terrain[groupNum]->GetVertex().size(); i += 3)
+		{
+			if(D3DXIntersectTri(&terrain[groupNum]->GetVertex()[i].p,
+				&terrain[groupNum]->GetVertex()[i + 1].p,
+				&terrain[groupNum]->GetVertex()[i + 2].p,
+				&TempPos,
+				&TempDir,
+				&U, &V, &Dist))
+			{
+				IsHit = true;
+				break;
+			}
+		}
+		
+		if (IsHit) break;
+	}
+
+	if(IsHit)
+	{
+		D3DXVECTOR3 MovedPos = TempPos + (TempDir * Dist);
+		D3DXVECTOR3 Anchor(0, 4.1f, 0);
+		Zemmin2->SetPos(MovedPos + Anchor);
+	}
+	return Dist;
 }
 

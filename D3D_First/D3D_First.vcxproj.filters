@@ -111,6 +111,12 @@
     <ClInclude Include="ObjectSrc\Objects.h">
       <Filter>Source Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Source Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="objUnit.h">
+      <Filter>Source Files\Obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -181,6 +187,12 @@
     </ClCompile>
     <ClCompile Include="ObjectSrc\Objects.cpp">
       <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="objUnit.cpp">
+      <Filter>Source Files\Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
