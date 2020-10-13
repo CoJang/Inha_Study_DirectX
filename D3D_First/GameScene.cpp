@@ -5,6 +5,7 @@
 
 #include "ObjectSrc/Group.h"
 #include "objUnit.h"
+#include "ObjectSrc/OBJ_Loader.h"
 
 #include "GameScene.h"
 
@@ -101,6 +102,10 @@ void GameScene::InitGameScene()
 		objMap->SetScale(0.05f, 0.05f, 0.05f);
 		objMap->SetAngleX(Deg2Rad(-90));
 		objMap->RePositionVertice();
+
+		Loader temp;
+		vector<Group*> tempcontainor;
+		temp.LoadASE(tempcontainor, "Data", "woman_01_all.ASE");
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;

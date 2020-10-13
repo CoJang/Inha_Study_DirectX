@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Light">
       <UniqueIdentifier>{b60548f7-7fba-4ef2-8b33-c81c825f6c11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Ase">
+      <UniqueIdentifier>{4bdc6566-d210-4e51-8c11-1c26186ae288}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

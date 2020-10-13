@@ -3,14 +3,17 @@
 class Group;
 class MtlTex;
 
-class ObjLoader
+class Loader
 {
 private:
 	std::map<string, MtlTex*> mapMtlTex;
 public:
-	ObjLoader() = default;
-	~ObjLoader() = default;
+	Loader() = default;
+	~Loader() = default;
 
-	void Load(OUT std::vector<Group*> & vec_Group, IN char * folder, IN char * file);
+	void LoadOBJ(OUT std::vector<Group*> & vec_Group, IN char * folder, IN char * file);
 	void LoadMtlLib(char * folder, char * file);
+
+	void LoadASE(OUT std::vector<Group*> & vec_Group, IN char * folder, IN char * file);
+	void LoadASEMtl(char * folder, char * file);
 };

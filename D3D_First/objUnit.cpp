@@ -21,8 +21,8 @@ objUnit::~objUnit()
 
 void objUnit::Init(char* folder, char* file)
 {
-	ObjLoader Loder;
-	Loder.Load(vecGroup, folder, file);
+	Loader Loder;
+	Loder.LoadOBJ(vecGroup, folder, file);
 }
 
 void objUnit::Update(float delta)
