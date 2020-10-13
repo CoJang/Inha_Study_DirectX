@@ -61,6 +61,11 @@ void objUnit::Render(float delta)
 
 void objUnit::RePositionVertice()
 {
+	D3DXMatrixScaling(&ScaleMat, Scale.x, Scale.y, Scale.z);
+	D3DXMatrixRotationX(&RotateMat, RotateAngle.x);
+	D3DXMatrixTranslation(&TransMat, Position.x, Position.y, Position.z);
+	WorldMat = ScaleMat * RotateMat * TransMat;
+	
 	for(int groupNum = 0; groupNum < vecGroup.size(); groupNum++)
 		for (int i = 0; i < vecGroup[groupNum]->GetVertex().size(); i += 3)
 		{

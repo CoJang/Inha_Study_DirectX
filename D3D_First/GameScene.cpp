@@ -44,11 +44,11 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 				MousePos.y = HIWORD(lParam);
 
 				D3DXMATRIXA16 tempX, tempY;
-				D3DXVECTOR3 CameraPosition = *CamPos;
-				D3DXMatrixRotationY(&tempX, (OldMousePos.x - MousePos.x) * -0.01f);
+				D3DXVECTOR3 CameraPosition = CamPivot;
 				D3DXMatrixRotationX(&tempY, (OldMousePos.y - MousePos.y) * 0.02f);
+				D3DXMatrixRotationY(&tempX, (OldMousePos.x - MousePos.x) * -0.01f);
 				
-				D3DXVec3TransformCoord(CamPos, &CameraPosition, &(tempX * tempY));
+				D3DXVec3TransformCoord(&CamPivot, &CameraPosition, &(tempX * tempY));
 				break;
 			}
 		default:
@@ -62,8 +62,8 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		short Input = HIWORD(wParam);
 		Input /= 120;
 		//*CamFov += Input * 0.1f;
-		CamPos->y += Input;
-		CamPos->z += Input;
+		CamPivot.y += Input;
+		CamPivot.z += Input;
 	}
 	break;
 	default:
@@ -92,8 +92,15 @@ void GameScene::InitGameScene()
 
 		map_surface = new objUnit;
 		map_surface->Init("Data", "map_surface.obj");
-		map_surface->SetScale(0.1f, 0.1f, 0.1f);
+		map_surface->SetScale(0.05f, 0.05f, 0.05f);
 		map_surface->SetAngleX(Deg2Rad(-90));
+		map_surface->RePositionVertice();
+
+		objMap = new objUnit;
+		objMap->Init("Data", "map.obj");
+		objMap->SetScale(0.05f, 0.05f, 0.05f);
+		objMap->SetAngleX(Deg2Rad(-90));
+		objMap->RePositionVertice();
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -110,6 +117,8 @@ void GameScene::InitGameScene()
 	CamPos = Camera->GetCamPos();
 	CamTarget = Camera->GetCamTarget();
 	CamFov = Camera->GetCamFov();
+	CamPivot = D3DXVECTOR3(0, 15, -15);
+	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
 }
 
 void GameScene::SetLight()
@@ -202,13 +211,18 @@ void GameScene::Update(float delta)
 	Bot_Zemmin2->Update(delta);
 	
 	Camera->SetCamTarget(Zemmin2->GetPos());
+	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
 
-	map_surface->Update(delta);
+	//map_surface->Update(delta);
 	
-	
+	// When Player's Pos Changed
 	if(OldCharPos != Zemmin2->GetPos())
 	{
-		MapCheck(Zemmin2->GetPos(), map_surface->GetGroups());
+		if(!MapCheck(Zemmin2->GetPos(), map_surface->GetGroups()))
+		{
+			Zemmin2->SetPos(OldCharPos);
+		}
+		
 		OldCharPos = Zemmin2->GetPos();
 	}
 
@@ -240,7 +254,8 @@ void GameScene::Render(float delta)
 		DEVICE->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 		DEVICE->BeginScene();
 
-		map_surface->Render(delta);
+		//map_surface->Render(delta);
+		objMap->Render(delta);
 		
 		Grid->Draw(delta);
 		Line->Draw(delta);
@@ -252,7 +267,6 @@ void GameScene::Render(float delta)
 		Torch.DrawGizmo(delta);
 
 		{
-			
 			bc->Draw(delta);
 		}
 		
@@ -266,8 +280,9 @@ float GameScene::MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain)
 {
 	float U(0), V(0), Dist(0);
 	bool IsHit = false;
+	D3DXVECTOR3 Anchor(0, 4.1f, 0);
 
-	D3DXVECTOR3 TempPos = charpos + D3DXVECTOR3(0, 0.1f, 0);
+	D3DXVECTOR3 TempPos = charpos + D3DXVECTOR3(0, 5, 0);
 	D3DXVECTOR3 TempDir = D3DXVECTOR3(0, -1, 0);
 	
 	for (int groupNum = 0; groupNum < terrain.size(); groupNum++)
@@ -281,20 +296,17 @@ float GameScene::MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain)
 				&TempDir,
 				&U, &V, &Dist))
 			{
-				IsHit = true;
-				break;
+				if (Dist < 16.5f)
+				{
+					//cout << Dist << endl;
+					D3DXVECTOR3 MovedPos = TempPos + (TempDir * Dist);
+					Zemmin2->SetPos(MovedPos + Anchor);
+					return true;
+				}
 			}
 		}
-		
-		if (IsHit) break;
 	}
 
-	if(IsHit)
-	{
-		D3DXVECTOR3 MovedPos = TempPos + (TempDir * Dist);
-		D3DXVECTOR3 Anchor(0, 4.1f, 0);
-		Zemmin2->SetPos(MovedPos + Anchor);
-	}
-	return Dist;
+	return false;
 }
 

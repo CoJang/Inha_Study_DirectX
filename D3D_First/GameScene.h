@@ -21,7 +21,7 @@ public:
 private:
 // temp
 	BezierCurve* bc;
-	//vector<Group*> vecGroup;
+	objUnit* objMap;
 	objUnit* map_surface;
 	D3DXVECTOR3 OldCharPos;
 	
@@ -37,6 +37,7 @@ private:
 	MyCamera* Camera;
 	D3DXVECTOR3* CamPos;
 	D3DXVECTOR3* CamTarget;
+	D3DXVECTOR3 CamPivot;
 	float* CamFov;
 	
 // light

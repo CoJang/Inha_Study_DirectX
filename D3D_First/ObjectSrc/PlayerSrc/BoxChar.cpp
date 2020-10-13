@@ -89,7 +89,7 @@ void BoxChar::InputCheck(float delta)
 	if (GetKeyState('W') & 0x8000)
 	{
 		IsKeyDown = true;
-		velocity = 10.5f * delta;
+		velocity = 20.5f * delta;
 		state = WALK;
 	}
 	if (GetKeyState('A') & 0x8000)

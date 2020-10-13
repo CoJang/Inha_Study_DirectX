@@ -19,9 +19,9 @@ public:
 	objUnit();
 	~objUnit();
 
-	virtual void Init(char* folder, char* file);
-	virtual void Update(float delta);
-	virtual void Render(float delta);
+	void Init(char* folder, char* file);
+	void Update(float delta);
+	void Render(float delta);
 
 
 	void SetScale(float x, float y, float z) { Scale = D3DXVECTOR3(x, y, z); }
