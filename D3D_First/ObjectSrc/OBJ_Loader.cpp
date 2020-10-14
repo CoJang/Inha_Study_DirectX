@@ -220,24 +220,15 @@ void Loader::LoadASE(std::vector<Group*>& vec_Group, char* folder, char* file)
 				fgets(buff, sizeof(buff), SrcFile); // Class
 				fgets(buff, sizeof(buff), SrcFile); // Ambient
 				sscanf_s(buff, "%*s %f %f %f", &r, &g, &b);
-				mapMtlTex[to_string(i)]->GetMaterial().Ambient.r = r;
-				mapMtlTex[to_string(i)]->GetMaterial().Ambient.g = g;
-				mapMtlTex[to_string(i)]->GetMaterial().Ambient.b = b;
-				mapMtlTex[to_string(i)]->GetMaterial().Ambient.a = 1.0f;
+				mapMtlTex[to_string(i)]->GetMaterial().Ambient = D3DXCOLOR(r, g, b, 1.0f);
 
 				fgets(buff, sizeof(buff), SrcFile);
 				sscanf_s(buff, "%*s %f %f %f", &r, &g, &b);
-				mapMtlTex[to_string(i)]->GetMaterial().Diffuse.r = r;
-				mapMtlTex[to_string(i)]->GetMaterial().Diffuse.g = g;
-				mapMtlTex[to_string(i)]->GetMaterial().Diffuse.b = b;
-				mapMtlTex[to_string(i)]->GetMaterial().Diffuse.a = 1.0f;
+				mapMtlTex[to_string(i)]->GetMaterial().Diffuse = D3DXCOLOR(r, g, b, 1.0f);
 
 				fgets(buff, sizeof(buff), SrcFile);
 				sscanf_s(buff, "%*s %f %f %f", &r, &g, &b);
-				mapMtlTex[to_string(i)]->GetMaterial().Specular.r = r;
-				mapMtlTex[to_string(i)]->GetMaterial().Specular.g = g;
-				mapMtlTex[to_string(i)]->GetMaterial().Specular.b = b;
-				mapMtlTex[to_string(i)]->GetMaterial().Specular.a = 1.0f;
+				mapMtlTex[to_string(i)]->GetMaterial().Specular = D3DXCOLOR(r, g, b, 1.0f);
 				
 				while(i != MtlCount) // skip for other data
 				{
