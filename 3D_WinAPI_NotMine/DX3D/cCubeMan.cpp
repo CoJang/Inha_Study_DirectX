@@ -11,7 +11,8 @@
 
 
 cCubeMan::cCubeMan()
-	: m_pRoot(NULL)
+	: m_pRoot(nullptr)
+	  , m_pTexture(nullptr)
 {
 }
 
@@ -19,32 +20,36 @@ cCubeMan::cCubeMan()
 cCubeMan::~cCubeMan()
 {
 	if (m_pRoot)
-		m_pRoot->Destroy(); 
+		m_pRoot->Destroy();
+
+	SafeRelease(m_pTexture);
 }
 
 void cCubeMan::Setup()
 {
-	cCharacter::Setup(); 
+	cCharacter::Setup();
 
-	ZeroMemory(&m_stMtl, sizeof(D3DMATERIAL9)); 
-	m_stMtl.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f); 
+	ZeroMemory(&m_stMtl, sizeof(D3DMATERIAL9));
+	m_stMtl.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	m_stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	m_stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 
-	cBody*	pBody = new cBody; 
-	pBody->Setup(); 
-	pBody->SetParentWorldTM(&m_matWorld); 
-	m_pRoot = pBody; 
+	D3DXCreateTextureFromFile(g_pD3DDevice, _T("../image/batman.png"), &m_pTexture);
 
-	cHead* pHead = new cHead; 
-	pHead->Setup(); 
+	cBody* pBody = new cBody;
+	pBody->Setup();
+	pBody->SetParentWorldTM(&m_matWorld);
+	m_pRoot = pBody;
 
-	m_pRoot->AddChild(pHead); 
+	cHead* pHead = new cHead;
+	pHead->Setup();
 
-	cLeftArm* pLArm = new cLeftArm; 
-	pLArm->Setup(); 
-	pLArm->SetRotDeltaX(0.1f); 
-	m_pRoot->AddChild(pLArm); 
+	m_pRoot->AddChild(pHead);
+
+	cLeftArm* pLArm = new cLeftArm;
+	pLArm->Setup();
+	pLArm->SetRotDeltaX(0.1f);
+	m_pRoot->AddChild(pLArm);
 
 	cRightArm* pRArm = new cRightArm;
 	pRArm->Setup();
@@ -62,26 +67,36 @@ void cCubeMan::Setup()
 	m_pRoot->AddChild(pRLeg);
 }
 
-void cCubeMan::Update()
+void cCubeMan::Update(iMap* pMap)
 {
-	cCharacter::Update(); 
+	cCharacter::Update(pMap);
 	if (m_pRoot)
-		m_pRoot->Update(); 
+		m_pRoot->Update();
 }
 
 void cCubeMan::Render()
 {
 	if (g_pD3DDevice)
 	{
-		g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true); 
-		g_pD3DDevice->SetMaterial(&m_stMtl); 
+		g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+		g_pD3DDevice->SetMaterial(&m_stMtl);
 
-		cCharacter::Render(); 
+		cCharacter::Render();
 
-		D3DXMATRIXA16 matWorld; 
-		D3DXMatrixIdentity(&matWorld); 
-		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld); 
+		D3DXMATRIXA16 matWorld;
+		D3DXMatrixIdentity(&matWorld);
+		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+		g_pD3DDevice->SetTexture(0, m_pTexture);
 		if (m_pRoot)
-			m_pRoot->Render(); 
+			m_pRoot->Render();
+		g_pD3DDevice->SetTexture(0, nullptr);
 	}
 }
+
+/* 
+1. GRID pn .. 바꿔서 라이트 적용되는거 확인할수 있도록
+2. Direction Light ... 해뜨고 지는거
+3. Spot Light .. 키 입력에 따라 방향 조정
+4. Point Light .. 범위를 조정 할수 있도록 
+5. 각 라이트의 위치를 박스로 표시 해줄것..
+*/

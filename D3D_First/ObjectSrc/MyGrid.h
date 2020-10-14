@@ -15,7 +15,7 @@ public:
 	void Draw(float delta);
 };
 
-class Pyramid : public Objects
+class Pyramid : public Objects_PC
 {
 public:
 	Pyramid() = default;
@@ -26,7 +26,7 @@ public:
 	void Draw(float delta);
 };
 
-class AxisLine : public Objects
+class AxisLine : public Objects_PC
 {
 private:
 	std::vector<Pyramid> vec_GizmoVector;
@@ -39,7 +39,7 @@ public:
 	void Draw(float delta);
 };
 
-class BezierCurve : public Objects
+class BezierCurve : public Objects_PC
 {
 	std::vector<PC_VERTEX> vec_Straight;
 public:

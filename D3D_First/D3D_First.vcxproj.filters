@@ -120,6 +120,9 @@
     <ClInclude Include="objUnit.h">
       <Filter>Source Files\Obj</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="objUnit.cpp">
       <Filter>Source Files\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectNode.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

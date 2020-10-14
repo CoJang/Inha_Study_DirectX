@@ -30,3 +30,4 @@ void Group::Render(float delta)
 		DEVICE->SetTexture(0, NULL);
 	}
 }
+

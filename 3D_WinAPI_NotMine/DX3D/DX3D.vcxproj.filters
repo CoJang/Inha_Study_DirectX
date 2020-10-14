@@ -16,6 +16,15 @@
     <Filter Include="CubeMan">
       <UniqueIdentifier>{d8fa7376-c585-4cac-8f75-b00590010d7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ObjLoader">
+      <UniqueIdentifier>{576fbfbc-3a43-419e-8547-f17eca6cd8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{a987ee29-ac43-4f69-bf4b-4651d259aab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AseLoader">
+      <UniqueIdentifier>{0ce0269f-e715-4707-91ec-3e85d81db14b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +90,39 @@
     <ClInclude Include="cCubeMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cMtlTex.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cObject.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjectManager.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjLoader.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cTextureManager.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cGroup.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="iMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Asciitok.h">
+      <Filter>Source Files\AseLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cAseLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +177,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cCubeMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cGroup.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cObject.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cMtlTex.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjLoader.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjectManager.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cTextureManager.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="iMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjMap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAseLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

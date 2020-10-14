@@ -1,7 +1,6 @@
 #pragma once
 #include "MtlTex.h"
 
-
 class Group : public ObjData
 {
 private:
@@ -14,5 +13,3 @@ public:
 
 	void Render(float delta);
 };
-
-

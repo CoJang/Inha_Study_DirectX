@@ -1,7 +1,7 @@
 #pragma once
-#include "Objects.h"
+#include "../ObjectNode.h"
 
-class Box : public Objects_PNT
+class Box : public ObjectNode
 {
 protected:
 	D3DXVECTOR3 Position;
