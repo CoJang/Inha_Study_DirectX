@@ -28,9 +28,9 @@
 
 #include <d3dx9.h>
 #pragma comment(lib, "d3d9.lib")
-#pragma comment(lib, "d3dx9.lib") 
+#pragma comment(lib, "d3dx9.lib")
 
-using namespace std; 
+using namespace std;
 
 extern HWND g_hWnd;
 
@@ -51,24 +51,35 @@ extern HWND g_hWnd;
 
 struct ST_PC_VERTEX
 {
-	D3DXVECTOR3  p; 
-	D3DCOLOR	 c; 
-	enum { FVF  = D3DFVF_XYZ | D3DFVF_DIFFUSE};
+	D3DXVECTOR3 p;
+	D3DCOLOR c;
+
+	enum { FVF = D3DFVF_XYZ | D3DFVF_DIFFUSE };
 };
 
 struct ST_PNT_VERTEX
 {
-	D3DXVECTOR3	p; 
-	D3DXVECTOR3	n; 
-	D3DXVECTOR2	t;
+	D3DXVECTOR3 p;
+	D3DXVECTOR3 n;
+	D3DXVECTOR2 t;
+
 	enum { FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 };
 };
 
 struct ST_PT_VERTEX
 {
-	D3DXVECTOR3	p;
-	D3DXVECTOR2	t;
+	D3DXVECTOR3 p;
+	D3DXVECTOR2 t;
+
 	enum { FVF = D3DFVF_XYZ | D3DFVF_TEX1 };
+};
+
+struct ST_PN_VERTEX
+{
+	D3DXVECTOR3 p;
+	D3DXVECTOR3 n;
+
+	enum { FVF = D3DFVF_XYZ | D3DFVF_NORMAL };
 };
 
 #define Synthesize(varType , varName , funName) \
@@ -76,16 +87,33 @@ protected : varType varName ; \
 public : inline varType Get##funName(void) const { return varName ; } \
 public : inline void Set##funName(varType var) { varName = var ; }
 
-#define Synthesize_pass_by_Ref(varType , varName , funName) \
+#define Synthesize_Pass_by_Ref(varType , varName , funName) \
 protected : varType varName ; \
 public : inline varType& Get##funName(void)  { return varName ; } \
 public : inline void Set##funName(varType& var) { varName = var ; }
 /*
 Synthesize(int , A , Value ) ;
-==> 
-int A ; 
+==>
+int A ;
 int GetValue() { return A ; }
 void SetValue(int a ) { A = a ; }
 */
+#define SafeAddRef(p)	{if(p) p->AddRef() ; }
 
+#define Synthesize_Add_Ref(varType , varName , funName) \
+protected : varType varName ; \
+public : virtual varType Get##funName(void) const { return varName ; } \
+public : virtual void Set##funName(varType var ) { \
+	if( varName != var ) \
+	{ \
+		SafeAddRef(var) ; \
+		SafeRelease(varName) ; \
+		varName = var ; \
+	} \
+}
+// ========================================
+#include "iMap.h"
 #include "cDeviceManager.h"
+#include "cObject.h"
+#include "cObjectManager.h"
+#include "cTextureManager.h"

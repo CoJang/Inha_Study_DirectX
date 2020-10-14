@@ -10,7 +10,7 @@ enum AnimState
 	JUMP,
 };
 
-class BoxChar : public Objects
+class BoxChar : public Objects_PC
 {
 protected:
 	AnimState   state;

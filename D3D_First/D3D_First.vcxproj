@@ -154,6 +154,7 @@
     <ClInclude Include="ManagerSrc\DeviceManager.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyMath.h" />
+    <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="ObjectSrc\Box.h" />
     <ClInclude Include="ObjectSrc\Group.h" />
     <ClInclude Include="ObjectSrc\MtlTex.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="ManagerSrc\DeviceManager.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyMath.cpp" />
+    <ClCompile Include="ObjectNode.cpp" />
     <ClCompile Include="ObjectSrc\Box.cpp" />
     <ClCompile Include="ObjectSrc\Group.cpp" />
     <ClCompile Include="ObjectSrc\MtlTex.cpp" />

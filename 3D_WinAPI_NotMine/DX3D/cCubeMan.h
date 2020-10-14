@@ -1,6 +1,6 @@
 #pragma once
 #include "cCharacter.h"
-class cCubeNode; 
+class cCubeNode;
 
 class cCubeMan :
 	public cCharacter
@@ -9,14 +9,14 @@ public:
 	cCubeMan();
 	//~cCubeMan();
 protected :
-	cCubeNode*			m_pRoot; 
-	D3DMATERIAL9		m_stMtl; 
-public : 
-	virtual ~cCubeMan(); 
+	cCubeNode* m_pRoot;
+	D3DMATERIAL9 m_stMtl;
+	LPDIRECT3DTEXTURE9 m_pTexture;
 
-	virtual void Setup() override; 
-	virtual void Update() override; 
-	virtual void Render() override; 
+public :
+	virtual ~cCubeMan();
 
+	void Setup() override;
+	void Update(iMap* pMap) override;
+	void Render() override;
 };
-

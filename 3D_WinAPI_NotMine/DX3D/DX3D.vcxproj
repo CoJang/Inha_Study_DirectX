@@ -71,16 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(IncludePath);$(DH);</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -142,6 +149,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asciitok.h" />
+    <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cBody.h" />
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cCharacter.h" />
@@ -150,20 +159,30 @@
     <ClInclude Include="cCubePC.h" />
     <ClInclude Include="cCubePNT.h" />
     <ClInclude Include="cDeviceManager.h" />
+    <ClInclude Include="cFrame.h" />
     <ClInclude Include="cGrid.h" />
+    <ClInclude Include="cGroup.h" />
     <ClInclude Include="cHead.h" />
     <ClInclude Include="cLeftArm.h" />
     <ClInclude Include="cLeftLeg.h" />
     <ClInclude Include="cMainGame.h" />
+    <ClInclude Include="cMtlTex.h" />
+    <ClInclude Include="cObject.h" />
+    <ClInclude Include="cObjectManager.h" />
+    <ClInclude Include="cObjLoader.h" />
+    <ClInclude Include="cObjMap.h" />
     <ClInclude Include="cPyramid.h" />
     <ClInclude Include="cRightArm.h" />
     <ClInclude Include="cRightLeg.h" />
+    <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="DX3D.h" />
+    <ClInclude Include="iMap.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cBody.cpp" />
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cCharacter.cpp" />
@@ -172,15 +191,24 @@
     <ClCompile Include="cCubePC.cpp" />
     <ClCompile Include="cCubePNT.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
+    <ClCompile Include="cFrame.cpp" />
     <ClCompile Include="cGrid.cpp" />
+    <ClCompile Include="cGroup.cpp" />
     <ClCompile Include="cHead.cpp" />
     <ClCompile Include="cLeftArm.cpp" />
     <ClCompile Include="cLeftLeg.cpp" />
     <ClCompile Include="cMainGame.cpp" />
+    <ClCompile Include="cMtlTex.cpp" />
+    <ClCompile Include="cObject.cpp" />
+    <ClCompile Include="cObjectManager.cpp" />
+    <ClCompile Include="cObjLoader.cpp" />
+    <ClCompile Include="cObjMap.cpp" />
     <ClCompile Include="cPyramid.cpp" />
     <ClCompile Include="cRightArm.cpp" />
     <ClCompile Include="cRightLeg.cpp" />
+    <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="DX3D.cpp" />
+    <ClCompile Include="iMap.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

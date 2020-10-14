@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Group.h"
+#include "../ObjectNode.h"
 #include "OBJ_Loader.h"
 
 void Loader::LoadOBJ(std::vector<Group*>& vec_Group, char* folder, char* file)
@@ -257,6 +258,86 @@ void Loader::LoadASE(std::vector<Group*>& vec_Group, char* folder, char* file)
 		} // end if
 		else if (strcmp(buff, "*GEOMOBJECT") == 0)
 		{
+			string CurrentName;
+			
+			while(true)
+			{
+				fscanf_s(SrcFile, "%s", buff, sizeof(buff));
+				
+				if (strcmp(buff, "*NODE_NAME") == 0)
+				{
+					//fscanf_s(SrcFile, "%s", buff, sizeof(buff));
+					fgets(buff, sizeof(buff), SrcFile);
+					
+					string temp(buff);
+					temp.erase(temp.begin(), temp.begin() + 2);
+					temp.erase(temp.size() - 3, 3);
+					
+					if (mapObjNode.find(temp) == mapObjNode.end())
+					{
+						mapObjNode[temp] = new ObjectNode;
+						CurrentName = temp.c_str();
+					}
+				}
+				else if(strcmp(buff, "*NODE_PARENT") == 0)
+				{
+					fgets(buff, sizeof(buff), SrcFile);
+					
+					string ParentsName(buff);
+					ParentsName.erase(ParentsName.begin(), ParentsName.begin() + 2);
+					ParentsName.erase(ParentsName.size() - 3, 3);
+
+					mapObjNode.find(ParentsName)->second->AddChild(mapObjNode.find(CurrentName)->second);
+				}
+				else if (strcmp(buff, "*TM_ROW0") == 0)
+				{
+					D3DXMATRIXA16 Mat; D3DXMatrixIdentity(&Mat);
+					fgets(buff, sizeof(buff), SrcFile);
+					sscanf_s(buff, "%f %f %f",	   &Mat._11, &Mat._12, &Mat._13);
+					fgets(buff, sizeof(buff), SrcFile);
+					sscanf_s(buff, "%*s %f %f %f", &Mat._21, &Mat._22, &Mat._23);
+					fgets(buff, sizeof(buff), SrcFile);
+					sscanf_s(buff, "%*s %f %f %f", &Mat._31, &Mat._32, &Mat._33);
+					fgets(buff, sizeof(buff), SrcFile);
+					sscanf_s(buff, "%*s %f %f %f", &Mat._41, &Mat._42, &Mat._43);
+
+					mapObjNode.find(CurrentName)->second->SetWorldMatrix(Mat);
+				}
+				else if(strcmp(buff, "*MESH") == 0)
+				{
+					while(true)
+					{
+						fgets(buff, sizeof(buff), SrcFile);
+						sscanf_s(buff, "%s", buff, sizeof(buff));
+
+						int VertexNum(0), FaceNum(0);
+
+						if(strcmp(buff, "*MESH_NUMVERTEX") == 0)
+						{
+							fscanf_s(SrcFile, "%d", &VertexNum);
+						}
+						else if (strcmp(buff, "*MESH_NUMFACES") == 0)
+						{
+							fscanf_s(SrcFile, "%d", &FaceNum);
+						}
+						else if (strcmp(buff, "*MESH_VERTEX_LIST") == 0)
+						{
+							fgets(buff, sizeof(buff), SrcFile);
+							float x(0), y(0), z(0);
+							for(int i = 0; i < VertexNum; i++)
+							{
+								fgets(buff, sizeof(buff), SrcFile);
+								sscanf_s(buff, "%*s %*d %f %f %f", &x, &z, &y);
+								positions.push_back(D3DXVECTOR3(x, z, y));
+							}
+						}
+						
+						break;
+					}
+					break;
+				}
+			}
+
 			if (!vertices.empty())
 			{
 				Group* group = new Group;
@@ -264,28 +345,6 @@ void Loader::LoadASE(std::vector<Group*>& vec_Group, char* folder, char* file)
 				group->SetMat(mapMtlTex[MtlName]);
 				vec_Group.push_back(group);
 				vertices.clear();
-			}
-
-			if (strcmp(buff, "*MESH_VERTEX") == 0)
-			{
-				fgets(buff, sizeof(buff), SrcFile);
-				float x(0), y(0), z(0);
-				sscanf_s(buff, "%*d %f %f %f", &x, &y, &z);
-				//switch (buff[1])
-				//{
-				//case ' ':
-				//	sscanf_s(buff, "%*s %f %f %f", &x, &y, &z);
-				//	positions.push_back(D3DXVECTOR3(x, y, z));
-				//	break;
-				//case 't':
-				//	sscanf_s(buff, "%*s %f %f %f", &x, &y, &z);
-				//	UVs.push_back(D3DXVECTOR2(x, y));
-				//	break;
-				//case 'n':
-				//	sscanf_s(buff, "%*s %f %f %f", &x, &y, &z);
-				//	normals.push_back(D3DXVECTOR3(x, y, z));
-				//	break;
-				//}
 			}
 		}
 		else if (buff[0] == 'u')

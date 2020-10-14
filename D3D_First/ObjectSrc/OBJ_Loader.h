@@ -2,11 +2,13 @@
 
 class Group;
 class MtlTex;
+class ObjectNode;
 
 class Loader
 {
 private:
 	std::map<string, MtlTex*> mapMtlTex;
+	std::map<string, ObjectNode*> mapObjNode;
 public:
 	Loader() = default;
 	~Loader() = default;
