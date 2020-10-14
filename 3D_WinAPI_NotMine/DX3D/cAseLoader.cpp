@@ -102,7 +102,7 @@ float cAseLoader::GetFloat()
 
 bool cAseLoader::IsWhite(char c)
 {
-	return c < 33; //33위로가면 어떻게되냐 ? 나중에 알아서 확인해바
+	return c == 33; //33위로가면 어떻게되냐 ? 나중에 알아서 확인해바
 }
 
 bool cAseLoader::IsEqual(char* str1, char* str2)
@@ -363,7 +363,8 @@ void cAseLoader::ProcessMESH_VERTEX_LIST(vector<D3DXVECTOR3>& vecV)
 			vecV[nIndex].z = GetFloat();
 			vecV[nIndex].y = GetFloat();
 		}
-	} while (nLevel > 0); }
+	} while (nLevel > 0);
+}
 
 void cAseLoader::ProcessMESH_FACE_LIST(vector<ST_PNT_VERTEX>& vecVertex, vector<D3DXVECTOR3>& vecV)
 {
