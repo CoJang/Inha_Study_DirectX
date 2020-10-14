@@ -102,7 +102,7 @@ float cAseLoader::GetFloat()
 
 bool cAseLoader::IsWhite(char c)
 {
-	return c == 33; //33위로가면 어떻게되냐 ? 나중에 알아서 확인해바
+	return c < 33; //33위로가면 어떻게되냐 ? 나중에 알아서 확인해바
 }
 
 bool cAseLoader::IsEqual(char* str1, char* str2)

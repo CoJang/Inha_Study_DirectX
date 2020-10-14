@@ -117,11 +117,11 @@
     <ClInclude Include="Asciitok.h">
       <Filter>Source Files\AseLoader</Filter>
     </ClInclude>
-    <ClInclude Include="cFrame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cAseLoader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\AseLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cFrame.h">
+      <Filter>Source Files\AseLoader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,11 +203,11 @@
     <ClCompile Include="cObjMap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="cFrame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cAseLoader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\AseLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cFrame.cpp">
+      <Filter>Source Files\AseLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
