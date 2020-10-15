@@ -3,9 +3,11 @@
 #include "ObjectSrc/PlayerSrc/BoxChar.h"
 #include "MyCamera.h"
 
+#include "ObjectFrame.h"
 #include "ObjectSrc/Group.h"
 #include "objUnit.h"
 #include "ObjectSrc/OBJ_Loader.h"
+#include "ASE_Loader.h"
 
 #include "GameScene.h"
 
@@ -85,7 +87,6 @@ void GameScene::InitGameScene()
 	Zemmin2 = new BoxChar;
 	Zemmin2->Init();
 	OldCharPos = Zemmin2->GetPos();
-	//Zemmin2->SetPos(Zemmin2->GetPos() + D3DXVECTOR3(0, 3.6f, 0));
 	
 	{
 		bc = new BezierCurve;
@@ -106,6 +107,9 @@ void GameScene::InitGameScene()
 		Loader temp;
 		vector<Group*> tempcontainor;
 		temp.LoadASE(tempcontainor, "Data", "woman_01_all.ASE");
+
+		ASE_Loader loader;
+		RootFrame = loader.Load("woman/woman_01_all.ASE");
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -260,7 +264,7 @@ void GameScene::Render(float delta)
 		DEVICE->BeginScene();
 
 		//map_surface->Render(delta);
-		objMap->Render(delta);
+		//objMap->Render(delta);
 		
 		Grid->Draw(delta);
 		Line->Draw(delta);
@@ -272,6 +276,7 @@ void GameScene::Render(float delta)
 		Torch.DrawGizmo(delta);
 
 		{
+			RootFrame->Render();
 			bc->Draw(delta);
 		}
 		

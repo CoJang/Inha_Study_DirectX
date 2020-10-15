@@ -11,6 +11,7 @@ class BezierCurve;
 
 class Group;
 class objUnit;
+class ObjectFrame;
 
 class GameScene
 {
@@ -24,6 +25,7 @@ private:
 	objUnit* objMap;
 	objUnit* map_surface;
 	D3DXVECTOR3 OldCharPos;
+	ObjectFrame* RootFrame;
 	
 // giomatric objects
 	MyGrid* Grid;
