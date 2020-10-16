@@ -5,6 +5,7 @@ class cCamera;
 class cGrid;
 class cCubeMan;
 class cGroup;
+class cMtlTex;
 
 class cMainGame
 {
@@ -28,7 +29,19 @@ private :
 	iMap* m_pMap;
 
 	cFrame* m_pRootFrame;
+	LPD3DXMESH m_pMeshTeapot;
+	LPD3DXMESH m_pMeshSphere;
+	D3DMATERIAL9 m_stMtlTeapot;
+	D3DMATERIAL9 m_stMtlSphere;
+
+	LPD3DXMESH m_pObjMesh;
+	LPD3DXMESH m_pAseMesh;
+	vector<cMtlTex*> m_vecAseMtlTex;
+	vector<cMtlTex*> m_vecObjMtlTex;
 public :
+	void Setup_MeshObjects();
+	void Mesh_Render();
+	
 	void Setup();
 	void Update();
 	void Render();

@@ -3,7 +3,7 @@
 
 
 cFrame::cFrame()
-	: m_pMtlTex(nullptr)
+	:m_pMtlTex(nullptr)
 {
 	D3DXMatrixIdentity(&m_matLocalTM);
 	D3DXMatrixIdentity(&m_matWorldTM);
@@ -12,7 +12,12 @@ cFrame::cFrame()
 
 cFrame::~cFrame()
 {
-	SafeRelease(m_pMtlTex);
+	//SafeRelease(m_pMtlTex);
+	
+	//for each(auto it in m_vecMtlTex)
+	//{
+	//	SafeRelease(it);
+	//}
 }
 
 void cFrame::Update(int nKeyFrame, D3DXMATRIXA16* pmatParent)

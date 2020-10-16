@@ -264,7 +264,7 @@ void GameScene::Render(float delta)
 		DEVICE->BeginScene();
 
 		//map_surface->Render(delta);
-		//objMap->Render(delta);
+		objMap->Render(delta);
 		
 		Grid->Draw(delta);
 		Line->Draw(delta);

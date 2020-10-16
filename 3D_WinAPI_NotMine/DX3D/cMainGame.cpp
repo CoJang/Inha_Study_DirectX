@@ -20,6 +20,10 @@ cMainGame::cMainGame()
 	  , m_pTexture(nullptr)
 	  , m_pMap(nullptr)
 	  , m_pRootFrame(nullptr)
+	  ,m_pMeshTeapot(nullptr)
+	  ,m_pMeshSphere(nullptr)
+	  ,m_pObjMesh(nullptr)
+	  ,m_pAseMesh(nullptr)
 {
 }
 
@@ -32,6 +36,13 @@ cMainGame::~cMainGame()
 	SafeDelete(m_pCubeMan);
 	SafeDelete(m_pMap);
 	SafeRelease(m_pTexture);
+	SafeRelease(m_pMeshTeapot);
+	SafeRelease(m_pMeshSphere);
+	SafeRelease(m_pObjMesh);
+	SafeRelease(m_pAseMesh);
+
+	for each(auto p in m_vecObjMtlTex)
+		SafeRelease(p);
 
 	for each (auto p in m_vecGroup)
 	{
@@ -42,6 +53,90 @@ cMainGame::~cMainGame()
 	m_pRootFrame->Destroy();
 	g_pObjectManager->Destroy();
 	g_pDeviceManager->Destroy();
+}
+
+void cMainGame::Setup_MeshObjects()
+{
+	D3DXCreateTeapot(g_pD3DDevice, &m_pMeshTeapot, NULL);
+	D3DXCreateSphere(g_pD3DDevice, 5.0f, 10, 10, &m_pMeshSphere, NULL);
+
+	ZeroMemory(&m_stMtlTeapot, sizeof(D3DMATERIAL9));
+	m_stMtlTeapot.Ambient = D3DXCOLOR(0, 0.5f, 0.5f, 1);
+	m_stMtlTeapot.Diffuse = D3DXCOLOR(0, 0.5f, 0.5f, 1);
+	m_stMtlTeapot.Specular = D3DXCOLOR(0, 0.5f, 0.5f, 1);
+	
+	ZeroMemory(&m_stMtlSphere, sizeof(D3DMATERIAL9));
+	m_stMtlSphere.Ambient = D3DXCOLOR(0.5f, 0, 0.5f, 1);
+	m_stMtlSphere.Diffuse = D3DXCOLOR(0.5f, 0, 0.5f, 1);
+	m_stMtlSphere.Specular = D3DXCOLOR(0.5f, 0, 0.5f, 1);
+
+	cObjLoader l;
+	m_pObjMesh = l.LoadMesh(m_vecObjMtlTex, "obj", "map.obj");
+
+	cAseLoader aseloader;
+	m_pAseMesh = aseloader.LoadMesh(m_vecAseMtlTex, "woman/woman_01_all.ASE");
+}
+
+void cMainGame::Mesh_Render()
+{
+	D3DXMATRIXA16 matWorld, matS, matR;
+	g_pD3DDevice->SetTexture(0, NULL);
+	//{
+	//	D3DXMatrixIdentity(&matWorld);
+	//	D3DXMatrixIdentity(&matS);
+	//	D3DXMatrixIdentity(&matR);
+
+	//	matWorld = matS * matR;
+	//	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	//	g_pD3DDevice->SetMaterial(&m_stMtlTeapot);
+	//	m_pMeshTeapot->DrawSubset(0);
+	//}
+	//{
+	//	D3DXMatrixIdentity(&matWorld);
+	//	D3DXMatrixIdentity(&matS);
+	//	D3DXMatrixIdentity(&matR);
+
+	//	matWorld = matS * matR;
+	//	D3DXMatrixTranslation(&matWorld, 10, 0, 0);
+	//	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	//	g_pD3DDevice->SetMaterial(&m_stMtlSphere);
+	//	m_pMeshSphere->DrawSubset(0);
+	//}
+	{
+		//D3DXMatrixIdentity(&matWorld);
+		//D3DXMatrixIdentity(&matS);
+		//D3DXMatrixIdentity(&matR);
+		//D3DXMatrixScaling(&matS, 0.01f, 0.01f, 0.01f);
+		//D3DXMatrixRotationX(&matR, -D3DX_PI / 2.0f);
+		//matWorld = matS * matR;
+
+		//g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+		//for(size_t i = 0; i < m_vecObjMtlTex.size(); ++i)
+		//{
+		//	g_pD3DDevice->SetMaterial(&m_vecObjMtlTex[i]->GetMaterial());
+		//	g_pD3DDevice->SetTexture(0, m_vecObjMtlTex[i]->GetTexture());
+		//	m_pObjMesh->DrawSubset(i);
+		//}
+		
+	}
+	{
+		D3DXMatrixIdentity(&matWorld);
+		D3DXMatrixIdentity(&matS);
+		D3DXMatrixIdentity(&matR);
+		matWorld = matS * matR;
+
+		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+		for(size_t i = 0; i < m_vecAseMtlTex.size(); ++i)
+		{
+			g_pD3DDevice->SetMaterial(&m_vecAseMtlTex[i]->GetMaterial());
+			g_pD3DDevice->SetTexture(0, m_vecAseMtlTex[i]->GetTexture());
+			m_pAseMesh->DrawSubset(i);
+		}
+
+		g_pD3DDevice->SetTexture(0, NULL);
+	}
 }
 
 void cMainGame::Setup()
@@ -60,13 +155,16 @@ void cMainGame::Setup()
 	m_pGrid->Setup();
 
 	{
-		cAseLoader l;
-		m_pRootFrame = l.Load("woman/woman_01_all.ASE");
+		
+		//m_pRootFrame = l.Load("woman/woman_01_all.ASE");
+		
 	}
 
 	Setup_Texture();
 	Setup_Obj();
 	Set_Light();
+
+	Setup_MeshObjects();
 }
 
 void cMainGame::Update()
@@ -89,13 +187,15 @@ void cMainGame::Render()
 	                    1.0F, 0);
 
 	g_pD3DDevice->BeginScene();
-
 	if (m_pRootFrame)
 		m_pRootFrame->Render();
 	
 	if (m_pGrid)
 		m_pGrid->Render();
 
+	//g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+	Mesh_Render();
+	
 	//if (m_pCubePC)
 	//	m_pCubePC->Render(); 
 	//Obj_Render(); 

@@ -124,4 +124,6 @@ void cGrid::Render()
 
 	for each (auto p in m_vecPyramid)
 		p->Render();
+
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 }

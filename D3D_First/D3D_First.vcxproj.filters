@@ -132,10 +132,10 @@
     <ClInclude Include="ObjectFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ASE_Loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Asciitok.h">
+      <Filter>Source Files\Ase</Filter>
+    </ClInclude>
+    <ClInclude Include="ASE_Loader.h">
       <Filter>Source Files\Ase</Filter>
     </ClInclude>
   </ItemGroup>
@@ -225,7 +225,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ASE_Loader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Ase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@ private:
 
 public:
 	cFrame* Load(IN char* szFullPath);
+	LPD3DXMESH LoadMesh(OUT vector<cMtlTex*> & vecMtlTex, IN char* szFullPath);
 
 private: //내부적으로 사용할함수들을 정리해보자.
 	char* GetToken();
@@ -27,9 +28,11 @@ private: //내부적으로 사용할함수들을 정리해보자.
 	void ProcessMATERIAL(OUT cMtlTex* pMtltex);
 	void ProcessMAP_DIFFUSE(OUT cMtlTex* pMtltex);
 	cFrame* ProcessGEOBJECT();
+	cFrame* ProcessGEOBJECT_OPT(OUT vector<DWORD> & vecAttri);
 	void ProcessMESH(OUT cFrame* pFrame);
 	void ProcessMESH_VERTEX_LIST(OUT vector<D3DXVECTOR3>& vecV);
 	void ProcessMESH_FACE_LIST(OUT vector<ST_PNT_VERTEX>& vecVertex, IN vector<D3DXVECTOR3>& vecV);
+	void ProcessMESH_FACE_LIST_OPT(OUT vector<DWORD>& vecAttrBuf, OUT vector<ST_PNT_VERTEX>& vecVertex, IN vector<D3DXVECTOR3>& vecV);
 	void ProcessMESH_TVERTLIST(OUT vector<D3DXVECTOR2>& vecVT);
 	void ProcessMESH_TFACELIST(OUT vector<ST_PNT_VERTEX>& vecVertex, IN vector<D3DXVECTOR2>& vecVT);
 	void ProcessMESH_NOMRALS(OUT vector<ST_PNT_VERTEX>& vecVertex);

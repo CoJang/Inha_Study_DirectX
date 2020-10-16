@@ -89,7 +89,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			Cnt++;
 			if(Timer > 1)
 			{
-				//cout << "Frame : " << Cnt << endl;
+				cout << "Frame : " << Cnt << endl;
 				Timer = 0;
 				Cnt = 0;
 			}

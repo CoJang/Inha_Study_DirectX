@@ -14,6 +14,7 @@ Synthesize_Pass_by_Ref(D3DXMATRIXA16, m_matLocalTM, LocalTM);
 Synthesize_Pass_by_Ref(D3DXMATRIXA16, m_matWorldTM, WorldTM);
 
 Synthesize_Add_Ref(cMtlTex*, m_pMtlTex, MtlTex);
+//Synthesize_Pass_by_Ref(vector<cMtlTex*>, m_vecMtlTex, vecMtlTex);
 	vector<cFrame*> m_vecChild;
 
 public:

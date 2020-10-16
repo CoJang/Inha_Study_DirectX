@@ -56,6 +56,92 @@ cFrame* cAseLoader::Load(char* szFullPath)
 	return pRoot;
 }
 
+LPD3DXMESH cAseLoader::LoadMesh(OUT vector<cMtlTex*> & vecMtlTex, char* szFullPath)
+{
+	cFrame* pRoot = nullptr;
+	vector<cFrame*> vecFrame;
+	vector<DWORD> vecAttrBuf;
+	vector<ST_PNT_VERTEX> vecVertex;
+
+	fopen_s(&m_fp, szFullPath, "r");
+
+	while (char* szToken = GetToken())
+	{
+		if (IsEqual(szToken, ID_SCENE))
+		{
+			//ProcessScene();
+		}
+		else if (IsEqual(szToken, ID_MATERIAL_LIST))
+		{
+			ProcessMATERIAL_LIST();
+		}
+		else if (IsEqual(szToken, ID_GEOMETRY))
+		{
+			cFrame* pFrame = ProcessGEOBJECT_OPT(vecAttrBuf);
+			if (pRoot == nullptr)
+			{
+				pRoot = pFrame;
+				Set_SceneFrame(pRoot);
+			}
+			vecFrame.push_back(pFrame);
+		}
+	} //<<:while()
+	fclose(m_fp);
+
+	for(auto frame : vecFrame)
+	{
+		if (frame->GetMtlTex())
+		for(int i = 0; i < frame->GetVertex().size(); i++)
+		{
+			vecVertex.push_back(frame->GetVertex()[i]);
+		}
+	}
+
+	pRoot->CalcOriginLocalTM(nullptr);
+
+	LPD3DXMESH pMesh = NULL;
+	D3DXCreateMeshFVF(vecAttrBuf.size(), vecVertex.size(), D3DXMESH_MANAGED,
+		ST_PNT_VERTEX::FVF, g_pD3DDevice, &pMesh);
+
+	ST_PNT_VERTEX* pv = NULL;
+	pMesh->LockVertexBuffer(0, (LPVOID*)&pv);
+	memcpy(pv, &vecVertex[0], vecVertex.size() * sizeof(ST_PNT_VERTEX));
+
+	pMesh->UnlockVertexBuffer();
+
+	WORD* pI = NULL;
+	pMesh->LockIndexBuffer(0, (LPVOID*)&pI);
+	for (int i = 0; i < vecVertex.size(); ++i)
+		pI[i] = i;
+	pMesh->UnlockIndexBuffer();
+
+	DWORD* pa = NULL;
+	pMesh->LockAttributeBuffer(0, &pa);
+	memcpy(pa, &vecAttrBuf[0], vecAttrBuf.size() * sizeof(DWORD));
+	pMesh->UnlockAttributeBuffer();
+
+	vector<DWORD> vecAdj(vecVertex.size());
+	pMesh->GenerateAdjacency(0.0f, &vecAdj[0]);
+
+	// D3DXMESHOPT_VERTEXCACHE 중복 버택스가 있으면 히트율을 높여 최적화
+	pMesh->OptimizeInplace(D3DXMESHOPT_ATTRSORT | D3DXMESHOPT_COMPACT | D3DXMESHOPT_VERTEXCACHE,
+		&vecAdj[0], 0, 0, 0);
+
+	for each (auto p in m_vecMtlTex)
+	{
+		if(p)
+			vecMtlTex.push_back(p);
+		SafeRelease(p);
+	}
+	
+	for(auto frame : vecFrame)
+	{
+		SafeRelease(frame);
+	}
+	
+	return pMesh;
+}
+
 char* cAseLoader::GetToken()
 {
 	int nReadCnt = 0; //읽은 갯수
@@ -154,6 +240,7 @@ void cAseLoader::ProcessMATERIAL_LIST()
 		{
 			int nIndex = GetInteger();
 			m_vecMtlTex[nIndex] = new cMtlTex;
+			m_vecMtlTex[nIndex]->SetAttrID(nIndex);
 			ProcessMATERIAL(m_vecMtlTex[nIndex]);
 		}
 	}
@@ -278,6 +365,61 @@ cFrame* cAseLoader::ProcessGEOBJECT()
 	return pFrame;
 }
 
+cFrame* cAseLoader::ProcessGEOBJECT_OPT(OUT vector<DWORD> & vecAttri)
+{
+	cFrame* pFrame = new cFrame;
+
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_NODE_NAME))
+		{
+			m_mapFrame[GetToken()] = pFrame;
+		}
+		else if (IsEqual(szToken, ID_NODE_PARENT))
+		{
+			m_mapFrame[GetToken()]->AddChild(pFrame);
+		}
+		else if (IsEqual(szToken, ID_NODE_TM))
+		{
+			ProcessNODE_TM(pFrame);
+		}
+		else if (IsEqual(szToken, ID_MESH))
+		{
+			ProcessMESH(pFrame);
+		}
+		else if (IsEqual(szToken, ID_TM_ANIMATION))
+		{
+			// skip
+		}
+		else if (IsEqual(szToken, ID_MATERIAL_REF))
+		{
+			int nMtlIndex = GetInteger();
+			pFrame->SetMtlTex(m_vecMtlTex[nMtlIndex]);
+			pFrame->GetMtlTex()->SetAttrID(nMtlIndex);
+		}
+	} while (nLevel > 0);
+
+	if(pFrame->GetMtlTex())
+	{
+		for(int i = 0; i < pFrame->GetVertex().size(); i += 3)
+		{
+			vecAttri.push_back(pFrame->GetMtlTex()->GetAttrID());
+		}
+	}
+
+	return pFrame;
+}
+
 void cAseLoader::ProcessMESH(OUT cFrame* pFrame)
 {
 	vector<D3DXVECTOR3> vecV;
@@ -331,15 +473,15 @@ void cAseLoader::ProcessMESH(OUT cFrame* pFrame)
 	}
 	while (nLevel > 0);
 
-	D3DXMATRIXA16 matInvWorld;
-	D3DXMatrixInverse(&matInvWorld, nullptr, &pFrame->GetWorldTM());
-	for (int i = 0; i < vecVertex.size(); i++)
-	{
-		D3DXVec3TransformCoord(&vecVertex[i].p, &vecVertex[i].p, &matInvWorld);
+	//D3DXMATRIXA16 matInvWorld;
+	//D3DXMatrixInverse(&matInvWorld, nullptr, &pFrame->GetWorldTM());
+	//for (int i = 0; i < vecVertex.size(); i++)
+	//{
+	//	D3DXVec3TransformCoord(&vecVertex[i].p, &vecVertex[i].p, &matInvWorld);
 
-		D3DXVec3TransformNormal(&vecVertex[i].n, &vecVertex[i].n, &matInvWorld);
-		pFrame->SetVertex(vecVertex);
-	}
+	//	D3DXVec3TransformNormal(&vecVertex[i].n, &vecVertex[i].n, &matInvWorld);
+	//}
+	pFrame->SetVertex(vecVertex);
 }
 
 void cAseLoader::ProcessMESH_VERTEX_LIST(vector<D3DXVECTOR3>& vecV)
@@ -396,6 +538,40 @@ void cAseLoader::ProcessMESH_FACE_LIST(vector<ST_PNT_VERTEX>& vecVertex, vector<
 		}
 	}
 	while (nLevel > 0);
+}
+
+void cAseLoader::ProcessMESH_FACE_LIST_OPT(vector<DWORD>& vecAttrBuf, vector<ST_PNT_VERTEX>& vecVertex,
+	vector<D3DXVECTOR3>& vecV)
+{
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_MESH_VERTEX))
+		{
+			int nFaceIndex = GetInteger();
+		}
+		else if (IsEqual(szToken, ID_MESH_FACE))
+		{
+			int nFaceIndex = GetInteger();
+			GetToken();
+			vecVertex[nFaceIndex * 3 + 0].p = vecV[GetInteger()];
+			GetToken();
+			vecVertex[nFaceIndex * 3 + 2].p = vecV[GetInteger()];
+			GetToken();
+			vecVertex[nFaceIndex * 3 + 1].p = vecV[GetInteger()];
+
+			//vecAttrBuf.push_back()
+		}
+	} while (nLevel > 0);
 }
 
 void cAseLoader::ProcessMESH_TVERTLIST(vector<D3DXVECTOR2>& vecVT)
@@ -487,7 +663,6 @@ void cAseLoader::ProcessNODE_TM(cFrame* pFrame)
 {
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
-
 	int nLevel = 0;
 	do
 	{
