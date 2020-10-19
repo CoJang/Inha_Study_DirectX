@@ -9,6 +9,12 @@ private:
 	Parser PS;
 	vector<MtlTex*> m_vecMtlTex;
 	map<string, ObjectFrame*> m_mapFrame;
+
+	//프레임 계산용 변수
+	DWORD m_dwFirstFrame;
+	DWORD m_dwLastFrame;
+	DWORD m_dwFrameSpeed;
+	DWORD m_dwTicksPerFrame;
 	
 public:
 	ASE_Loader();
@@ -29,4 +35,9 @@ public:
 	void ProcessNODE_TM(OUT ObjectFrame* pFrame);
 	void ProcessScene();
 	void Set_SceneFrame(OUT ObjectFrame* pRoot);
+
+	//애니메이션 관련 >>
+	void ProcessTM_ANIMATION(OUT ObjectFrame* pFrame);
+	void ProcessCONTROL_POS_TRACK(OUT ObjectFrame* pFrame);
+	void ProcessCONTROL_ROT_TRACK(OUT ObjectFrame* pFrame);
 };

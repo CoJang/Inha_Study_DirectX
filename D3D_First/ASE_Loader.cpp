@@ -27,7 +27,7 @@ ObjectFrame* ASE_Loader::Load(char* FullPath)
 	{
 		if (IsEqual(token, ID_SCENE))
 		{
-			//ProcessScene();
+			ProcessScene();
 		}
 		else if (IsEqual(token, ID_MATERIAL_LIST))
 		{
@@ -181,7 +181,7 @@ ObjectFrame* ASE_Loader::ProcessGEOBJECT()
 		}
 		else if (IsEqual(token, ID_TM_ANIMATION))
 		{
-			// skip
+			ProcessTM_ANIMATION(frame);
 		}
 		else if (IsEqual(token, ID_MATERIAL_REF))
 		{
@@ -429,8 +429,133 @@ void ASE_Loader::ProcessNODE_TM(ObjectFrame* frame)
 
 void ASE_Loader::ProcessScene()
 {
+	int Level = 0;
+
+	do
+	{
+		char* token = GetToken();
+
+		if (IsEqual(token, "{")) Level++;
+		else if (IsEqual(token, "}")) Level--;
+
+		else if (IsEqual(token, ID_FIRSTFRAME))
+		{
+			m_dwFirstFrame = GetInteger();
+		}
+		else if (IsEqual(token, ID_LASTFRAME))
+		{
+			m_dwLastFrame = GetInteger();
+		}
+		else if (IsEqual(token, ID_FRAMESPEED))
+		{
+			m_dwFrameSpeed = GetInteger();
+		}
+		else if (IsEqual(token, ID_TICKSPERFRAME))
+		{
+			m_dwTicksPerFrame = GetInteger();
+		}
+
+	} while (Level > 0);
 }
 
 void ASE_Loader::Set_SceneFrame(ObjectFrame* pRoot)
 {
+	pRoot->m_dwFirstFrame = m_dwFirstFrame;
+	pRoot->m_dwLastFrame = m_dwLastFrame;
+	pRoot->m_dwFrameSpeed = m_dwFrameSpeed;
+	pRoot->m_dwTicksPerFrame = m_dwTicksPerFrame;
+}
+
+void ASE_Loader::ProcessTM_ANIMATION(ObjectFrame* pFrame)
+{
+	int Level = 0;
+
+	do
+	{
+		char* token = GetToken();
+
+		if (IsEqual(token, "{")) Level++;
+		else if (IsEqual(token, "}")) Level--;
+
+		else if (IsEqual(token, ID_POS_TRACK))
+		{
+			ProcessCONTROL_POS_TRACK(pFrame);
+		}
+		else if (IsEqual(token, ID_ROT_TRACK))
+		{
+			ProcessCONTROL_ROT_TRACK(pFrame);
+		}
+
+	} while (Level > 0);
+}
+
+void ASE_Loader::ProcessCONTROL_POS_TRACK(ObjectFrame* pFrame)
+{
+	vector<ST_POS_SAMPLE> vecPosTrack;
+
+	int nLevel = 0;
+	do
+	{
+		char* token = GetToken();
+		if (IsEqual(token, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(token, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(token, ID_POS_SAMPLE))
+		{
+			ST_POS_SAMPLE s;
+			s.n = GetInteger();
+			s.v.x = GetFloat();
+			s.v.z = GetFloat();
+			s.v.y = GetFloat();
+			vecPosTrack.push_back(s);
+		}
+	} while (nLevel > 0);
+
+	pFrame->SetPosTrack(vecPosTrack);
+}
+
+void ASE_Loader::ProcessCONTROL_ROT_TRACK(ObjectFrame* pFrame)
+{
+	vector<ST_ROT_SAMPLE> vecRotTrack;
+	int nLevel = 0;
+	do
+	{
+		char* token = GetToken();
+		if (IsEqual(token, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(token, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(token, ID_ROT_SAMPLE))
+		{
+			ST_ROT_SAMPLE s;
+			s.n = GetInteger();
+			s.q.x = GetFloat();
+			s.q.z = GetFloat();
+			s.q.y = GetFloat();
+			s.q.w = GetFloat();
+
+			//쿼터니온으로 바꿔주려면 변환식이 들어가야한다.
+			s.q.x *= sinf(s.q.w / 2.f);
+			s.q.y *= sinf(s.q.w / 2.f);
+			s.q.z *= sinf(s.q.w / 2.f);
+			s.q.w = cosf(s.q.w / 2.f);
+
+			if (!vecRotTrack.empty())
+			{
+				s.q = vecRotTrack.back().q * s.q;	//회전값 누적
+			}
+			vecRotTrack.push_back(s);
+		}
+	} while (nLevel > 0);
+
+	pFrame->SetRotTrack(vecRotTrack);
 }

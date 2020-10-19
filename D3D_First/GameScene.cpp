@@ -235,7 +235,7 @@ void GameScene::Update(float delta)
 		OldCharPos = Zemmin2->GetPos();
 	}
 
-
+	RootFrame->Update(RootFrame->GetKeyFrame(), nullptr);
 
 	
 	//static float SunTimer = 0;
@@ -264,7 +264,7 @@ void GameScene::Render(float delta)
 		DEVICE->BeginScene();
 
 		//map_surface->Render(delta);
-		objMap->Render(delta);
+		//objMap->Render(delta);
 		
 		Grid->Draw(delta);
 		Line->Draw(delta);

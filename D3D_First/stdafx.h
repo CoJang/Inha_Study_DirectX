@@ -96,6 +96,29 @@ struct PT_VERTEX
 	enum { FVF = D3DFVF_XYZ | D3DFVF_TEX1 };
 };
 
+//회전과 이동처리에 관한 구조체
+struct ST_POS_SAMPLE
+{
+	int n;
+	D3DXVECTOR3 v;
+	ST_POS_SAMPLE()
+		:n(0)
+		, v(0, 0, 0)
+	{}//구조체 안에서 초기화 가능하다
+};
+
+struct ST_ROT_SAMPLE
+{
+	int n;
+	D3DXQUATERNION q;
+	ST_ROT_SAMPLE()
+		:n(0)
+	{
+		D3DXQuaternionIdentity(&q);
+	}
+
+};
+
 #include "MyMath.h"
 #include "ManagerSrc/DeviceManager.h"
 #include "ObjectSrc/ObjData.h"
