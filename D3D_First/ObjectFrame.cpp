@@ -45,15 +45,17 @@ void ObjectFrame::Render()
 		DEVICE->SetMaterial(&m_pMtlTex->GetMaterial());
 
 		DEVICE->SetFVF(PNT_VERTEX::FVF);
-		//DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecVertex.size() / 3,	&m_vecVertex[0], sizeof(PNT_VERTEX));
-		DEVICE->SetStreamSource(0, m_pVB, 0, sizeof(PNT_VERTEX));
-		DEVICE->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_nNumTri);//m_nNumTri 삼각형을 몇개를 그릴 것이냐로 넣는다
+		DEVICE->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecVertex.size() / 3,	&m_vecVertex[0], sizeof(PNT_VERTEX));
+		//DEVICE->SetStreamSource(0, m_pVB, 0, sizeof(PNT_VERTEX));
+		//DEVICE->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_nNumTri);//m_nNumTri 삼각형을 몇개를 그릴 것이냐로 넣는다
 	}
 	
 	for each (auto c in m_vecChild)
 	{
 		c->Render();
 	}
+	
+	DEVICE->SetTexture(0, NULL);
 }
 
 void ObjectFrame::AddChild(ObjectFrame* pChild)

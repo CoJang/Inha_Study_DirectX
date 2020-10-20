@@ -69,6 +69,12 @@ extern HWND g_hwnd;
 		} \
 	}
 
+struct Ray
+{
+	D3DXVECTOR3 Pos;
+	D3DXVECTOR3 Dir;
+};
+
 // point & color
 struct PC_VERTEX
 {

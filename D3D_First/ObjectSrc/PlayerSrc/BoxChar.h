@@ -65,5 +65,7 @@ public:
 	void SetLook(D3DXVECTOR3 target);
 	void SetState(AnimState anim_state, float speed);
 	void SetDestList(vector<PC_VERTEX> & vertexlist);
+	void AddDest(D3DXVECTOR3 target);
+	void FirstPriorityMove(D3DXVECTOR3 target);
 };
 

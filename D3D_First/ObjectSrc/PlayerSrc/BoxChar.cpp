@@ -252,18 +252,28 @@ BoxCharBot::BoxCharBot()
 
 void BoxCharBot::Update(float delta)
 {
-	if (fabs(position.x - Dest.x) < EPSILON && fabs(position.z - Dest.z) < EPSILON)
+	if(!DestList.empty())
 	{
-		position.x = Dest.x; position.z = Dest.z;
-		SetState(IDLE, 0);
-		DestIndex = (DestIndex + 1) % DestList.size();
-		SetLook(DestList[DestIndex]);
-	}
-	else
-	{
-		SetState(WALK, 5.0f);
-		//SetLook(DestList[DestIndex]);
-		//cout << fabs(position.x - Dest.x) << " " << fabs(position.z - Dest.z) << endl;
+		if (fabs(position.x - Dest.x) < EPSILON && fabs(position.z - Dest.z) < EPSILON)
+		{
+			position.x = Dest.x; position.z = Dest.z;
+			DestList.pop_back();
+			SetState(IDLE, 0);
+			
+			if(!DestList.empty())
+			{
+				DestIndex = (DestIndex + 1) % DestList.size();
+				SetLook(DestList[DestIndex]);
+				Dest = DestList[DestIndex];
+			}
+		}
+		else
+		{
+			SetLook(DestList[DestIndex]);
+			SetState(WALK, 5.0f);
+			//SetLook(DestList[DestIndex]);
+			//cout << fabs(position.x - Dest.x) << " " << fabs(position.z - Dest.z) << endl;
+		}
 	}
 	
 	velocity = Speed * delta;
@@ -315,4 +325,19 @@ void BoxCharBot::SetDestList(vector<PC_VERTEX>& vertexlist)
 	{
 		DestList.push_back(vertexlist[i].p);
 	}
+}
+
+void BoxCharBot::AddDest(D3DXVECTOR3 target)
+{
+	if (DestList.empty())
+		Dest = target;
+	
+	DestList.push_back(target);
+}
+
+void BoxCharBot::FirstPriorityMove(D3DXVECTOR3 target)
+{
+	DestList.clear();
+	DestList.push_back(target);
+	SetLook(target);
 }

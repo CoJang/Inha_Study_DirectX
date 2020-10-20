@@ -12,6 +12,7 @@ class BezierCurve;
 class Group;
 class objUnit;
 class ObjectFrame;
+class MySphere;
 
 class GameScene
 {
@@ -26,6 +27,7 @@ private:
 	objUnit* map_surface;
 	D3DXVECTOR3 OldCharPos;
 	ObjectFrame* RootFrame;
+	MySphere* sphere;
 	
 // giomatric objects
 	MyGrid* Grid;
@@ -56,5 +58,28 @@ public:
 	void Render(float delta);
 
 	float MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain);
+	Ray CalcPickingRay(POINT MPos);
+	bool IsRayHitInSphere(Ray & ray, MySphere & sphere);
+	void GridRayHitProcess(Ray & ray);
+};
+
+class MySphere
+{
+private:
+	LPD3DXMESH Mesh;
+	D3DMATERIAL9 Material;
+	D3DXVECTOR3 Position;
+	float Radius;
+public:
+	MySphere();
+	~MySphere();
+
+	void Update(float delta);
+	void Render(float delta);
+
+	void SetMaterialColor(D3DXCOLOR color);
+	void SetPosition(D3DXVECTOR3 pos) { Position = pos; }
+	D3DXVECTOR3 GetPosition() { return Position; }
+	float GetRadius() { return Radius; }
 };
 

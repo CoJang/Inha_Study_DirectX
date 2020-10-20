@@ -38,6 +38,28 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	
 	switch (Msg)
 	{
+	case WM_LBUTTONDOWN:
+		{
+			MousePos.x = LOWORD(lParam);
+			MousePos.y = HIWORD(lParam);
+
+			Ray ray = CalcPickingRay(MousePos);
+
+			if (IsRayHitInSphere(ray, *sphere))
+			{
+				sphere->SetMaterialColor(D3DXCOLOR(1, 1, 0, 1));
+			}
+		}
+		break;
+	case WM_RBUTTONDOWN:
+		{
+			MousePos.x = LOWORD(lParam);
+			MousePos.y = HIWORD(lParam);
+			
+			Ray ray = CalcPickingRay(MousePos);
+			GridRayHitProcess(ray);
+		}
+		break;
 	case WM_MOUSEMOVE:
 		switch(wParam)
 		{
@@ -54,6 +76,14 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 				D3DXVec3TransformCoord(&CamPivot, &CameraPosition, &(tempX * tempY));
 				break;
 			}
+		case MK_RBUTTON:
+			{
+				MousePos.x = LOWORD(lParam);
+				MousePos.y = HIWORD(lParam);
+				Ray ray = CalcPickingRay(MousePos);
+				GridRayHitProcess(ray);
+			}
+			break;
 		default:
 			break;
 		}
@@ -104,20 +134,19 @@ void GameScene::InitGameScene()
 		objMap->SetAngleX(Deg2Rad(-90));
 		objMap->RePositionVertice();
 
-		Loader temp;
-		vector<Group*> tempcontainor;
-		temp.LoadASE(tempcontainor, "Data", "woman_01_all.ASE");
-
 		ASE_Loader loader;
 		RootFrame = loader.Load("woman/woman_01_all.ASE");
+
+		sphere = new MySphere;
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
 	Bot_Zemmin2->Init();
 	Bot_Zemmin2->SetPos(D3DXVECTOR3(5, 4.1f, 5));
 	Bot_Zemmin2->SetTexture(TEXT("texture/78075e030cd39335.png"));
-	Bot_Zemmin2->SetDestList(bc->GetVertexList());
+	//Bot_Zemmin2->SetDestList(bc->GetVertexList());
 	Bot_Zemmin2->SetLook(D3DXVECTOR3(0, 0, 0));
+	Bot_Zemmin2->AddDest(D3DXVECTOR3(0, 0, 0));
 	Bot_Zemmin2->SetState(AnimState::WALK, 5.0f);
 
 	Camera = new MyCamera;
@@ -277,6 +306,7 @@ void GameScene::Render(float delta)
 
 		{
 			RootFrame->Render();
+			sphere->Render(delta);
 			bc->Draw(delta);
 		}
 		
@@ -319,4 +349,114 @@ float GameScene::MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain)
 
 	return false;
 }
+
+Ray GameScene::CalcPickingRay(POINT MPos)
+{
+	float px = 0.0f; float py = 0.0f; Ray ray;
+
+	D3DVIEWPORT9 vp;
+	DEVICE->GetViewport(&vp);
+	D3DXMATRIXA16 view, proj, worldmat, viewInverse;
+	DEVICE->GetTransform(D3DTS_VIEW, &view);
+	DEVICE->GetTransform(D3DTS_PROJECTION, &proj);
+	DEVICE->GetTransform(D3DTS_WORLD, &worldmat);
+	D3DXMatrixInverse(&viewInverse, 0, &view);
+
+	D3DXVec3Unproject(&ray.Dir, &D3DXVECTOR3(MPos.x, MPos.y, 1.0f), &vp, &proj, &view, &worldmat);
+
+	ray.Pos = D3DXVECTOR3(viewInverse._41, viewInverse._42, viewInverse._43);
+	D3DXVec3Normalize(&ray.Dir, &ray.Dir);
+
+	return ray;
+}
+
+bool GameScene::IsRayHitInSphere(Ray& ray, MySphere& sphere)
+{
+	D3DXVECTOR3 v = ray.Pos - sphere.GetPosition();
+
+	float b = 2.0f * D3DXVec3Dot(&ray.Dir, &v);
+	float c = D3DXVec3Dot(&v, &v) - sphere.GetRadius() * sphere.GetRadius();
+	float discriminant = b * b - 4.0f * c;
+
+	if (discriminant < 0.0f) return false;
+
+	discriminant = sqrtf(discriminant);
+
+	float s0 = (-b + discriminant) / 2.0f;
+	float s1 = (-b - discriminant) / 2.0f;
+
+	if (s0 >= 0.0f || s1 >= 0.0f)
+		return true;
+
+	return false;
+}
+
+void GameScene::GridRayHitProcess(Ray& ray)
+{
+	vector<PC_VERTEX> & GridVertices = Grid->Getvertices();
+	D3DXVECTOR3 HitPos;
+	for (int i = 0; i < GridVertices.size(); i += 3)
+	{
+		float U(0), V(0), Dist(0);
+
+		if (D3DXIntersectTri(&GridVertices[i].p,
+			&GridVertices[i + 1].p,
+			&GridVertices[i + 2].p,
+			&ray.Pos, &ray.Dir, &U, &V, &Dist))
+		{
+			HitPos = ray.Pos + (ray.Dir * Dist);
+			Bot_Zemmin2->FirstPriorityMove(HitPos);
+			GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
+			GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
+			GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
+			break;
+		}
+	}
+}
+
+MySphere::MySphere()
+	:Position(0, 10, 0),
+	Radius(1.f)
+{
+	ZeroMemory(&Material, sizeof(D3DMATERIAL9));
+	
+	Material.Ambient = D3DXCOLOR(0.7f, 0.0f, 0.7f, 1.0f);
+	Material.Diffuse = D3DXCOLOR(0.7f, 0.0f, 0.7f, 1.0f);
+	Material.Specular = D3DXCOLOR(0.7f, 0.0f, 0.7f, 1.0f);
+	Material.Power = 1.0f;
+	//Material.Emissive = D3DXCOLOR(0.5f, -0.5f, -1.0f, 1.0f);
+
+	D3DXCreateSphere(DEVICE, Radius, 10, 10, &Mesh, NULL);
+}
+
+MySphere::~MySphere()
+{
+	Mesh->Release();
+}
+
+void MySphere::Update(float delta)
+{
+	
+}
+
+void MySphere::Render(float delta)
+{
+	//DEVICE->SetRenderState(D3DRS_LIGHTING, false);
+	D3DXMATRIXA16 TransMat;
+	D3DXMatrixTranslation(&TransMat, Position.x, Position.y, Position.z);
+	DEVICE->SetTransform(D3DTS_WORLD, &TransMat);
+	
+	DEVICE->SetMaterial(&Material);
+	Mesh->DrawSubset(0);
+	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
+}
+
+void MySphere::SetMaterialColor(D3DXCOLOR color)
+{
+	Material.Ambient = color;
+	Material.Diffuse = color;
+	Material.Specular = color;
+}
+
+
 

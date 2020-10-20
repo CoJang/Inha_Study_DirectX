@@ -13,6 +13,8 @@ public:
 	void Init(int lineNum, float cellsize);
 	void Update(float delta) {};
 	void Draw(float delta);
+
+	vector<PC_VERTEX> & Getvertices() { return vec_pc_vertices; }
 };
 
 class Pyramid : public Objects_PC
