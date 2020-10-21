@@ -59,11 +59,11 @@ void AxisLine::Init()
 {
 	PC_VERTEX v;
 	float axisLineSize = 15;
-	v.p = D3DXVECTOR3(axisLineSize, 0, 0);
+	v.p = D3DXVECTOR3(axisLineSize, 0.1f, 0);
 	v.c = D3DCOLOR_XRGB(255, 0, 0);
 	vec_Vertexs.push_back(v);
 
-	v.p = D3DXVECTOR3(-axisLineSize, 0, 0);
+	v.p = D3DXVECTOR3(-axisLineSize, 0.1f, 0);
 	vec_Vertexs.push_back(v);
 
 	v.c = D3DCOLOR_XRGB(0, 255, 0);
@@ -74,10 +74,10 @@ void AxisLine::Init()
 	vec_Vertexs.push_back(v);
 
 	v.c = D3DCOLOR_XRGB(0, 0, 255);
-	v.p = D3DXVECTOR3(0, 0, axisLineSize);
+	v.p = D3DXVECTOR3(0, 0.1f, axisLineSize);
 	vec_Vertexs.push_back(v);
 
-	v.p = D3DXVECTOR3(0, 0, -axisLineSize);
+	v.p = D3DXVECTOR3(0, 0.1f, -axisLineSize);
 	vec_Vertexs.push_back(v);
 
 	Pyramid Gizmo;

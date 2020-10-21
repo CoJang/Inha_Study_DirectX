@@ -94,9 +94,10 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 		short Input = HIWORD(wParam);
 		Input /= 120;
-		//*CamFov += Input * 0.1f;
-		CamPivot.y += Input;
-		CamPivot.z += Input;
+			
+		CamPivot.x += Camera->GetCamDir().x * Input;
+		CamPivot.y += Camera->GetCamDir().y * Input;
+		CamPivot.z += Camera->GetCamDir().z * Input;
 	}
 	break;
 	default:
@@ -109,7 +110,7 @@ void GameScene::InitGameScene()
 	SetLight();
 
 	Grid = new MyGrid;
-	Grid->Init(30, 0.5f);
+	Grid->Init(5, 5.0f);
 
 	Line = new AxisLine;
 	Line->Init();
@@ -406,9 +407,26 @@ void GameScene::GridRayHitProcess(Ray& ray)
 		{
 			HitPos = ray.Pos + (ray.Dir * Dist);
 			Bot_Zemmin2->FirstPriorityMove(HitPos);
-			GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
-			GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
-			GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
+			if(i % 2 == 0)
+			{
+				GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
+
+				GridVertices[i ].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i - 1].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i - 2].c = D3DCOLOR_XRGB(0, 0, 0);
+			}
+			else
+			{
+				GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
+
+				GridVertices[i + 3].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 4].c = D3DCOLOR_XRGB(0, 0, 0);
+				GridVertices[i + 5].c = D3DCOLOR_XRGB(0, 0, 0);
+			}
 			break;
 		}
 	}
