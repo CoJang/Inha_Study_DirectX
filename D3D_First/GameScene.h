@@ -13,6 +13,7 @@ class Group;
 class objUnit;
 class ObjectFrame;
 class MySphere;
+class Terrain;
 
 class GameScene
 {
@@ -28,6 +29,7 @@ private:
 	D3DXVECTOR3 OldCharPos;
 	ObjectFrame* RootFrame;
 	MySphere* sphere;
+	Terrain* TR;
 	
 // giomatric objects
 	MyGrid* Grid;

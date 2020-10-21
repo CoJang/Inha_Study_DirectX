@@ -8,6 +8,7 @@
 #include "objUnit.h"
 #include "ObjectSrc/OBJ_Loader.h"
 #include "ASE_Loader.h"
+#include "Terrain.h"
 
 #include "GameScene.h"
 
@@ -139,6 +140,10 @@ void GameScene::InitGameScene()
 		RootFrame = loader.Load("woman/woman_01_all.ASE");
 
 		sphere = new MySphere;
+		
+		TR = new Terrain;
+		TR->LoadFromRawFile("Data/HeightMap.raw");
+		TR->CreateTerrain(256, 1.0f);
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -281,7 +286,7 @@ void GameScene::Update(float delta)
 		D3DXMatrixRotationZ(&RotMat, 1.0f * delta);
 		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
 	
-		Sun.SetDirection(dir);
+		//Sun.SetDirection(dir);
 		//SunTimer = 0;
 	}
 }
@@ -309,6 +314,7 @@ void GameScene::Render(float delta)
 			RootFrame->Render();
 			sphere->Render(delta);
 			bc->Draw(delta);
+			TR->Draw(delta);
 		}
 		
 

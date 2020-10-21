@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Parser">
       <UniqueIdentifier>{a05a3102-271a-41fe-9e5c-af59d567f0f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Terrain">
+      <UniqueIdentifier>{ee414505-a04f-4637-9391-7da81c0d85fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -138,6 +141,9 @@
     <ClInclude Include="ASE_Loader.h">
       <Filter>Source Files\Ase</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Source Files\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -226,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="ASE_Loader.cpp">
       <Filter>Source Files\Ase</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
