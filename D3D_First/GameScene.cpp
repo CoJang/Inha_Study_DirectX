@@ -143,7 +143,6 @@ void GameScene::InitGameScene()
 		
 		TR = new Terrain;
 		TR->LoadFromRawFile("Data/HeightMap.raw");
-		TR->CreateTerrain(256, 1.0f);
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -260,15 +259,15 @@ void GameScene::Update(float delta)
 	//map_surface->Update(delta);
 	
 	// When Player's Pos Changed
-	if(OldCharPos != Zemmin2->GetPos())
-	{
-		if(!MapCheck(Zemmin2->GetPos(), map_surface->GetGroups()))
-		{
-			Zemmin2->SetPos(OldCharPos);
-		}
-		
-		OldCharPos = Zemmin2->GetPos();
-	}
+	//if(OldCharPos != Zemmin2->GetPos())
+	//{
+	//	if(!MapCheck(Zemmin2->GetPos(), map_surface->GetGroups()))
+	//	{
+	//		Zemmin2->SetPos(OldCharPos);
+	//	}
+	//	
+	//	OldCharPos = Zemmin2->GetPos();
+	//}
 
 	RootFrame->Update(RootFrame->GetKeyFrame(), nullptr);
 
