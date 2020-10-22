@@ -16,6 +16,7 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
+	delete[] HeightMap;
 }
 
 void Terrain::LoadFromRawFile(char* Path)
@@ -140,8 +141,6 @@ void Terrain::CreateTerrain(float cellsize)
 	LPDIRECT3DTEXTURE9 texture;
 	D3DXCreateTextureFromFileA(DEVICE, "Data/terrain.jpg", &texture);
 	mtltex.SetTexture(texture);
-
-	delete[] HeightMap;
 }
 
 float Terrain::GetHeight(float x, float z)
@@ -153,11 +152,72 @@ float Terrain::GetHeight(float x, float z)
 	_z /= CellSize;
 
 	// floorf = 내림
-	float col = floorf(_x);
-	float row = floorf(_z);
+	int col = floorf(_x);
+	int row = floorf(_z);
 
-	//float A =
-	return 0.0f;
+	float A = HeightMap[row][col];
+	float B = HeightMap[row][col + 1];
+	float C = HeightMap[row + 1][col];
+	float D = HeightMap[row + 1][col + 1];
+
+	float dx = _x - col;
+	float dz = _z - row;
+	float MapHeight = 0;
+
+	if(dz > 1.0f - dx)
+	{
+		float uy = B - A; // A -> B
+		float vy = C - A; // A -> C
+
+		MapHeight = A + Lerp(0.0f, uy, dx) + Lerp(0.0f, vy, dz);
+	}
+	else // 아래쪽 삼각형 DCB
+	{
+		float uy = C - D; // D -> C
+		float vy = B - D; // D -> B
+
+		MapHeight = D + Lerp(0.0f, uy, 1.0f - dx) + Lerp(0.0f, vy, 1.0f - dz);
+	}
+	
+	return MapHeight;
+}
+
+bool Terrain::GetHeight(OUT D3DXVECTOR3& pos)
+{
+	//if (pos.x < 0.f || pos.z < 0.f || pos.x >= RowCell || pos.z >= ColCell)
+	//{
+	//	return false;
+	//}
+
+	//int nX = pos.x;
+	//int nZ = pos.z;
+
+	//float fDeltaX = pos.x - nX;
+	//float fDeltaZ = pos.z - nZ;
+
+	//int _0 = (nZ + 0) * RowCell + nX + 0;
+	//int _1 = (nZ + 1) * RowCell + nX + 0;
+	//int _2 = (nZ + 1) * RowCell + nX + 1;
+	//int _3 = (nZ + 0) * RowCell + nX + 1;
+
+	//if (fDeltaX + fDeltaZ < 1.0f) //왼쪽 아래에 있다
+	//{
+	//	D3DXVECTOR3 v01 = vec_Vertexs[_1] - vec_Vertexs[_0];
+	//	D3DXVECTOR3 v03 = vec_Vertexs[_3] - vec_Vertexs[_0];
+
+	//	pos.y = vec_Vertexs[_0].y + (v01 * fDeltaZ + v03 * fDeltaX).y;
+
+	//}
+	//else
+	//{
+	//	fDeltaX = 1.0f - fDeltaX;
+	//	fDeltaZ = 1.0f - fDeltaZ;
+	//	D3DXVECTOR3 v21 = vec_Vertexs[_1] - vec_Vertexs[_2];
+	//	D3DXVECTOR3 v23 = vec_Vertexs[_3] - vec_Vertexs[_2];
+	//	pos.y = vec_Vertexs[_2].y + (v21 * fDeltaX + v23 * fDeltaZ).y;
+	//}
+
+	//return true;
 }
 
 void Terrain::Update(float delta)
@@ -172,7 +232,7 @@ void Terrain::Draw(float delta)
 
 	D3DXMATRIXA16 WorldMat;
 	D3DXMatrixIdentity(&WorldMat);
-	D3DXMatrixTranslation(&WorldMat, -125, -15, -125);
+	D3DXMatrixTranslation(&WorldMat, -126.0f, 0, -126.0f);
 
 	DEVICE->SetTexture(0, mtltex.GetTexture());
 	DEVICE->SetMaterial(&mtltex.GetMaterial());
@@ -186,15 +246,4 @@ void Terrain::Draw(float delta)
 	DEVICE->SetTexture(0, NULL);
 
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
-}
-
-float Terrain::GetHeightData(float row, float col)
-{
-	//return HeightDatas[row + col * ]
-	return 0.0f;
-}
-
-void Terrain::SetHeightData(float row, float col, int height)
-{
-	
 }

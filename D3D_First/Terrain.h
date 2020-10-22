@@ -20,11 +20,10 @@ public:
 	void LoadFromRawFile(char* Path);
 	void CreateTerrain(float cellsize);
 	float GetHeight(float x, float z);
+	bool GetHeight(OUT D3DXVECTOR3 & pos);
 
 	void Update(float delta) override;
 	void Draw(float delta) override;
-	
-	float GetHeightData(float row, float col);
-	void SetHeightData(float row, float col, int height);
+
 };
 

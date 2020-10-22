@@ -5,3 +5,4 @@
 #define Deg2Rad(x) (x * PI / 180)
 #define Rad2Deg(x) (x / PI * 180)
 
+float Lerp(float a, float b, float t);

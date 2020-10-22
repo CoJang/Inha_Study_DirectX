@@ -268,6 +268,10 @@ void GameScene::Update(float delta)
 	//	
 	//	OldCharPos = Zemmin2->GetPos();
 	//}
+	OldCharPos = Zemmin2->GetPos();
+	Zemmin2->SetPos(D3DXVECTOR3(OldCharPos.x,
+					TR->GetHeight(OldCharPos.x, OldCharPos.z),
+					OldCharPos.z));
 
 	RootFrame->Update(RootFrame->GetKeyFrame(), nullptr);
 
@@ -412,26 +416,11 @@ void GameScene::GridRayHitProcess(Ray& ray)
 		{
 			HitPos = ray.Pos + (ray.Dir * Dist);
 			Bot_Zemmin2->FirstPriorityMove(HitPos);
-			if(i % 2 == 0)
-			{
-				GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
+			
+			GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
+			GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
+			GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
 
-				GridVertices[i ].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i - 1].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i - 2].c = D3DCOLOR_XRGB(0, 0, 0);
-			}
-			else
-			{
-				GridVertices[i].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 1].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 2].c = D3DCOLOR_XRGB(0, 0, 0);
-
-				GridVertices[i + 3].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 4].c = D3DCOLOR_XRGB(0, 0, 0);
-				GridVertices[i + 5].c = D3DCOLOR_XRGB(0, 0, 0);
-			}
 			break;
 		}
 	}
