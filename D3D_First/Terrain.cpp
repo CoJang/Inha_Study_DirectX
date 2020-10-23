@@ -217,7 +217,7 @@ bool Terrain::GetHeight(OUT D3DXVECTOR3& pos)
 	//	pos.y = vec_Vertexs[_2].y + (v21 * fDeltaX + v23 * fDeltaZ).y;
 	//}
 
-	//return true;
+	return true;
 }
 
 void Terrain::Update(float delta)

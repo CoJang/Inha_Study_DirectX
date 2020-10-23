@@ -9,6 +9,7 @@ protected:
 	D3DXVECTOR3 MovePivot;
 	D3DXVECTOR3 RotateAngle;
 	D3DMATERIAL9 material;
+	LPDIRECT3DTEXTURE9* texture;
 
 	int RotateFlag;
 	float MaxAngle;
@@ -27,7 +28,8 @@ public:
 	inline void SetPivot(D3DXVECTOR3 pivot) { MovePivot = pivot; }
 	inline void SetMaxAngle(float angle) { MaxAngle = angle; }
 	inline void SetAnimDir(int dir) { AnimDirection = dir; }
-	
+	void SetScale(float x, float y, float z) { Scale = D3DXVECTOR3(x, y, z); }
+
 	inline void SetAngleX(float x) { RotateAngle.x = x; }
 	inline void SetAngleY(float y) { RotateAngle.y = y; }
 	inline void SetAngleZ(float z) { RotateAngle.z = z; }
@@ -40,4 +42,16 @@ public:
 	inline float GetAngleZ() { return RotateAngle.z; }
 	
 	inline D3DXMATRIXA16 & GetWorldMat() { return WorldMat; }
+	vector<PNT_VERTEX> & GetVertice() { return vec_Vertexs; }
+	void LoadTexture(char* Path);
+	void SetMaterialColor(D3DXCOLOR color);
+};
+
+class SkyBox : public Box
+{
+public:
+	SkyBox();
+	~SkyBox();
+
+	void Init(D3DXVECTOR3 pos, D3DXVECTOR3 scale, D3DXCOLOR color);
 };

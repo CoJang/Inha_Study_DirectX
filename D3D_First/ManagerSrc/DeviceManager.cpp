@@ -64,6 +64,8 @@ void DeviceManager::InitDeviceManager()
 		::MessageBox(0, TEXT("CreateDevice() - FAILED!"), 0, 0);
 		return;
 	}
+
+	Device->SetRenderState(D3DRS_ZENABLE, true);
 }
 
 void DeviceManager::Destroy()

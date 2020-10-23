@@ -29,6 +29,7 @@ GameScene::~GameScene()
 	SafeDelete(Bot_Zemmin2);
 	SafeDelete(map_surface);
 	DEVICEMANAGER->Destroy();
+	delete[] sphere;
 }
 
 
@@ -59,6 +60,9 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			
 			Ray ray = CalcPickingRay(MousePos);
 			GridRayHitProcess(ray);
+
+			for (int i = 0; i < 1000; i++)
+				IsMeshSphereCulled(sphere[i]);
 		}
 		break;
 	case WM_MOUSEMOVE:
@@ -139,10 +143,20 @@ void GameScene::InitGameScene()
 		ASE_Loader loader;
 		RootFrame = loader.Load("woman/woman_01_all.ASE");
 
-		sphere = new MySphere;
+		sphere = new MySphere[1000];
+		for(int i = 0; i < 10; i++)
+		{
+			for(int j = 0; j < 10; j++)
+			{
+				for(int k = 0; k < 10; k++)
+				{
+					sphere[i * 100 + j * 10 + k].SetPosition(D3DXVECTOR3(k * 2, j * 2, i * 2));
+				}
+			}
+		}
 		
-		TR = new Terrain;
-		TR->LoadFromRawFile("Data/HeightMap.raw");
+		//TR = new Terrain;
+		//TR->LoadFromRawFile("Data/HeightMap.raw");
 	}
 
 	Bot_Zemmin2 = new BoxCharBot;
@@ -162,6 +176,10 @@ void GameScene::InitGameScene()
 	CamFov = Camera->GetCamFov();
 	CamPivot = D3DXVECTOR3(0, 15, -15);
 	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
+
+	Sky = new SkyBox;
+	Sky->Init(*CamPos, D3DXVECTOR3(10, 10, 10), D3DXCOLOR(1, 1, 1, 1));
+	Sky->LoadTexture("texture/metal_01-18.png");
 }
 
 void GameScene::SetLight()
@@ -245,35 +263,30 @@ void GameScene::Update(float delta)
 	Torch.LightUpdate(delta);
 	
 	Camera->Update(delta);
+	
+	
 	Grid->Update(delta);
 	Line->Update(delta);
 	
 	
 	Zemmin2->Update(delta);
 
-	Bot_Zemmin2->Update(delta);
+	//Bot_Zemmin2->Update(delta);
 	
 	Camera->SetCamTarget(Zemmin2->GetPos());
 	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
-
+	
+	Sky->SetPos(*CamPos);
+	Sky->Update(delta);
 	//map_surface->Update(delta);
 	
 	// When Player's Pos Changed
-	//if(OldCharPos != Zemmin2->GetPos())
-	//{
-	//	if(!MapCheck(Zemmin2->GetPos(), map_surface->GetGroups()))
-	//	{
-	//		Zemmin2->SetPos(OldCharPos);
-	//	}
-	//	
-	//	OldCharPos = Zemmin2->GetPos();
-	//}
-	OldCharPos = Zemmin2->GetPos();
-	Zemmin2->SetPos(D3DXVECTOR3(OldCharPos.x,
-					TR->GetHeight(OldCharPos.x, OldCharPos.z),
-					OldCharPos.z));
+	//OldCharPos = Zemmin2->GetPos();
+	//Zemmin2->SetPos(D3DXVECTOR3(OldCharPos.x,
+	//				TR->GetHeight(OldCharPos.x, OldCharPos.z),
+	//				OldCharPos.z));
 
-	RootFrame->Update(RootFrame->GetKeyFrame(), nullptr);
+	//RootFrame->Update(RootFrame->GetKeyFrame(), nullptr);
 
 	
 	//static float SunTimer = 0;
@@ -301,6 +314,9 @@ void GameScene::Render(float delta)
 		DEVICE->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 		DEVICE->BeginScene();
 
+		DEVICE->SetRenderState(D3DRS_ZENABLE, false);
+		Sky->Draw(delta);
+		DEVICE->SetRenderState(D3DRS_ZENABLE, true);
 		//map_surface->Render(delta);
 		//objMap->Render(delta);
 		
@@ -308,18 +324,25 @@ void GameScene::Render(float delta)
 		Line->Draw(delta);
 		Zemmin2->Draw(delta);
 		
-		Bot_Zemmin2->Draw(delta);
+		//Bot_Zemmin2->Draw(delta);
 
 		FlashLight.DrawGizmo(delta);
 		Torch.DrawGizmo(delta);
 
 		{
-			RootFrame->Render();
-			sphere->Render(delta);
-			bc->Draw(delta);
-			TR->Draw(delta);
+			//RootFrame->Render();
+			//sphere->Render(delta);
+			//bc->Draw(delta);
+			//TR->Draw(delta);
 		}
 		
+		for(int i = 0; i < 1000; i++)
+		{
+			if(!sphere[i].GetState())
+				sphere[i].Render(delta);
+		}
+
+		Camera->Render(delta);
 
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);
@@ -426,9 +449,28 @@ void GameScene::GridRayHitProcess(Ray& ray)
 	}
 }
 
+bool GameScene::IsMeshSphereCulled(MySphere & mesh)
+{
+	auto plane = Camera->GetCamFrustumPlane();
+	float Result = 0.0f;
+	bool isculled = false;
+	for(int i = 0; i < 6; i++)
+	{
+		Result = D3DXPlaneDotCoord(&plane[i], &mesh.GetPosition());
+		Result >= mesh.GetRadius() ? isculled = true : isculled = false;
+		if (isculled) break;
+	}
+	
+	mesh.SetState(isculled);
+	return isculled;
+}
+
 MySphere::MySphere()
 	:Position(0, 10, 0),
-	Radius(1.f)
+	Scale(1,1,1)
+	,Radius(1.f)
+	,IsCulled(false)
+	,texture(NULL)
 {
 	ZeroMemory(&Material, sizeof(D3DMATERIAL9));
 	
@@ -454,13 +496,25 @@ void MySphere::Update(float delta)
 void MySphere::Render(float delta)
 {
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, false);
-	D3DXMATRIXA16 TransMat;
+	D3DXMATRIXA16 ScaleMat, TransMat, WorldMat;
+	D3DXMatrixIdentity(&WorldMat);
+	D3DXMatrixScaling(&ScaleMat, Scale.x, Scale.y, Scale.z);
 	D3DXMatrixTranslation(&TransMat, Position.x, Position.y, Position.z);
-	DEVICE->SetTransform(D3DTS_WORLD, &TransMat);
+	WorldMat = ScaleMat * TransMat;
+	
+	DEVICE->SetTransform(D3DTS_WORLD, &WorldMat);
 	
 	DEVICE->SetMaterial(&Material);
+	if (texture) DEVICE->SetTexture(0, *texture);
 	Mesh->DrawSubset(0);
+	if (texture) DEVICE->SetTexture(0, NULL);
 	//DEVICE->SetRenderState(D3DRS_LIGHTING, true);
+}
+
+void MySphere::LoadTexture(char* Path)
+{
+	texture = new LPDIRECT3DTEXTURE9;
+	D3DXCreateTextureFromFileA(DEVICE, Path, texture);
 }
 
 void MySphere::SetMaterialColor(D3DXCOLOR color)

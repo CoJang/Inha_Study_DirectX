@@ -1,5 +1,7 @@
 #pragma once
 
+class Box;
+
 class MyCamera
 {
 private:
@@ -11,12 +13,17 @@ private:
 	
 	D3DXMATRIXA16 ViewMat;
 	D3DXMATRIXA16 ProjMat;
+
+	Box* frustum;
+	vector<D3DXVECTOR3> vec_Vertices;
+	vector<D3DXPLANE> ViewPlane;
 public:
 	MyCamera();
 	~MyCamera();
 
 	void Init();
 	void Update(float delta);
+	void Render(float delta);
 
 	D3DXMATRIXA16 GetCameraView() { return ViewMat; }
 	D3DXMATRIXA16 GetCameraProjection() { return ProjMat; }
@@ -31,5 +38,6 @@ public:
 
 	void SetCamDir(D3DXVECTOR3 dir) { CameraDirection = dir; }
 	D3DXVECTOR3 GetCamDir() { return CameraDirection; }
+	vector<D3DXPLANE> GetCamFrustumPlane() { return ViewPlane; }
 };
 

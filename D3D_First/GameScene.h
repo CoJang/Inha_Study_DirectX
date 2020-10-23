@@ -30,6 +30,7 @@ private:
 	ObjectFrame* RootFrame;
 	MySphere* sphere;
 	Terrain* TR;
+	SkyBox* Sky;
 	
 // giomatric objects
 	MyGrid* Grid;
@@ -63,6 +64,7 @@ public:
 	Ray CalcPickingRay(POINT MPos);
 	bool IsRayHitInSphere(Ray & ray, MySphere & sphere);
 	void GridRayHitProcess(Ray & ray);
+	bool IsMeshSphereCulled(MySphere & mesh);
 };
 
 class MySphere
@@ -71,7 +73,11 @@ private:
 	LPD3DXMESH Mesh;
 	D3DMATERIAL9 Material;
 	D3DXVECTOR3 Position;
+	D3DXVECTOR3 Scale;
 	float Radius;
+	LPDIRECT3DTEXTURE9* texture;
+
+	bool IsCulled;
 public:
 	MySphere();
 	~MySphere();
@@ -79,9 +85,14 @@ public:
 	void Update(float delta);
 	void Render(float delta);
 
+	void LoadTexture(char* Path);
+	void SetMaterial(D3DMATERIAL9 mtl) { Material = mtl; }
+	void SetScale(float x, float y, float z) { Scale = D3DXVECTOR3(x, y, z); }
 	void SetMaterialColor(D3DXCOLOR color);
 	void SetPosition(D3DXVECTOR3 pos) { Position = pos; }
 	D3DXVECTOR3 GetPosition() { return Position; }
 	float GetRadius() { return Radius; }
+	bool GetState() { return IsCulled; }
+	void SetState(bool state) { IsCulled = state; }
 };
 

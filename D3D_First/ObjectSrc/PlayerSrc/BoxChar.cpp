@@ -40,7 +40,7 @@ void BoxChar::Init()
 	BCBody* Body = new BCBody;
 	Pivot = D3DXVECTOR3(0, 0, 0);
 	Scale = D3DXVECTOR3(0.8f, 1.5f, 0.5f);
-	Body->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 255, 255));
+	Body->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	Bodies.push_back(Body);
 
 	BCHead* Head = new BCHead;
@@ -52,28 +52,28 @@ void BoxChar::Init()
 	BCLeftArm* LeftArm = new BCLeftArm;
 	Pivot = D3DXVECTOR3(1.2f, 0.5f, 0); // »ó´ëÁÂÇ¥
 	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
-	LeftArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
+	LeftArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	LeftArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftArm);
 
 	BCRightArm* RightArm = new BCRightArm;
 	Pivot = D3DXVECTOR3(-1.2f, 0.5f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.1f, 0.5f);
-	RightArm->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
+	RightArm->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	RightArm->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(RightArm);
 
 	BCLeftLeg* LeftLeg = new BCLeftLeg;
 	Pivot = D3DXVECTOR3(0.4f, -2.6f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
-	LeftLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 0, 0));
+	LeftLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	LeftLeg->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(LeftLeg);
 
 	BCRightLeg* RightLeg = new BCRightLeg;
 	Pivot = D3DXVECTOR3(-0.4f, -2.6f, 0);
 	Scale = D3DXVECTOR3(0.4f, 1.3f, 0.5f);
-	RightLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(0, 0, 255));
+	RightLeg->Init(Pivot, Scale, D3DCOLOR_XRGB(255, 255, 255));
 	RightLeg->SetPivot(D3DXVECTOR3(0, Scale.y * -0.5f, 0));
 	Bodies.push_back(RightLeg);
 }
