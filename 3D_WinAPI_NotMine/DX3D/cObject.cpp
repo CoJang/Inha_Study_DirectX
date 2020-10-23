@@ -3,7 +3,7 @@
 
 
 cObject::cObject()
-	: m_ulRefCount(1)
+	:m_ulRefCount(1)
 {
 	g_pObjectManager->AddObject(this);
 }

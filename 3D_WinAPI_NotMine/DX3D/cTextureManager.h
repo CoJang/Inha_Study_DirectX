@@ -1,18 +1,21 @@
 #pragma once
+#include "stdafx.h"
 
 #define g_pTextureManager cTextureManager::GetInstance()
-
-class cTextureManager
+class cTextureManager 
 {
-	//public:
-	//	cTextureManager();
-	//	~cTextureManager();
-private :
-Singletone(cTextureManager);
+protected:
+	Singletone(cTextureManager);
+
 	std::map<std::string, LPDIRECT3DTEXTURE9> m_mapTexture;
 
-public :
-	LPDIRECT3DTEXTURE9 GetTexture(char* szFullPath);
-	LPDIRECT3DTEXTURE9 GetTexture(std::string& sFullPath);
+public:
+
+	/*cTextureManager();
+	~cTextureManager();*/
+	LPDIRECT3DTEXTURE9 GetTexture(char* szFullpath);
+	LPDIRECT3DTEXTURE9 GetTexture(std::string &sFullpath);
 	void Destroy();
+
 };
+

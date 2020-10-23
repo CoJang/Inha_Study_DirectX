@@ -1,28 +1,23 @@
 #include "stdafx.h"
 
 #include "cBody.h"
+#include "cHead.h"
 #include "cLeftArm.h"
 #include "cRightArm.h"
 #include "cLeftLeg.h"
 #include "cRightLeg.h"
-#include "cHead.h"
 
 #include "cCubeMan.h"
 
-
 cCubeMan::cCubeMan()
-	: m_pRoot(nullptr)
-	  , m_pTexture(nullptr)
+	:m_pRoot(NULL)
 {
 }
-
 
 cCubeMan::~cCubeMan()
 {
 	if (m_pRoot)
 		m_pRoot->Destroy();
-
-	SafeRelease(m_pTexture);
 }
 
 void cCubeMan::Setup()
@@ -30,11 +25,11 @@ void cCubeMan::Setup()
 	cCharacter::Setup();
 
 	ZeroMemory(&m_stMtl, sizeof(D3DMATERIAL9));
-	m_stMtl.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	m_stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	m_stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-
-	D3DXCreateTextureFromFile(g_pD3DDevice, _T("../image/batman.png"), &m_pTexture);
+	m_stMtl.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);	//주변 반영
+	m_stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);	//분산 반영
+	m_stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);	//반사 반영
+	//m_stMtl.Emissive = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);	//방출
+	//m_stMtl.Power 에서 설정한 값은 반사효과가 얼마나 예리한지 제어한다
 
 	cBody* pBody = new cBody;
 	pBody->Setup();
@@ -43,28 +38,27 @@ void cCubeMan::Setup()
 
 	cHead* pHead = new cHead;
 	pHead->Setup();
-
-	m_pRoot->AddChild(pHead);
+	m_pRoot->Addchild(pHead);
 
 	cLeftArm* pLArm = new cLeftArm;
 	pLArm->Setup();
 	pLArm->SetRotDeltaX(0.1f);
-	m_pRoot->AddChild(pLArm);
+	m_pRoot->Addchild(pLArm);
 
 	cRightArm* pRArm = new cRightArm;
 	pRArm->Setup();
 	pRArm->SetRotDeltaX(-0.1f);
-	m_pRoot->AddChild(pRArm);
+	m_pRoot->Addchild(pRArm);
 
 	cLeftLeg* pLLeg = new cLeftLeg;
 	pLLeg->Setup();
 	pLLeg->SetRotDeltaX(-0.1f);
-	m_pRoot->AddChild(pLLeg);
+	m_pRoot->Addchild(pLLeg);
 
 	cRightLeg* pRLeg = new cRightLeg;
 	pRLeg->Setup();
 	pRLeg->SetRotDeltaX(0.1f);
-	m_pRoot->AddChild(pRLeg);
+	m_pRoot->Addchild(pRLeg);
 }
 
 void cCubeMan::Update(iMap* pMap)
@@ -76,8 +70,10 @@ void cCubeMan::Update(iMap* pMap)
 
 void cCubeMan::Render()
 {
-	if (g_pD3DDevice)
+
+	if (g_pD3DDevice) 
 	{
+		g_pD3DDevice->SetTexture(0, m_pTexture);
 		g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 		g_pD3DDevice->SetMaterial(&m_stMtl);
 
@@ -86,17 +82,8 @@ void cCubeMan::Render()
 		D3DXMATRIXA16 matWorld;
 		D3DXMatrixIdentity(&matWorld);
 		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
-		g_pD3DDevice->SetTexture(0, m_pTexture);
 		if (m_pRoot)
 			m_pRoot->Render();
-		g_pD3DDevice->SetTexture(0, nullptr);
+		g_pD3DDevice->SetTexture(0, NULL);
 	}
 }
-
-/* 
-1. GRID pn .. 바꿔서 라이트 적용되는거 확인할수 있도록
-2. Direction Light ... 해뜨고 지는거
-3. Spot Light .. 키 입력에 따라 방향 조정
-4. Point Light .. 범위를 조정 할수 있도록 
-5. 각 라이트의 위치를 박스로 표시 해줄것..
-*/

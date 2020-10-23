@@ -3,8 +3,8 @@
 
 
 cMtlTex::cMtlTex()
-	: m_pTexture(nullptr)
-	, m_nAttrID(0)
+	:m_pTexture(NULL)
+	,m_nAttrID(NULL)
 {
 	ZeroMemory(&m_stMtl, sizeof(D3DMATERIAL9));
 }
@@ -14,3 +14,4 @@ cMtlTex::~cMtlTex()
 {
 	SafeRelease(m_pTexture);
 }
+

@@ -1,59 +1,84 @@
 #pragma once
-class cFrame;
 class cCubePC;
 class cCamera;
 class cGrid;
 class cCubeMan;
+class cLight;
 class cGroup;
+class cFrame;
 class cMtlTex;
+class cSkinnedMesh;
+
 
 class cMainGame
 {
-public:
-	cMainGame();
-	~cMainGame();
+private:
+	//vector<ST_PC_VERTEX> m_vecLineVertex;
+	//vector<ST_PC_VERTEX > m_vecTriangleVertex;
 
-private :
-	cCubePC* m_pCubePC;
-	cCamera* m_pCamera;
-	cGrid* m_pGrid;
+	cCubePC*	m_pCubePC;
+	cCamera*	m_pCamera;
+	cGrid*		m_pGrid;
 
 	cCubeMan* m_pCubeMan;
 
-	// >> : for texture 
-	LPDIRECT3DTEXTURE9 m_pTexture;
-	vector<ST_PT_VERTEX> m_vecVertex;
-	// << :
+	cLight* m_pLight;
 
+	// >> :
+	/*
+	LPDIRECT3DTEXTURE9 m_pTexture;	//텍스쳐를 관리할 텍스쳐 객체
+	vector<ST_PT_VERTEX> m_vecVertex;
+	*/
+	// << :
+	
 	vector<cGroup*> m_vecGroup;
 	iMap* m_pMap;
 
 	cFrame* m_pRootFrame;
+
 	LPD3DXMESH m_pMeshTeapot;
 	LPD3DXMESH m_pMeshSphere;
 	D3DMATERIAL9 m_stMtlTeapot;
 	D3DMATERIAL9 m_stMtlSphere;
 
 	LPD3DXMESH m_pObjMesh;
-	LPD3DXMESH m_pAseMesh;
-	vector<cMtlTex*> m_vecAseMtlTex;
 	vector<cMtlTex*> m_vecObjMtlTex;
-public :
-	void Setup_MeshObjects();
-	void Mesh_Render();
-	
+
+	vector<ST_SPHERE> m_vecSphere;
+	D3DMATERIAL9 m_stMtlNone;
+	D3DMATERIAL9 m_stMtlPicked;
+	D3DMATERIAL9 m_stMtlPlane;
+	vector<ST_PN_VERTEX> m_vecPlaneVertex;
+	D3DXVECTOR3 m_vPickedPosition;
+
+	cSkinnedMesh* m_pSkinnedMesh;
+
+
+public:
+	cMainGame();
+	~cMainGame();
+
 	void Setup();
 	void Update();
 	void Render();
-	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lparam);
 
-	void Set_Light();
-
-	void Setup_Texture();
-	void Draw_Texture();
-
+	//void Draw_Texture();
 	void Setup_Obj();
 	void Obj_Render();
 
 	void Load_Surface();
+
+	void Setup_MeshObject();
+	void Mesh_Render();
+
+	void Setup_PickingObj();
+	void PickingObj_Render();
+
+	void SkinnedMesh_Render();
+
+
+	void Setup_HeightMap();
 };
+
+	

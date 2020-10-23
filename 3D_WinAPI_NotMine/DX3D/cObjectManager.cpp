@@ -11,12 +11,12 @@ cObjectManager::~cObjectManager()
 {
 }
 
-void cObjectManager::AddObject(cObject* pObject)
+void cObjectManager::AddObject(cObject * pObject)
 {
 	m_setObject.insert(pObject);
 }
 
-void cObjectManager::RemoveObject(cObject* pObject)
+void cObjectManager::RemoveObject(cObject * pObject)
 {
 	m_setObject.erase(pObject);
 }

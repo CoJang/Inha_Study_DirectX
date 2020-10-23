@@ -1,15 +1,16 @@
 #pragma once
 class cPyramid
 {
-public:
-	cPyramid();
-	~cPyramid();
-
-private :
+private:
 	std::vector<ST_PC_VERTEX> m_vecVertex;
 	D3DXMATRIXA16 m_matR;
 
-public :
+
+public:
+	cPyramid();
+	~cPyramid();
 	void Setup(D3DCOLOR c, D3DXMATRIXA16& mat);
 	void Render();
+
 };
+

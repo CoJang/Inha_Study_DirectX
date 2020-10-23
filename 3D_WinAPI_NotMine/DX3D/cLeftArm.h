@@ -1,11 +1,11 @@
 #pragma once
 #include "cCubeNode.h"
-
 class cLeftArm :
-	public cCubeNode
+    public cCubeNode
 {
 public:
-	cLeftArm();
-	~cLeftArm();
-	void Setup() override;
+    cLeftArm();
+    ~cLeftArm();
+    virtual void Setup() override;
 };
+

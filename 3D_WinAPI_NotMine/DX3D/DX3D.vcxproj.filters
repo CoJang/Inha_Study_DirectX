@@ -1,29 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="소스 파일">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="CubeMan">
-      <UniqueIdentifier>{d8fa7376-c585-4cac-8f75-b00590010d7e}</UniqueIdentifier>
+      <UniqueIdentifier>{86f12a6e-7b47-44cf-95b7-f7f243a2a4cf}</UniqueIdentifier>
     </Filter>
     <Filter Include="ObjLoader">
-      <UniqueIdentifier>{576fbfbc-3a43-419e-8547-f17eca6cd8ac}</UniqueIdentifier>
+      <UniqueIdentifier>{71b537ce-30b0-4c65-8bd6-59aed445a27d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Map">
-      <UniqueIdentifier>{a987ee29-ac43-4f69-bf4b-4651d259aab9}</UniqueIdentifier>
+      <UniqueIdentifier>{d4473d7d-ad0f-4694-b573-5bc626d71130}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\AseLoader">
-      <UniqueIdentifier>{0ce0269f-e715-4707-91ec-3e85d81db14b}</UniqueIdentifier>
+    <Filter Include="ASELoader">
+      <UniqueIdentifier>{451a3b9b-659e-45e3-abbb-a895c7a986eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Picking">
+      <UniqueIdentifier>{20756dd9-b858-47c9-bdde-27a215be97bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeightMap">
+      <UniqueIdentifier>{0b3bef7e-16bf-450f-a7a4-2458ded9ed76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SkinedMesh">
+      <UniqueIdentifier>{11c292e9-2ccd-4e63-9719-57340bed0d3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,52 +40,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DX3D.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cMainGame.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="cDeviceManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="cDeviceManage.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cCubePC.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cCamera.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cGrid.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cPyramid.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cCubePNT.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cCubeNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cBody.h">
-      <Filter>CubeMan</Filter>
-    </ClInclude>
-    <ClInclude Include="cHead.h">
-      <Filter>CubeMan</Filter>
-    </ClInclude>
-    <ClInclude Include="cLeftArm.h">
-      <Filter>CubeMan</Filter>
-    </ClInclude>
-    <ClInclude Include="cLeftLeg.h">
-      <Filter>CubeMan</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cRightArm.h">
       <Filter>CubeMan</Filter>
@@ -84,28 +81,43 @@
     <ClInclude Include="cRightLeg.h">
       <Filter>CubeMan</Filter>
     </ClInclude>
+    <ClInclude Include="cLeftLeg.h">
+      <Filter>CubeMan</Filter>
+    </ClInclude>
+    <ClInclude Include="cLeftArm.h">
+      <Filter>CubeMan</Filter>
+    </ClInclude>
+    <ClInclude Include="cHead.h">
+      <Filter>CubeMan</Filter>
+    </ClInclude>
+    <ClInclude Include="cBody.h">
+      <Filter>CubeMan</Filter>
+    </ClInclude>
     <ClInclude Include="cCharacter.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cCubeMan.h">
-      <Filter>Header Files</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="cMtlTex.h">
+    <ClInclude Include="cLight.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjLoad.h">
       <Filter>ObjLoader</Filter>
     </ClInclude>
-    <ClInclude Include="cObject.h">
+    <ClInclude Include="cGroup.h">
       <Filter>ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="cObjectManager.h">
       <Filter>ObjLoader</Filter>
     </ClInclude>
-    <ClInclude Include="cObjLoader.h">
-      <Filter>ObjLoader</Filter>
-    </ClInclude>
     <ClInclude Include="cTextureManager.h">
       <Filter>ObjLoader</Filter>
     </ClInclude>
-    <ClInclude Include="cGroup.h">
+    <ClInclude Include="cMtlTex.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cObject.h">
       <Filter>ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="iMap.h">
@@ -115,45 +127,60 @@
       <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="Asciitok.h">
-      <Filter>Source Files\AseLoader</Filter>
+      <Filter>ASELoader</Filter>
     </ClInclude>
     <ClInclude Include="cAseLoader.h">
-      <Filter>Source Files\AseLoader</Filter>
+      <Filter>ASELoader</Filter>
     </ClInclude>
     <ClInclude Include="cFrame.h">
-      <Filter>Source Files\AseLoader</Filter>
+      <Filter>ASELoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cRay.h">
+      <Filter>Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="cHeightMap.h">
+      <Filter>HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimerManager.h">
+      <Filter>SkinedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cAllocateHierarchy.h">
+      <Filter>SkinedMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMesh.h">
+      <Filter>SkinedMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DX3D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cMainGame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="cDeviceManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="cDeviceManage.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cCubePC.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cCamera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cGrid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cPyramid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cCubePNT.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cCubeNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cBody.cpp">
       <Filter>CubeMan</Filter>
@@ -174,27 +201,30 @@
       <Filter>CubeMan</Filter>
     </ClCompile>
     <ClCompile Include="cCharacter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cCubeMan.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cLight.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjLoad.cpp">
+      <Filter>ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cGroup.cpp">
-      <Filter>ObjLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="cObject.cpp">
-      <Filter>ObjLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="cMtlTex.cpp">
-      <Filter>ObjLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="cObjLoader.cpp">
       <Filter>ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cObjectManager.cpp">
       <Filter>ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cTextureManager.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cMtlTex.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cObject.cpp">
       <Filter>ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="iMap.cpp">
@@ -204,23 +234,38 @@
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="cAseLoader.cpp">
-      <Filter>Source Files\AseLoader</Filter>
+      <Filter>ASELoader</Filter>
     </ClCompile>
     <ClCompile Include="cFrame.cpp">
-      <Filter>Source Files\AseLoader</Filter>
+      <Filter>ASELoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cRay.cpp">
+      <Filter>Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="cHeightMap.cpp">
+      <Filter>HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimerManager.cpp">
+      <Filter>SkinedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cAllocateHierarchy.cpp">
+      <Filter>SkinedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMesh.cpp">
+      <Filter>SkinedMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX3D.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="DX3D.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
 </Project>

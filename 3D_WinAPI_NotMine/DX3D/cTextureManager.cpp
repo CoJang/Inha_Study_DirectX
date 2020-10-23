@@ -11,23 +11,23 @@ cTextureManager::~cTextureManager()
 {
 }
 
-LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(char* szFullPath)
+LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(char * szFullpath)
 {
-	if (m_mapTexture.find(szFullPath) == m_mapTexture.end())
+	if (m_mapTexture.find(szFullpath) == m_mapTexture.end())
 	{
-		D3DXCreateTextureFromFileA(g_pD3DDevice, szFullPath, &m_mapTexture[szFullPath]);
+		D3DXCreateTextureFromFileA(g_pD3DDevice, szFullpath, &m_mapTexture[szFullpath]);
 	}
-	return m_mapTexture[szFullPath];
+	return m_mapTexture[szFullpath];
 }
 
-LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string& sFullPath)
+LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string & sFullpath)
 {
-	return GetTexture((char*)sFullPath.c_str());
+	return GetTexture((char*)sFullpath.c_str());
 }
 
 void cTextureManager::Destroy()
 {
-	for each (auto it in m_mapTexture)
+	for each(auto it in m_mapTexture)
 	{
 		SafeRelease(it.second);
 	}

@@ -3,20 +3,21 @@
 class cCubeNode;
 
 class cCubeMan :
-	public cCharacter
+    public cCharacter
 {
+protected:
+    cCubeNode* m_pRoot;
+    D3DMATERIAL9 m_stMtl;
+
 public:
-	cCubeMan();
-	//~cCubeMan();
-protected :
-	cCubeNode* m_pRoot;
-	D3DMATERIAL9 m_stMtl;
-	LPDIRECT3DTEXTURE9 m_pTexture;
+    cCubeMan();
+    virtual ~cCubeMan();
 
-public :
-	virtual ~cCubeMan();
+    virtual void Setup() override;
+    virtual void Update(iMap* pMap) override;
+    virtual void Render() override;
 
-	void Setup() override;
-	void Update(iMap* pMap) override;
-	void Render() override;
+
+
 };
+

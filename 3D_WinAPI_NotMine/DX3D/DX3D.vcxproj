@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B8EA753F-17E5-4D8A-BF79-5BFFC4B0BAFE}</ProjectGuid>
+    <ProjectGuid>{113072A5-2AC8-4396-B7E4-30F7D4DA51E1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DX3D</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -76,8 +76,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -86,8 +84,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asciitok.h" />
+    <ClInclude Include="cAllocateHierarchy.h" />
     <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cBody.h" />
     <ClInclude Include="cCamera.h" />
@@ -158,23 +155,28 @@
     <ClInclude Include="cCubeNode.h" />
     <ClInclude Include="cCubePC.h" />
     <ClInclude Include="cCubePNT.h" />
-    <ClInclude Include="cDeviceManager.h" />
+    <ClInclude Include="cDeviceManage.h" />
     <ClInclude Include="cFrame.h" />
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cGroup.h" />
     <ClInclude Include="cHead.h" />
+    <ClInclude Include="cHeightMap.h" />
     <ClInclude Include="cLeftArm.h" />
     <ClInclude Include="cLeftLeg.h" />
+    <ClInclude Include="cLight.h" />
     <ClInclude Include="cMainGame.h" />
     <ClInclude Include="cMtlTex.h" />
     <ClInclude Include="cObject.h" />
     <ClInclude Include="cObjectManager.h" />
-    <ClInclude Include="cObjLoader.h" />
+    <ClInclude Include="cObjLoad.h" />
     <ClInclude Include="cObjMap.h" />
     <ClInclude Include="cPyramid.h" />
+    <ClInclude Include="cRay.h" />
     <ClInclude Include="cRightArm.h" />
     <ClInclude Include="cRightLeg.h" />
+    <ClInclude Include="cSkinnedMesh.h" />
     <ClInclude Include="cTextureManager.h" />
+    <ClInclude Include="cTimerManager.h" />
     <ClInclude Include="DX3D.h" />
     <ClInclude Include="iMap.h" />
     <ClInclude Include="Resource.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cAllocateHierarchy.cpp" />
     <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cBody.cpp" />
     <ClCompile Include="cCamera.cpp" />
@@ -190,23 +193,28 @@
     <ClCompile Include="cCubeNode.cpp" />
     <ClCompile Include="cCubePC.cpp" />
     <ClCompile Include="cCubePNT.cpp" />
-    <ClCompile Include="cDeviceManager.cpp" />
+    <ClCompile Include="cDeviceManage.cpp" />
     <ClCompile Include="cFrame.cpp" />
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cGroup.cpp" />
     <ClCompile Include="cHead.cpp" />
+    <ClCompile Include="cHeightMap.cpp" />
     <ClCompile Include="cLeftArm.cpp" />
     <ClCompile Include="cLeftLeg.cpp" />
+    <ClCompile Include="cLight.cpp" />
     <ClCompile Include="cMainGame.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
     <ClCompile Include="cObject.cpp" />
     <ClCompile Include="cObjectManager.cpp" />
-    <ClCompile Include="cObjLoader.cpp" />
+    <ClCompile Include="cObjLoad.cpp" />
     <ClCompile Include="cObjMap.cpp" />
     <ClCompile Include="cPyramid.cpp" />
+    <ClCompile Include="cRay.cpp" />
     <ClCompile Include="cRightArm.cpp" />
     <ClCompile Include="cRightLeg.cpp" />
+    <ClCompile Include="cSkinnedMesh.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
+    <ClCompile Include="cTimerManager.cpp" />
     <ClCompile Include="DX3D.cpp" />
     <ClCompile Include="iMap.cpp" />
     <ClCompile Include="stdafx.cpp">

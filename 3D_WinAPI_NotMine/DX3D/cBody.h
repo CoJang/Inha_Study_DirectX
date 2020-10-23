@@ -1,12 +1,13 @@
 #pragma once
 #include "cCubeNode.h"
-
 class cBody :
-	public cCubeNode
+    public cCubeNode
 {
 public:
-	cBody();
-	~cBody();
+    cBody();
+    ~cBody();
 
-	void Setup() override;
+    virtual void Setup() override;
+
 };
+
