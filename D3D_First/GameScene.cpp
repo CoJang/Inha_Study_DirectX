@@ -103,6 +103,8 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		CamPivot.x += Camera->GetCamDir().x * Input;
 		CamPivot.y += Camera->GetCamDir().y * Input;
 		CamPivot.z += Camera->GetCamDir().z * Input;
+
+		Camera->UpdateFrustum();
 	}
 	break;
 	default:
@@ -176,6 +178,7 @@ void GameScene::InitGameScene()
 	CamFov = Camera->GetCamFov();
 	CamPivot = D3DXVECTOR3(0, 15, -15);
 	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
+	Camera->UpdateFrustum();
 
 	Sky = new SkyBox;
 	Sky->Init(*CamPos, D3DXVECTOR3(10, 10, 10), D3DXCOLOR(1, 1, 1, 1));
@@ -275,6 +278,7 @@ void GameScene::Update(float delta)
 	
 	Camera->SetCamTarget(Zemmin2->GetPos());
 	Camera->SetCamPos(Zemmin2->GetPos() + CamPivot);
+	Camera->UpdateFrustum();
 	
 	Sky->SetPos(*CamPos);
 	Sky->Update(delta);
@@ -466,8 +470,8 @@ bool GameScene::IsMeshSphereCulled(MySphere & mesh)
 }
 
 MySphere::MySphere()
-	:Position(0, 10, 0),
-	Scale(1,1,1)
+	:Position(0, 10, 0)
+	,Scale(1,1,1)
 	,Radius(1.f)
 	,IsCulled(false)
 	,texture(NULL)

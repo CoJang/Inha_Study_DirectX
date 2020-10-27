@@ -50,7 +50,6 @@ void cPyramid::Setup(D3DCOLOR c, D3DXMATRIXA16 & mat)
 
 void cPyramid::Render()
 {
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	D3DXMATRIXA16 matWorld, matS;
 	D3DXMatrixScaling(&matS, 0.1f, 2.0f, 0.1f);
 
@@ -59,5 +58,4 @@ void cPyramid::Render()
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
 	g_pD3DDevice->SetFVF(ST_PC_VERTEX::FVF);
 	g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLELIST, m_vecVertex.size() / 3, &m_vecVertex[0], sizeof(ST_PC_VERTEX));
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 }

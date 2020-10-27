@@ -22,6 +22,8 @@ class cAllocateHierarchy :
 
 protected:
 	Synthesize(string, m_sFolder, Folder);
+	Synthesize(D3DXVECTOR3, m_vMin, Min);
+	Synthesize(D3DXVECTOR3, m_vMax, Max);
 
 public:
 	cAllocateHierarchy();

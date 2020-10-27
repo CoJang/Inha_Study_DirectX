@@ -150,6 +150,15 @@
     <ClInclude Include="cSkinnedMesh.h">
       <Filter>SkinedMesh</Filter>
     </ClInclude>
+    <ClInclude Include="cOBB.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cZealot.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMeshMananger.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -253,6 +262,15 @@
     </ClCompile>
     <ClCompile Include="cSkinnedMesh.cpp">
       <Filter>SkinedMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cOBB.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cZealot.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMeshMananger.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

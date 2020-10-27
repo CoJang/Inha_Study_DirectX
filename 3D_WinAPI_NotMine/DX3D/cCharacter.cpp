@@ -22,7 +22,7 @@ void cCharacter::Setup()
 
 void cCharacter::Update(iMap* pMap)
 {
-	m_pMap = pMap;
+	//m_pMap = pMap;
 
 	if (GetKeyState('A') & 0x8000)
 	{
@@ -37,14 +37,11 @@ void cCharacter::Update(iMap* pMap)
 
 	if (GetKeyState('W') & 0x8000)
 	{
-		vPosition = vPosition -(m_vDirection * 0.5f);
-		//m_vPosition = vPosition - (m_vDirection * 0.2f);
-
+		vPosition = m_vPosition - (m_vDirection * 0.5f);
 	}
 	if (GetKeyState('S') & 0x8000)
 	{
 		vPosition = m_vPosition + (m_vDirection * 0.5f);
-		//m_vPosition = vPosition + (m_vDirection * 0.2f);
 	}
 
 
@@ -76,10 +73,10 @@ void cCharacter::Update(iMap* pMap)
 			
 		}
 	}
-	
+	m_vPosition = vPosition;
 
 
-	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y + 0.9f, m_vPosition.z);
+	D3DXMatrixTranslation(&matT, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 
 	m_matWorld = matR * matT;
 }

@@ -166,6 +166,7 @@
     <ClInclude Include="cLight.h" />
     <ClInclude Include="cMainGame.h" />
     <ClInclude Include="cMtlTex.h" />
+    <ClInclude Include="cOBB.h" />
     <ClInclude Include="cObject.h" />
     <ClInclude Include="cObjectManager.h" />
     <ClInclude Include="cObjLoad.h" />
@@ -175,8 +176,10 @@
     <ClInclude Include="cRightArm.h" />
     <ClInclude Include="cRightLeg.h" />
     <ClInclude Include="cSkinnedMesh.h" />
+    <ClInclude Include="cSkinnedMeshMananger.h" />
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimerManager.h" />
+    <ClInclude Include="cZealot.h" />
     <ClInclude Include="DX3D.h" />
     <ClInclude Include="iMap.h" />
     <ClInclude Include="Resource.h" />
@@ -204,6 +207,7 @@
     <ClCompile Include="cLight.cpp" />
     <ClCompile Include="cMainGame.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
+    <ClCompile Include="cOBB.cpp" />
     <ClCompile Include="cObject.cpp" />
     <ClCompile Include="cObjectManager.cpp" />
     <ClCompile Include="cObjLoad.cpp" />
@@ -213,8 +217,10 @@
     <ClCompile Include="cRightArm.cpp" />
     <ClCompile Include="cRightLeg.cpp" />
     <ClCompile Include="cSkinnedMesh.cpp" />
+    <ClCompile Include="cSkinnedMeshMananger.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimerManager.cpp" />
+    <ClCompile Include="cZealot.cpp" />
     <ClCompile Include="DX3D.cpp" />
     <ClCompile Include="iMap.cpp" />
     <ClCompile Include="stdafx.cpp">

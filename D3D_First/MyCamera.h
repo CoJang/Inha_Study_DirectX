@@ -23,6 +23,7 @@ public:
 
 	void Init();
 	void Update(float delta);
+	void UpdateFrustum();
 	void Render(float delta);
 
 	D3DXMATRIXA16 GetCameraView() { return ViewMat; }

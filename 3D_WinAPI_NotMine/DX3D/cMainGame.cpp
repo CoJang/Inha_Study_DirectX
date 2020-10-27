@@ -16,6 +16,9 @@
 #include "cHeightMap.h"
 #include "cSkinnedMesh.h"
 
+#include "cZealot.h"
+#include "cOBB.h"
+
 
 cMainGame::cMainGame()
 	:m_pCubePC(NULL)
@@ -29,6 +32,8 @@ cMainGame::cMainGame()
 	,m_pMeshSphere(NULL)
 	,m_pObjMesh(NULL)
 	,m_pSkinnedMesh(NULL)
+	,m_pHoldZealot(NULL)
+	,m_pMoveZealot(NULL)
 {
 
 }
@@ -42,6 +47,9 @@ cMainGame::~cMainGame()
 	SafeDelete(m_pCubeMan);
 	SafeDelete(m_pMap);
 	SafeDelete(m_pSkinnedMesh);
+	
+	SafeDelete(m_pHoldZealot);
+	SafeDelete(m_pMoveZealot);
 
 	//SafeRelease(m_pTexture);
 	SafeRelease(m_pMeshTeapot);
@@ -126,13 +134,13 @@ void cMainGame::Setup()
 	*/
 
 	Setup_HeightMap();
-	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Zealot", "zealot.X");
-	m_pSkinnedMesh->SetAnimationIndex(4);
+	//m_pSkinnedMesh = new cSkinnedMesh;
+	//m_pSkinnedMesh->Setup("Zealot", "zealot.X");
+	//m_pSkinnedMesh->SetAnimationIndex(4);
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 
-
+	Setup_OBB();
 }
 
 void cMainGame::Update()
@@ -151,12 +159,18 @@ void cMainGame::Update()
 	if (m_pLight)
 		m_pLight->Update();
 	*/
-	if (m_pRootFrame)
-		m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
+	//if (m_pRootFrame)
+	//	m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
 	g_pTimeManager->Update();
-	if (m_pSkinnedMesh)
-		m_pSkinnedMesh->Update();
+	//if (m_pSkinnedMesh)
+	//	m_pSkinnedMesh->Update();
+
+	if (m_pMoveZealot)
+		m_pMoveZealot->Update(m_pMap);
+
+	if (m_pHoldZealot)
+		m_pHoldZealot->Update(m_pMap);
 }
 
 void cMainGame::Render()
@@ -196,8 +210,8 @@ void cMainGame::Render()
 	
 	//PickingObj_Render();
 	
-	SkinnedMesh_Render();
-	
+	//SkinnedMesh_Render();
+	OBB_Render();
 		
 
 	g_pD3DDevice->EndScene();
@@ -436,6 +450,33 @@ void cMainGame::Setup_HeightMap()
 	cHeightMap* pMap = new cHeightMap;
 	pMap->Setup("HeightMapData/", "HeightMap.raw", "terrain.jpg");
 	m_pMap = pMap;
+}
+
+void cMainGame::Setup_OBB()
+{
+	m_pHoldZealot = new cZealot;
+	m_pHoldZealot->Setup();
+	
+	m_pMoveZealot = new cZealot;
+	m_pMoveZealot->Setup();
+
+	cCharacter* pCharacter = new cCharacter;
+	m_pMoveZealot->SetCharacterController(pCharacter);
+	SafeRelease(pCharacter);
+
+	
+}
+
+void cMainGame::OBB_Render()
+{
+	D3DCOLOR c = cOBB::IsCollision(m_pHoldZealot->GetOBB(), m_pMoveZealot->GetOBB()) ?
+		D3DCOLOR_XRGB(255, 0, 0) : D3DCOLOR_XRGB(255, 255, 255);
+
+	if (m_pHoldZealot)
+		m_pHoldZealot->Render(c);
+
+	if (m_pMoveZealot)
+		m_pMoveZealot->Render(c);
 }
 
 /*

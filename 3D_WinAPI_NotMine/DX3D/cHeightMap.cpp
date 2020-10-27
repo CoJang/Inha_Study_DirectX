@@ -140,7 +140,7 @@ void cHeightMap::Render()
 	g_pD3DDevice->SetMaterial(&m_stMtl);
 	g_pD3DDevice->SetTexture(0, m_pTexture);
 	m_pMesh->DrawSubset(0);
-
+	g_pD3DDevice->SetTexture(0, NULL);
 }
 
 bool cHeightMap::GetHeight(IN float x, OUT float & y, IN float z)

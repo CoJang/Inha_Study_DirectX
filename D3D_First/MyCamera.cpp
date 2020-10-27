@@ -56,7 +56,10 @@ void MyCamera::Update(float delta)
 	
 	D3DXMatrixLookAtLH(&ViewMat, &CameraPos, &CameraTarget, &CameraUp);
 	DEVICE->SetTransform(D3DTS_VIEW, &ViewMat);
+}
 
+void MyCamera::UpdateFrustum()
+{
 	auto v = frustum->GetVertice();
 	for (int i = 0; i < v.size(); i++)
 	{

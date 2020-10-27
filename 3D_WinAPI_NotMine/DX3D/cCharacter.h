@@ -1,5 +1,5 @@
 #pragma once
-class cCharacter
+class cCharacter : public cObject
 {
 protected:
 	float m_fRotY;
@@ -19,5 +19,9 @@ public:
 	virtual void Render();
 	virtual D3DXVECTOR3& GetPosition();
 
+	virtual D3DXMATRIXA16* GetTransform()
+	{
+		return &m_matWorld;
+	}
 };
 
