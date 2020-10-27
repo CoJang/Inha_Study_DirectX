@@ -5,33 +5,48 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\98.DeviceManager">
+      <UniqueIdentifier>{c827f8f9-ee09-4622-bfc9-ada4d1cc4560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.CommonHeader">
+      <UniqueIdentifier>{dc7c2b40-ae35-40d2-bea1-9d8e52b7df4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\99.Main">
+      <UniqueIdentifier>{4ea4164a-1cf1-45b9-948a-573e5ab8355b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.GameScene">
+      <UniqueIdentifier>{303eab05-9899-421f-9be0-e1efbfb4de1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\97.TimeManager">
+      <UniqueIdentifier>{1c074076-c43f-42fa-9932-5e5e8868e78d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="DxWindow.h">
+      <Filter>소스 파일\99.Main</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="DeviceManager.h">
+      <Filter>소스 파일\98.DeviceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>소스 파일\01.CommonHeader</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\01.CommonHeader</Filter>
     </ClInclude>
-    <ClInclude Include="DxWindow.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일\01.CommonHeader</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DxWindow.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="cGameScene.h">
+      <Filter>소스 파일\02.GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimeManager.h">
+      <Filter>소스 파일\97.TimeManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DxWindow.rc">
@@ -45,5 +60,19 @@
     <Image Include="DxWindow.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DxWindow.cpp">
+      <Filter>소스 파일\99.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>소스 파일\98.DeviceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameScene.cpp">
+      <Filter>소스 파일\02.GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimeManager.cpp">
+      <Filter>소스 파일\97.TimeManager</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 //
 
 #include "framework.h"
+#include "cGameScene.h"
 #include "DxWindow.h"
 
 #define MAX_LOADSTRING 100
@@ -16,6 +17,9 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+HWND g_hwnd;
+cGameScene* g_pGameScene;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -40,17 +44,60 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DXWINDOW));
 
-    MSG msg;
+	g_pGameScene = new cGameScene;
+	g_pGameScene->InitGameScene();
+	
+	static LARGE_INTEGER LastTime;
+	QueryPerformanceCounter(&LastTime);
+	static float deltatime = 0;
 
-    // 기본 메시지 루프입니다:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
+	float Timer = 0;
+	int Cnt = 0;
+
+	MSG msg;
+
+	// Main message loop:
+	while (true)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+			{
+				break;
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			g_pGameScene->Update(deltatime);
+			g_pGameScene->Render(deltatime);
+
+			LARGE_INTEGER CurTime, frequency, DeltaTime;
+			QueryPerformanceFrequency(&frequency);
+			QueryPerformanceCounter(&CurTime);
+			DeltaTime.QuadPart = (CurTime.QuadPart - LastTime.QuadPart) * 1000000;
+			DeltaTime.QuadPart /= frequency.QuadPart;
+
+			deltatime = DeltaTime.QuadPart * 0.000001f;
+
+			Timer += deltatime;
+			Cnt++;
+			if (Timer > 1)
+			{
+				cout << "Frame : " << Cnt << endl;
+				Timer = 0;
+				Cnt = 0;
+			}
+
+			LastTime = CurTime;
+		}
+	}
+
+	SafeDelete(g_pGameScene);
 
     return (int) msg.wParam;
 }
@@ -99,6 +146,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   g_hwnd = hWnd;
 
    if (!hWnd)
    {
