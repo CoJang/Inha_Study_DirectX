@@ -34,6 +34,10 @@ cMainGame::cMainGame()
 	,m_pSkinnedMesh(NULL)
 	,m_pHoldZealot(NULL)
 	,m_pMoveZealot(NULL)
+	,m_pFont(NULL)
+	, m_p3DText(NULL)
+	, m_pSprite(NULL)
+	, m_pTextureUI(NULL)
 {
 
 }
@@ -55,6 +59,11 @@ cMainGame::~cMainGame()
 	SafeRelease(m_pMeshTeapot);
 	SafeRelease(m_pMeshSphere);
 	SafeRelease(m_pObjMesh);
+	SafeRelease(m_pFont);
+	SafeRelease(m_p3DText);
+
+	SafeRelease(m_pSprite);
+	SafeRelease(m_pTextureUI);
 
 	for each(auto p in m_vecObjMtlTex)
 		SafeRelease(p);
@@ -66,6 +75,7 @@ cMainGame::~cMainGame()
 	m_vecGroup.clear();
 	m_pRootFrame->Destroy();
 	g_pDeviceManager->Destroy();
+	g_pFontManager->Destroy();
 }
 
 void cMainGame::Setup()
@@ -141,6 +151,8 @@ void cMainGame::Setup()
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 
 	Setup_OBB();
+	Create_Font();
+	SetUp_UI();
 }
 
 void cMainGame::Update()
@@ -212,7 +224,8 @@ void cMainGame::Render()
 	
 	//SkinnedMesh_Render();
 	OBB_Render();
-		
+	Text_Render();
+	UI_Render();
 
 	g_pD3DDevice->EndScene();
 	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
@@ -469,14 +482,151 @@ void cMainGame::Setup_OBB()
 
 void cMainGame::OBB_Render()
 {
-	D3DCOLOR c = cOBB::IsCollision(m_pHoldZealot->GetOBB(), m_pMoveZealot->GetOBB()) ?
-		D3DCOLOR_XRGB(255, 0, 0) : D3DCOLOR_XRGB(255, 255, 255);
+	//D3DCOLOR c = cOBB::IsCollision(m_pHoldZealot->GetOBB(), m_pMoveZealot->GetOBB()) ?
+		//D3DCOLOR_XRGB(255, 0, 0) : D3DCOLOR_XRGB(0, 255, 255);
+	D3DCOLOR c;
+	if(cOBB::IsCollision(m_pHoldZealot->GetOBB(), m_pMoveZealot->GetOBB()))
+	{
+		c = D3DCOLOR_XRGB(255, 0, 0);
+	}
+	else
+	{
+		c = D3DCOLOR_XRGB(0, 255, 255);
+	}
+	
 
 	if (m_pHoldZealot)
 		m_pHoldZealot->Render(c);
 
 	if (m_pMoveZealot)
 		m_pMoveZealot->Render(c);
+}
+
+void cMainGame::Create_Font()
+{
+	D3DXFONT_DESC fd;
+	ZeroMemory(&fd, sizeof(D3DXFONT_DESC));
+	fd.Width = 25;
+	fd.Height = 50;
+	fd.Weight = FW_MEDIUM;
+	fd.Italic = false;
+	fd.CharSet = DEFAULT_CHARSET;
+	fd.OutputPrecision = OUT_DEFAULT_PRECIS;
+	fd.PitchAndFamily = FF_DONTCARE;
+
+	// the same
+	//lstrcpy(fd.FaceName, TEXT("±¼¸²Ã¼"));
+	//wcscpy_s(fd.FaceName, L"±¼¸²Ã¼");
+	AddFontResource(TEXT("font/umberto.ttf"));
+	wcscpy_s(fd.FaceName, L"umberto");
+
+	D3DXCreateFontIndirect(g_pD3DDevice, &fd, &m_pFont);
+
+	HDC hdc = CreateCompatibleDC(0);
+	LOGFONT lf;
+	ZeroMemory(&lf, sizeof(LOGFONT));
+
+	lf.lfWidth = 12;
+	lf.lfHeight = 25;
+	lf.lfWeight = 500;
+	lf.lfItalic = false;
+	lf.lfUnderline = false;
+	lf.lfStrikeOut = false;
+	lf.lfCharSet = DEFAULT_CHARSET;
+	wcscpy_s(lf.lfFaceName, L"umberto");
+
+	HFONT hFont;
+	HFONT hOldFont;
+	hFont = CreateFontIndirect(&lf);
+	hOldFont = (HFONT)SelectObject(hdc, hFont);
+	D3DXCreateText(g_pD3DDevice, hdc, L"Direct3D", 0.001f, 0.01f, &m_p3DText,
+		0, 0);
+
+	SelectObject(hdc, hOldFont);
+	DeleteObject(hFont);
+	DeleteDC(hdc);
+}
+
+void cMainGame::Text_Render()
+{
+	string sText("ABC 123 !@#$ ÄÚÀå");
+	RECT rc;
+	SetRect(&rc, 100, 100, 200, 200);
+
+	LPD3DXFONT pFont = g_pFontManager->GetFont(cFontManager::E_QUEST);
+
+	
+	pFont->DrawTextA(NULL,
+						sText.c_str(),
+						sText.length(),
+						&rc,
+						DT_LEFT | DT_TOP | DT_NOCLIP,
+						D3DCOLOR_XRGB(255, 255, 0));
+
+	D3DXMATRIXA16 matWorld, matS, matR, matT;
+	D3DXMatrixIdentity(&matS);
+	D3DXMatrixIdentity(&matR);
+	D3DXMatrixIdentity(&matT);
+	D3DXMatrixScaling(&matS, 1.0f, 1.0f, 5.0f);
+	//D3DXMatrixRotationX(&matR, -D3DX_PI / 4.0f);
+	D3DXMatrixTranslation(&matT, -2.0f, 1.0f, 0.0f);
+	matWorld = matS * matR * matT;
+
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	m_p3DText->DrawSubset(0);
+}
+
+void cMainGame::SetUp_UI()
+{
+	D3DXCreateSprite(g_pD3DDevice, &m_pSprite);
+	
+	//m_pTextureUI = g_pTextureManager->GetTexture("image/brick_01-2.png");
+	D3DXCreateTextureFromFileEx(
+		g_pD3DDevice,
+		L"image/brick_01-2.png",
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT_NONPOW2,
+		D3DX_DEFAULT,
+		0,
+		D3DFMT_UNKNOWN,
+		D3DPOOL_MANAGED,
+		D3DX_FILTER_NONE,
+		D3DX_DEFAULT,
+		0,
+		&m_stImageInfo,
+		NULL,
+		&m_pTextureUI);
+}
+
+void cMainGame::UI_Render()
+{
+	m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
+
+	RECT rc;
+	SetRect(&rc, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
+
+	D3DXMATRIXA16 matWorld, matS, matR, matT;
+	D3DXMatrixIdentity(&matS);
+	D3DXMatrixIdentity(&matR);
+	D3DXMatrixIdentity(&matT);
+
+	static float angle = 0.0f;
+	angle += g_pTimeManager->GetElapsedTime();
+	
+	D3DXMatrixScaling(&matS, 1.0f, 1.0f, 1.0f);
+	D3DXMatrixTranslation(&matT, 150.0f, 100.0f, 0.0f);
+	D3DXMatrixRotationZ(&matR, angle);
+	matWorld = matS * matR * matT;
+
+	m_pSprite->SetTransform(&matWorld);
+	
+	m_pSprite->Draw(m_pTextureUI,
+		&rc,
+		&D3DXVECTOR3(0, 0, 0),
+		&D3DXVECTOR3(0, 0, 0),
+		D3DCOLOR_ARGB(255, 255, 255, 255));
+	
+	m_pSprite->End();
 }
 
 /*

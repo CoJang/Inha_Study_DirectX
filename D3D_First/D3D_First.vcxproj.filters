@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Terrain">
       <UniqueIdentifier>{ee414505-a04f-4637-9391-7da81c0d85fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sprite">
+      <UniqueIdentifier>{ca323265-78eb-4a58-9344-cf9217c40180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -144,6 +147,15 @@
     <ClInclude Include="Terrain.h">
       <Filter>Source Files\Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Source Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MySprite.h">
+      <Filter>Source Files\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="cUIPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -235,6 +247,15 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MySprite.cpp">
+      <Filter>Source Files\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="cUIPanel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ class objUnit;
 class ObjectFrame;
 class MySphere;
 class Terrain;
+class cUIPanel;
 
 class GameScene
 {
@@ -31,6 +32,7 @@ private:
 	MySphere* sphere;
 	Terrain* TR;
 	SkyBox* Sky;
+	cUIPanel* tempSprite;
 	
 // giomatric objects
 	MyGrid* Grid;

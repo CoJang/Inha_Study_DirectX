@@ -150,12 +150,14 @@
     <ClInclude Include="Asciitok.h" />
     <ClInclude Include="ASE_Loader.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="cUIPanel.h" />
     <ClInclude Include="D3D_First.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="LightSrc\MyLight.h" />
     <ClInclude Include="ManagerSrc\DeviceManager.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyMath.h" />
+    <ClInclude Include="MySprite.h" />
     <ClInclude Include="ObjectFrame.h" />
     <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="ObjectSrc\Box.h" />
@@ -180,16 +182,19 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ASE_Loader.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="cUIPanel.cpp" />
     <ClCompile Include="D3D_First.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="LightSrc\MyLight.cpp" />
     <ClCompile Include="ManagerSrc\DeviceManager.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyMath.cpp" />
+    <ClCompile Include="MySprite.cpp" />
     <ClCompile Include="ObjectFrame.cpp" />
     <ClCompile Include="ObjectNode.cpp" />
     <ClCompile Include="ObjectSrc\Box.cpp" />
@@ -217,6 +222,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D3D_First.rc" />

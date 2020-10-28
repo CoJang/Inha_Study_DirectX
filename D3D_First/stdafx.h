@@ -130,6 +130,7 @@ struct ST_ROT_SAMPLE
 #include "ObjectSrc/ObjData.h"
 #include "ObjectSrc/ObjectManager.h"
 #include "ObjectSrc/TextureManager.h"
+#include "UIManager.h"
 
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")

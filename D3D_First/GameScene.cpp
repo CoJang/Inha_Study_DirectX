@@ -9,6 +9,7 @@
 #include "ObjectSrc/OBJ_Loader.h"
 #include "ASE_Loader.h"
 #include "Terrain.h"
+#include "cUIPanel.h"
 
 #include "GameScene.h"
 
@@ -16,6 +17,7 @@ GameScene::GameScene()
 	:Sun(0)
 	,FlashLight(1)
 	,Torch(2)
+	, tempSprite(NULL)
 {
 }
 
@@ -28,6 +30,9 @@ GameScene::~GameScene()
 	SafeDelete(Zemmin2);
 	SafeDelete(Bot_Zemmin2);
 	SafeDelete(map_surface);
+
+	tempSprite->Destroy();
+	
 	DEVICEMANAGER->Destroy();
 	delete[] sphere;
 }
@@ -35,17 +40,17 @@ GameScene::~GameScene()
 
 void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	static POINT MousePos;
-	static POINT OldMousePos;
-	
+	static POINT* MousePos = &g_pUIManager->m_ptMousePos;
+	static POINT* OldMousePos = &g_pUIManager->m_ptOldMousePos;
+
 	switch (Msg)
 	{
 	case WM_LBUTTONDOWN:
 		{
-			MousePos.x = LOWORD(lParam);
-			MousePos.y = HIWORD(lParam);
+			MousePos->x = LOWORD(lParam);
+			MousePos->y = HIWORD(lParam);
 
-			Ray ray = CalcPickingRay(MousePos);
+			Ray ray = CalcPickingRay(*MousePos);
 
 			if (IsRayHitInSphere(ray, *sphere))
 			{
@@ -55,10 +60,10 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_RBUTTONDOWN:
 		{
-			MousePos.x = LOWORD(lParam);
-			MousePos.y = HIWORD(lParam);
+			MousePos->x = LOWORD(lParam);
+			MousePos->y = HIWORD(lParam);
 			
-			Ray ray = CalcPickingRay(MousePos);
+			Ray ray = CalcPickingRay(*MousePos);
 			GridRayHitProcess(ray);
 
 			for (int i = 0; i < 1000; i++)
@@ -70,30 +75,35 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		{
 		case MK_LBUTTON:
 			{
-				MousePos.x = LOWORD(lParam);
-				MousePos.y = HIWORD(lParam);
-
+				MousePos->x = LOWORD(lParam);
+				MousePos->y = HIWORD(lParam);
+				
+				if(g_pUIManager->Update())
+				{
+					break;
+				}
+				
 				D3DXMATRIXA16 tempX, tempY;
 				D3DXVECTOR3 CameraPosition = CamPivot;
-				D3DXMatrixRotationX(&tempY, (OldMousePos.y - MousePos.y) * 0.02f);
-				D3DXMatrixRotationY(&tempX, (OldMousePos.x - MousePos.x) * -0.01f);
+				D3DXMatrixRotationX(&tempY, (OldMousePos->y - MousePos->y) * 0.02f);
+				D3DXMatrixRotationY(&tempX, (OldMousePos->x - MousePos->x) * -0.01f);
 				
 				D3DXVec3TransformCoord(&CamPivot, &CameraPosition, &(tempX * tempY));
 				break;
 			}
 		case MK_RBUTTON:
 			{
-				MousePos.x = LOWORD(lParam);
-				MousePos.y = HIWORD(lParam);
-				Ray ray = CalcPickingRay(MousePos);
+				MousePos->x = LOWORD(lParam);
+				MousePos->y = HIWORD(lParam);
+				Ray ray = CalcPickingRay(*MousePos);
 				GridRayHitProcess(ray);
 			}
 			break;
 		default:
 			break;
 		}
-		OldMousePos.x = LOWORD(lParam);
-		OldMousePos.y = HIWORD(lParam);
+		OldMousePos->x = LOWORD(lParam);
+		OldMousePos->y = HIWORD(lParam);
 		break;
 	case WM_MOUSEWHEEL:
 	{
@@ -183,6 +193,10 @@ void GameScene::InitGameScene()
 	Sky = new SkyBox;
 	Sky->Init(*CamPos, D3DXVECTOR3(10, 10, 10), D3DXCOLOR(1, 1, 1, 1));
 	Sky->LoadTexture("texture/metal_01-18.png");
+
+	tempSprite = new cUIPanel;
+	tempSprite->SetUp("UI/panel-info.png", "Panel");
+	tempSprite->SetPos(100, 100, 0);
 }
 
 void GameScene::SetLight()
@@ -309,6 +323,8 @@ void GameScene::Update(float delta)
 		//Sun.SetDirection(dir);
 		//SunTimer = 0;
 	}
+
+	tempSprite->Update(NULL);
 }
 
 void GameScene::Render(float delta)
@@ -346,6 +362,7 @@ void GameScene::Render(float delta)
 				sphere[i].Render(delta);
 		}
 
+		tempSprite->Render();
 		Camera->Render(delta);
 
 		DEVICE->EndScene();

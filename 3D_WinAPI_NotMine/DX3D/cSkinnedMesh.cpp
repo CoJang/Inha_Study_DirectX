@@ -109,6 +109,7 @@ void cSkinnedMesh::Render(LPD3DXFRAME pFrame)
 				g_pD3DDevice->SetTexture(0, pBoneMesh->vecTexture[i]);
 				g_pD3DDevice->SetMaterial(&pBoneMesh->vecMtl[i]);
 				pBoneMesh->MeshData.pMesh->DrawSubset(i);
+				g_pD3DDevice->SetTexture(0, NULL);
 			}
 		}
 	}
