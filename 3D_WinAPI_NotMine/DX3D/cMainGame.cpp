@@ -19,6 +19,11 @@
 #include "cZealot.h"
 #include "cOBB.h"
 
+DWORD FtoDw(float f)
+{
+	return *(DWORD*)&f;
+}
+
 
 cMainGame::cMainGame()
 	:m_pCubePC(NULL)
@@ -35,9 +40,13 @@ cMainGame::cMainGame()
 	,m_pHoldZealot(NULL)
 	,m_pMoveZealot(NULL)
 	,m_pFont(NULL)
-	, m_p3DText(NULL)
-	, m_pSprite(NULL)
-	, m_pTextureUI(NULL)
+	,m_p3DText(NULL)
+	,m_pSprite(NULL)
+	,m_pTextureUI(NULL)
+	,m_pTex0(NULL)
+	,m_pTex1(NULL)
+	,m_pTex2(NULL)
+	,m_pTex3(NULL)
 {
 
 }
@@ -94,7 +103,8 @@ void cMainGame::Setup()
 	m_pGrid->Setup();
 
 
-	
+	Setup_Particle();
+	Setup_MultiTexture();
 
 	m_pLight = new cLight;
 	m_pLight->Setup();
@@ -183,6 +193,9 @@ void cMainGame::Update()
 
 	if (m_pHoldZealot)
 		m_pHoldZealot->Update(m_pMap);
+
+	Update_Particle();
+	Update_MultiTexture();
 }
 
 void cMainGame::Render()
@@ -226,6 +239,9 @@ void cMainGame::Render()
 	OBB_Render();
 	Text_Render();
 	UI_Render();
+
+	Render_Particle();
+	Render_MultiTexture();
 
 	g_pD3DDevice->EndScene();
 	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
@@ -627,6 +643,337 @@ void cMainGame::UI_Render()
 		D3DCOLOR_ARGB(255, 255, 255, 255));
 	
 	m_pSprite->End();
+}
+
+void cMainGame::Setup_Particle()
+{
+	m_vecVertexParticle.resize(1000);
+	for(int i = 0; i < m_vecVertexParticle.size(); i++)
+	{
+		float fRadius = rand() % 100 / 10.0f;
+
+		m_vecVertexParticle[i].p = D3DXVECTOR3(0, 0, fRadius);
+		D3DXVECTOR3 vAngle = D3DXVECTOR3(
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f),
+			D3DXToRadian(rand() % 3600 / 10.0f)
+		);
+
+		D3DXMATRIXA16 matRx, matRy, matRz, matWorld;
+		D3DXMatrixRotationX(&matRx, vAngle.x);
+		D3DXMatrixRotationY(&matRy, vAngle.y);
+		D3DXMatrixRotationZ(&matRz, vAngle.z);
+		matWorld = matRx * matRy * matRz;
+
+		D3DXVec3TransformCoord(
+			&m_vecVertexParticle[i].p,
+			&m_vecVertexParticle[i].p,
+			&matWorld
+		);
+		
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(255, 180, 70, 20);
+	}
+}
+
+void cMainGame::Update_Particle()
+{
+	static int nAlpha = 0;
+	static int nDelta = 4;
+
+	nAlpha += nDelta;
+
+	if(nAlpha > 255)
+	{
+		nAlpha = 255;
+		nDelta *= -1;
+	}
+	if (nAlpha < 0)
+	{
+		nAlpha = 0;
+		nDelta *= -1;
+	}
+
+	for(int i = 0; i < m_vecVertexParticle.size(); i++)
+	{
+		if (i % 2 == 0) continue;
+
+		m_vecVertexParticle[i].c = D3DCOLOR_ARGB(nAlpha, 180, 70, 20);
+	}
+}
+
+void cMainGame::Render_Particle()
+{
+	D3DXMATRIXA16 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSIZE, FtoDw(5.0f));
+
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSCALE_A, FtoDw(0.0f));
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSCALE_B, FtoDw(0.0f));
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSCALE_C, FtoDw(1.0f));
+
+	// 알파텍스쳐 적용을 위해 킴
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSIZE_MIN, FtoDw(0.0f));
+	g_pD3DDevice->SetRenderState(D3DRS_POINTSIZE_MAX, FtoDw(100.0f));
+
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
+
+	g_pD3DDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+	g_pD3DDevice->SetFVF(ST_PC_VERTEX::FVF);
+	g_pD3DDevice->SetTexture(0, g_pTextureManager->GetTexture("image/myalpha.png"));
+
+	g_pD3DDevice->DrawPrimitiveUP(D3DPT_POINTLIST,
+									m_vecVertexParticle.size(),
+									&m_vecVertexParticle[0],
+									sizeof(ST_PC_VERTEX));
+	
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+	
+	g_pD3DDevice->SetTexture(0, NULL);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG0, D3DTA_DIFFUSE);
+	g_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+}
+
+void cMainGame::Setup_MultiTexture()
+{
+	m_pTex0 = g_pTextureManager->GetTexture("image/stones.png");
+	m_pTex1 = g_pTextureManager->GetTexture("image/env0.png");
+	m_pTex2 = g_pTextureManager->GetTexture("image/env1.png");
+	m_pTex3 = g_pTextureManager->GetTexture("image/Albedo00.jpg");
+
+	ST_PT_VERTEX v;
+	v.p = D3DXVECTOR3(0, 0, 0); v.t = D3DXVECTOR2(0, 1); m_vecVertex_Multi.push_back(v);
+	v.p = D3DXVECTOR3(0, 2, 0); v.t = D3DXVECTOR2(0, 0); m_vecVertex_Multi.push_back(v);
+	v.p = D3DXVECTOR3(2, 0, 0); v.t = D3DXVECTOR2(1, 1); m_vecVertex_Multi.push_back(v);
+	
+	v.p = D3DXVECTOR3(2, 2, 0); v.t = D3DXVECTOR2(1, 0); m_vecVertex_Multi.push_back(v);
+	v.p = D3DXVECTOR3(2, 0, 0); v.t = D3DXVECTOR2(1, 1); m_vecVertex_Multi.push_back(v);
+	v.p = D3DXVECTOR3(0, 2, 0); v.t = D3DXVECTOR2(0, 0); m_vecVertex_Multi.push_back(v);
+	
+}
+
+void cMainGame::Update_MultiTexture()
+{
+	if (GetAsyncKeyState('1') & 0x8000) m_nType = 1;
+	if (GetAsyncKeyState('2') & 0x8000) m_nType = 2;
+	if (GetAsyncKeyState('3') & 0x8000) m_nType = 3;
+	if (GetAsyncKeyState('4') & 0x8000) m_nType = 4;
+	if (GetAsyncKeyState('5') & 0x8000) m_nType = 5;
+	if (GetAsyncKeyState('6') & 0x8000) m_nType = 6;
+	if (GetAsyncKeyState('7') & 0x8000) m_nType = 7;
+	if (GetAsyncKeyState('8') & 0x8000) m_nType = 8;
+	if (GetAsyncKeyState('9') & 0x8000) m_nType = 9;
+	if (GetAsyncKeyState('0') & 0x8000) m_nType = 0;
+	if (GetAsyncKeyState('R') & 0x8000) m_nType = -1;
+}
+
+void cMainGame::Render_MultiTexture1()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex1);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture2()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex1);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE2X);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture3()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex1);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE4X);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture4()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex1);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_ADD);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture5()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex1);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_SUBTRACT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture6()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex3);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_ADDSIGNED);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture7()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex3);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_ADDSIGNED2X);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture8()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex3);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_ADDSMOOTH);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture9()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex2);
+	g_pD3DDevice->SetTexture(2, m_pTex3);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_RESULTARG, D3DTA_TEMP);
+	
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG0, D3DTA_TEMP);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	//g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG2, D3DTA_TEXTURE);
+
+	g_pD3DDevice->SetTextureStageState(3, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture0()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTexture(1, m_pTex2);
+	g_pD3DDevice->SetTexture(2, m_pTex3);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLORARG0, D3DTA_TEXTURE);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_RESULTARG, D3DTA_TEMP);
+
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_LERP);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG0, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG1, D3DTA_TEMP);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLORARG2, D3DTA_TEXTURE);
+
+	g_pD3DDevice->SetTextureStageState(3, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture_default()
+{
+	g_pD3DDevice->SetTexture(0, m_pTex0);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+}
+
+void cMainGame::Render_MultiTexture()
+{
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
+
+	for(int i = 0; i < 4; i++)
+	{
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
+
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	}
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_TEXCOORDINDEX, 0);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_TEXCOORDINDEX, 0);
+	g_pD3DDevice->SetTextureStageState(3, D3DTSS_TEXCOORDINDEX, 0);
+
+	switch(m_nType)
+	{
+		case 1: Render_MultiTexture1(); break;
+		case 2: Render_MultiTexture2(); break;
+		case 3: Render_MultiTexture3(); break;
+		case 4: Render_MultiTexture4(); break;
+		case 5: Render_MultiTexture5(); break;
+		case 6: Render_MultiTexture6(); break;
+		case 7: Render_MultiTexture7(); break;
+		case 8: Render_MultiTexture8(); break;
+		case 9: Render_MultiTexture9(); break;
+		case 0: Render_MultiTexture0(); break;
+		default: Render_MultiTexture_default(); break;
+	}
+
+	
+
+	g_pD3DDevice->SetFVF(ST_PT_VERTEX::FVF);
+	g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLELIST,
+		m_vecVertex_Multi.size() / 3,
+		&m_vecVertex_Multi[0],
+		sizeof(ST_PT_VERTEX));
+
+	g_pD3DDevice->SetTexture(0, NULL);
+	g_pD3DDevice->SetTexture(1, NULL);
+	g_pD3DDevice->SetTexture(2, NULL);
+
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+	g_pD3DDevice->SetTextureStageState(1, D3DTSS_RESULTARG, D3DTA_CURRENT);
+	g_pD3DDevice->SetTextureStageState(2, D3DTSS_RESULTARG, D3DTA_CURRENT);
+	
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+	for (int i = 0; i < 4; ++i)
+	{
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+		g_pD3DDevice->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+	}
 }
 
 /*
