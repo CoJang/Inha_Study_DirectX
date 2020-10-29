@@ -61,5 +61,8 @@ public:
 	virtual void OnMouseHover();
 	virtual void OnMouseClick();
 	virtual void OnMouseLeave();
+	virtual void OnMouseDrag();
+
+	virtual void ChangeSprite(char* szFullPath);
 };
 

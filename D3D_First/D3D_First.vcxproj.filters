@@ -154,7 +154,7 @@
       <Filter>Source Files\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="cUIPanel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +255,7 @@
       <Filter>Source Files\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="cUIPanel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

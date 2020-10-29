@@ -47,9 +47,11 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_LBUTTONDOWN:
 		{
+			g_pUIManager->m_stMouseState = MS_LCLICK;
 			MousePos->x = LOWORD(lParam);
 			MousePos->y = HIWORD(lParam);
-
+			g_pUIManager->Update();
+			
 			Ray ray = CalcPickingRay(*MousePos);
 
 			if (IsRayHitInSphere(ray, *sphere))
@@ -60,8 +62,10 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_RBUTTONDOWN:
 		{
+			g_pUIManager->m_stMouseState = MS_RCLICK;
 			MousePos->x = LOWORD(lParam);
 			MousePos->y = HIWORD(lParam);
+			g_pUIManager->Update();
 			
 			Ray ray = CalcPickingRay(*MousePos);
 			GridRayHitProcess(ray);
@@ -71,12 +75,15 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_MOUSEMOVE:
+		g_pUIManager->m_stMouseState = MS_NORMAL;
+		MousePos->x = LOWORD(lParam);
+		MousePos->y = HIWORD(lParam);
+		g_pUIManager->Update();
 		switch(wParam)
 		{
 		case MK_LBUTTON:
 			{
-				MousePos->x = LOWORD(lParam);
-				MousePos->y = HIWORD(lParam);
+				g_pUIManager->m_stMouseState = MS_DRAG;
 				
 				if(g_pUIManager->Update())
 				{
@@ -93,8 +100,6 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			}
 		case MK_RBUTTON:
 			{
-				MousePos->x = LOWORD(lParam);
-				MousePos->y = HIWORD(lParam);
 				Ray ray = CalcPickingRay(*MousePos);
 				GridRayHitProcess(ray);
 			}

@@ -61,10 +61,36 @@ void MySprite::OnMouseLeave()
 {
 }
 
+void MySprite::OnMouseDrag()
+{
+}
+
+void MySprite::ChangeSprite(char* szFullPath)
+{
+	
+}
+
 void MySprite::SetUp(char* szFullPath, char* szUIName)
 {
+	if(g_pUIManager->GetSprite(szUIName))
+	{
+		memcpy(this, g_pUIManager->GetSprite(szUIName), sizeof(MySprite));
+		return;
+	}
+	
 	D3DXCreateSprite(DEVICE, &m_pSprite);
 
+	if(g_pUIManager->GetTexture(szFullPath))
+	{
+		m_pTextureUI = g_pUIManager->GetTexture(szFullPath);
+		m_stImageInfo = *g_pUIManager->GetImageInfo(szFullPath);
+		SetRect(&m_rRect, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
+
+		m_szName = szUIName;
+		Update(NULL);
+		return;
+	}
+	
 	D3DXCreateTextureFromFileExA(DEVICE,
 								szFullPath,
 								D3DX_DEFAULT_NONPOW2,
@@ -82,6 +108,8 @@ void MySprite::SetUp(char* szFullPath, char* szUIName)
 
 	SetRect(&m_rRect, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
 	m_szName = szUIName;
+	g_pUIManager->AddImageInfo(szFullPath, &m_stImageInfo);
+	g_pUIManager->AddTexture(szFullPath, m_pTextureUI);
 	g_pUIManager->AddSprite(m_szName, this);
 	Update(NULL);
 }

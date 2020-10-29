@@ -1,6 +1,15 @@
 #pragma once
 #include "MySprite.h"
 
+class cUIButton : public MySprite
+{
+public:
+	void OnMouseClick() override;
+	void OnMouseHover() override;
+	void OnMouseLeave() override;
+	void OnMouseDrag() override;
+};
+
 class cUIPanel : public MySprite
 {
 public:
@@ -13,5 +22,6 @@ public:
 	void OnMouseClick() override;
 	void OnMouseHover() override;
 	void OnMouseLeave() override;
+	void OnMouseDrag() override;
 };
 
