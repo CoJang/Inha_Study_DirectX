@@ -50,7 +50,8 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			g_pUIManager->m_stMouseState = MS_LCLICK;
 			MousePos->x = LOWORD(lParam);
 			MousePos->y = HIWORD(lParam);
-			g_pUIManager->Update();
+			
+			if (g_pUIManager->Update()) break;
 			
 			Ray ray = CalcPickingRay(*MousePos);
 
@@ -65,7 +66,7 @@ void GameScene::WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			g_pUIManager->m_stMouseState = MS_RCLICK;
 			MousePos->x = LOWORD(lParam);
 			MousePos->y = HIWORD(lParam);
-			g_pUIManager->Update();
+			if (g_pUIManager->Update()) break;
 			
 			Ray ray = CalcPickingRay(*MousePos);
 			GridRayHitProcess(ray);

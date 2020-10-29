@@ -43,6 +43,9 @@
     <Filter Include="Source Files\Sprite">
       <UniqueIdentifier>{ca323265-78eb-4a58-9344-cf9217c40180}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Font">
+      <UniqueIdentifier>{3af483c7-31db-46c5-88b1-3566478595a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -129,14 +132,8 @@
     <ClInclude Include="objUnit.h">
       <Filter>Source Files\Obj</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Source Files\Parser</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectFrame.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asciitok.h">
       <Filter>Source Files\Ase</Filter>
@@ -155,6 +152,15 @@
     </ClInclude>
     <ClInclude Include="cUIPanel.h">
       <Filter>Source Files\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectNode.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFrame.h">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="cFont.h">
+      <Filter>Source Files\Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -233,14 +239,8 @@
     <ClCompile Include="objUnit.cpp">
       <Filter>Source Files\Obj</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files\Parser</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectFrame.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ASE_Loader.cpp">
       <Filter>Source Files\Ase</Filter>
@@ -256,6 +256,15 @@
     </ClCompile>
     <ClCompile Include="cUIPanel.cpp">
       <Filter>Source Files\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectNode.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFrame.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFont.cpp">
+      <Filter>Source Files\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

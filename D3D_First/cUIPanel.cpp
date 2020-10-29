@@ -1,19 +1,28 @@
 #include "stdafx.h"
+#include "cFont.h"
 #include "cUIPanel.h"
 
 
 void cUIButton::OnMouseClick()
 {
+	ChangeSprite("UI/btn-med-down.png");
+	
+	if(m_szName == "OK")
+		g_pUIManager->GetSprite("Panel")->SetText("그렇다");
+
+	if (m_szName == "NO")
+		g_pUIManager->GetSprite("Panel")->SetText("아니다");
 }
 
 void cUIButton::OnMouseHover()
 {
-	m_stImageInfo = *g_pUIManager->GetImageInfo("UI/btn-med-over.png");
-	m_pTextureUI = g_pUIManager->GetTexture("UI/btn-med-over.png");
+	ChangeSprite("UI/btn-med-over.png");
+
 }
 
 void cUIButton::OnMouseLeave()
 {
+	ChangeSprite("UI/btn-med-up.png");
 }
 
 void cUIButton::OnMouseDrag()
@@ -44,11 +53,12 @@ void cUIPanel::SetUp(char* szFullPath, char* szUIName)
 	CancleBT->SetAnchor(ConfirmBT->GetImageInfo().Width * 0.5f, ConfirmBT->GetImageInfo().Height * 0.5f, 0);
 	CancleBT->SetPos(m_stImageInfo.Width * 0.5f, m_stImageInfo.Height * 0.72f, 0);
 	AddChild(CancleBT);
-}
-
-void cUIPanel::Update(D3DXMATRIXA16* pmatParent)
-{
-	MySprite::Update(pmatParent);
+	
+	Update(NULL);
+	
+	m_pFont = new cFont;
+	m_pFont->Setup("탈출은 지능순", FONT_DEFAULT);
+	m_pFont->SetFormat(DT_CENTER | DT_VCENTER);
 }
 
 void cUIPanel::OnMouseClick()

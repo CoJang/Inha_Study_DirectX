@@ -29,13 +29,13 @@ bool UIManager::Update()
 			it.second->OnMouseDrag();
 			IsReact = true;
 		}
-		else if (PtInRect(&(it.second->GetDrawArea()), m_ptMousePos) && m_stMouseState == MS_LCLICK)
+		if (PtInRect(&(it.second->GetDrawArea()), m_ptMousePos) && m_stMouseState == MS_LCLICK)
 		{
 			it.second->OnMouseClick();
 			IsReact = true;
 		}
 		
-		if(!PtInRect(&(it.second->GetDrawArea()), m_ptMousePos) && m_stMouseState == MS_NORMAL)
+		if(!PtInRect(&(it.second->GetDrawArea()), m_ptMousePos) && !IsReact)
 		{
 			it.second->OnMouseLeave();
 		}
@@ -44,28 +44,28 @@ bool UIManager::Update()
 	return IsReact;
 }
 
-void UIManager::AddImageInfo(char* path, D3DXIMAGE_INFO* info)
+void UIManager::AddImageInfo(char* path, D3DXIMAGE_INFO info)
 {
 	if (m_mapImageInfo.find(path) == m_mapImageInfo.end())
 		m_mapImageInfo[path] = info;
 }
 
-void UIManager::AddImageInfo(string& path, D3DXIMAGE_INFO* info)
+void UIManager::AddImageInfo(string& path, D3DXIMAGE_INFO info)
 {
 	return AddImageInfo((char*)path.c_str(), info);
 }
 
-D3DXIMAGE_INFO* UIManager::GetImageInfo(char* path)
+D3DXIMAGE_INFO UIManager::GetImageInfo(char* path)
 {
 	if (m_mapImageInfo.find(path) == m_mapImageInfo.end())
 	{
-		return NULL;
+		return D3DXIMAGE_INFO();
 	}
 
 	return m_mapImageInfo[path];
 }
 
-D3DXIMAGE_INFO* UIManager::GetImageInfo(string& path)
+D3DXIMAGE_INFO UIManager::GetImageInfo(string& path)
 {
 	return GetImageInfo((char*)path.c_str());
 }
@@ -122,6 +122,46 @@ MySprite* UIManager::GetSprite(string & Name)
 	return GetSprite((char*)Name.c_str());
 }
 
+LPD3DXFONT UIManager::GetFont(FontType type)
+{
+	if (m_mapFont.find(type) != m_mapFont.end())
+	{
+		return m_mapFont[type];
+	}
+
+	D3DXFONT_DESC FD;
+	ZeroMemory(&FD, sizeof(D3DXFONT_DESC));
+
+	if (type == FONT_DEFAULT)
+	{
+		FD.Width = 12;
+		FD.Height = 25;
+		FD.Weight = FW_BOLD;
+		FD.Italic = false;
+		FD.CharSet = DEFAULT_CHARSET;
+		FD.OutputPrecision = OUT_DEFAULT_PRECIS;
+		FD.PitchAndFamily = FF_DONTCARE;
+
+		wcscpy_s(FD.FaceName, L"±¼¸²Ã¼");
+	}
+	else if (type == FONT_WARNING)
+	{
+		FD.Width = 12;
+		FD.Height = 25;
+		FD.Weight = FW_MEDIUM;
+		FD.Italic = false;
+		FD.CharSet = DEFAULT_CHARSET;
+		FD.OutputPrecision = OUT_DEFAULT_PRECIS;
+		FD.PitchAndFamily = FF_DONTCARE;
+
+		AddFontResource(TEXT("font/umberto.ttf"));
+		wcscpy_s(FD.FaceName, L"umberto");
+	}
+
+	D3DXCreateFontIndirect(DEVICE, &FD, &m_mapFont[type]);
+	return m_mapFont[type];
+}
+
 void UIManager::Destroy()
 {
 	for (auto it : m_mapTexture)
@@ -137,4 +177,13 @@ void UIManager::Destroy()
 	}
 
 	m_mapSprite.clear();
+
+	for (auto it : m_mapFont)
+	{
+		SafeRelease(it.second);
+	}
+
+	m_mapFont.clear();
+
+	
 }
