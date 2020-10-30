@@ -33,6 +33,7 @@ using namespace std;
 extern HWND g_hwnd;
 
 #define SafeRelease(p) { if(p) p->Release(); p = NULL; }
+#define SafeDeleteArray(p) {if(p) delete[] p; p=NULL;}
 #define SafeDelete(p) { if(p) delete p; p = NULL; }
 #define SafeAddRef(p) { if (p) p->AddRef(); }
 #define Singletone(class_name) \

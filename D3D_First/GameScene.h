@@ -16,6 +16,8 @@ class MySphere;
 class Terrain;
 class cUIPanel;
 
+class cSkinnedMesh;
+
 class GameScene
 {
 public:
@@ -23,6 +25,11 @@ public:
 	~GameScene();
 	
 private:
+// Shader
+	LPD3DXEFFECT			m_pShader;
+	LPDIRECT3DTEXTURE9		m_pZealotDM;
+	cSkinnedMesh*			m_pZealot;
+	
 // temp
 	BezierCurve* bc;
 	objUnit* objMap;
@@ -67,6 +74,9 @@ public:
 	bool IsRayHitInSphere(Ray & ray, MySphere & sphere);
 	void GridRayHitProcess(Ray & ray);
 	bool IsMeshSphereCulled(MySphere & mesh);
+	
+	void SetShader();
+	void RenderShader();
 };
 
 class MySphere

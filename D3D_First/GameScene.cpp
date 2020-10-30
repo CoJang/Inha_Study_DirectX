@@ -11,6 +11,9 @@
 #include "Terrain.h"
 #include "cUIPanel.h"
 
+#include "cShader.h"
+#include "cSkinnedMesh.h"
+
 #include "GameScene.h"
 
 GameScene::GameScene()
@@ -18,6 +21,9 @@ GameScene::GameScene()
 	,FlashLight(1)
 	,Torch(2)
 	, tempSprite(NULL)
+	, m_pShader(NULL)
+	, m_pZealotDM(NULL)
+	, m_pZealot(NULL)
 {
 }
 
@@ -30,6 +36,12 @@ GameScene::~GameScene()
 	SafeDelete(Zemmin2);
 	SafeDelete(Bot_Zemmin2);
 	SafeDelete(map_surface);
+
+
+	// 쉐이더를 release 한다.
+	SafeRelease(m_pShader);
+	SafeRelease(m_pZealotDM);
+	SafeDelete(m_pZealot);
 
 	tempSprite->Destroy();
 	
@@ -203,6 +215,11 @@ void GameScene::InitGameScene()
 	tempSprite = new cUIPanel;
 	tempSprite->SetUp("UI/panel-info.png", "Panel");
 	tempSprite->SetPos(100, 100, 0);
+
+	// shader
+	{
+		SetShader();
+	}
 }
 
 void GameScene::SetLight()
@@ -331,6 +348,7 @@ void GameScene::Update(float delta)
 	}
 
 	tempSprite->Update(NULL);
+	m_pZealot->Update();
 }
 
 void GameScene::Render(float delta)
@@ -370,6 +388,7 @@ void GameScene::Render(float delta)
 
 		tempSprite->Render();
 		Camera->Render(delta);
+		RenderShader();
 
 		DEVICE->EndScene();
 		DEVICE->Present(NULL, NULL, NULL, NULL);
@@ -492,6 +511,58 @@ bool GameScene::IsMeshSphereCulled(MySphere & mesh)
 	return isculled;
 }
 
+void GameScene::SetShader()
+{
+	m_pShader = LoadShader("TextureMapping.fx");
+	if (!m_pShader) cout << "m_pShader Load Fail!" << endl;
+
+	m_pZealotDM = LoadTexture("Zealot/Zealot_Diffuse.bmp");
+	if (!m_pZealotDM) cout << "m_pZealotDM Load Fail!" << endl;
+
+	m_pZealot = new cSkinnedMesh("Zealot", "zealot.X");
+	m_pZealot->SetRandomTrackPosition();
+	if (!m_pZealot) cout << "m_pZealot Load Fail!" << endl;
+}
+
+void GameScene::RenderShader()
+{
+	// 뷰 행렬을 만든다.
+	D3DXMATRIXA16			matView;
+	DEVICE->GetTransform(D3DTS_VIEW, &matView);
+
+	// 투영행렬을 만든다.
+	D3DXMATRIXA16			matProjection;
+	DEVICE->GetTransform(D3DTS_PROJECTION, &matProjection);
+
+	// 월드행렬을 만든다.
+	D3DXMATRIXA16			matWorld;
+	DEVICE->GetTransform(D3DTS_WORLD, &matWorld);
+	D3DXMatrixScaling(&matWorld, 10, 10, 10);
+
+	// 쉐이더 전역변수들을 설정
+	m_pShader->SetMatrix("gWorldMatrix", &matWorld);
+	m_pShader->SetMatrix("gViewMatrix", &matView);
+	m_pShader->SetMatrix("gProjectionMatrix", &matProjection);
+
+	m_pShader->SetTexture("DiffuseMap_Tex", m_pZealotDM);
+
+	// 쉐이더를 시작한다.
+	UINT numPasses = 0;
+	m_pShader->Begin(&numPasses, NULL);
+	{
+		for (UINT i = 0; i < numPasses; ++i)
+		{
+			m_pShader->BeginPass(i);
+			{
+				// 구체를 그린다.
+				m_pZealot->Render(NULL);
+			}
+			m_pShader->EndPass();
+		}
+	}
+	m_pShader->End();
+}
+
 MySphere::MySphere()
 	:Position(0, 10, 0)
 	,Scale(1,1,1)
@@ -550,6 +621,4 @@ void MySphere::SetMaterialColor(D3DXCOLOR color)
 	Material.Diffuse = color;
 	Material.Specular = color;
 }
-
-
 

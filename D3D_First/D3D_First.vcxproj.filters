@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Font">
       <UniqueIdentifier>{3af483c7-31db-46c5-88b1-3566478595a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shader">
+      <UniqueIdentifier>{fe64449e-affc-437e-aba3-0bb48321d3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xFile">
+      <UniqueIdentifier>{026b7139-77af-4fe6-ad9e-31d51d155259}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -162,6 +168,24 @@
     <ClInclude Include="cFont.h">
       <Filter>Source Files\Font</Filter>
     </ClInclude>
+    <ClInclude Include="cShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cAllocateHierarchy.h">
+      <Filter>Source Files\xFile</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMesh.h">
+      <Filter>Source Files\xFile</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMeshMananger.h">
+      <Filter>Source Files\xFile</Filter>
+    </ClInclude>
+    <ClInclude Include="cZealot.h">
+      <Filter>Source Files\xFile</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimerManager.h">
+      <Filter>Source Files\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -266,6 +290,24 @@
     <ClCompile Include="cFont.cpp">
       <Filter>Source Files\Font</Filter>
     </ClCompile>
+    <ClCompile Include="cShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAllocateHierarchy.cpp">
+      <Filter>Source Files\xFile</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMesh.cpp">
+      <Filter>Source Files\xFile</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMeshMananger.cpp">
+      <Filter>Source Files\xFile</Filter>
+    </ClCompile>
+    <ClCompile Include="cZealot.cpp">
+      <Filter>Source Files\xFile</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimerManager.cpp">
+      <Filter>Source Files\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D3D_First.rc">
@@ -279,5 +321,10 @@
     <Image Include="D3D_First.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="TextureMapping.fx">
+      <Filter>Source Files\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
