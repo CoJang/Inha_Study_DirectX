@@ -1,6 +1,8 @@
 #pragma once
 #include "MySprite.h"
 
+class cFont;
+
 class cUIButton : public MySprite
 {
 public:
@@ -17,7 +19,6 @@ public:
 	~cUIPanel();
 
 	void SetUp(char* szFullPath, char* szUIName) override;
-	void Update(D3DXMATRIXA16* pmatParent) override;
 
 	void OnMouseClick() override;
 	void OnMouseHover() override;

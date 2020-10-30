@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Asciitok.h" />
     <ClInclude Include="ASE_Loader.h" />
+    <ClInclude Include="cFont.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="cUIPanel.h" />
     <ClInclude Include="D3D_First.h" />
@@ -186,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ASE_Loader.cpp" />
+    <ClCompile Include="cFont.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="cUIPanel.cpp" />
     <ClCompile Include="D3D_First.cpp" />

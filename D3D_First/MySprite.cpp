@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "cFont.h"
 #include "MySprite.h"
 
 
@@ -12,6 +13,7 @@ MySprite::MySprite()
 	, m_pTextureUI(NULL)
 	, m_dColor(D3DCOLOR_ARGB(255, 255, 255, 255))
 	, m_szName("Unknown")
+	, m_pFont(NULL)
 {
 	D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixIdentity(&matS);
@@ -42,32 +44,35 @@ void MySprite::AddChild(MySprite* child)
 RECT MySprite::GetDrawArea()
 {
 	RECT CurrentArea;
-	SetRect(&CurrentArea, m_vPos.x, m_vPos.y,
-						  m_vPos.x + m_stImageInfo.Width, 
-						  m_vPos.y + m_stImageInfo.Height);
+	SetRect(&CurrentArea, matWorld._41 - m_vAnchor.x,
+						 matWorld._42 - m_vAnchor.y,
+						 matWorld._41 + m_stImageInfo.Width - m_vAnchor.x,
+						 matWorld._42 + m_stImageInfo.Height - m_vAnchor.y);
 
 	return CurrentArea;
 }
 
-void MySprite::OnMouseHover()
-{
-}
-
-void MySprite::OnMouseClick()
-{
-}
-
-void MySprite::OnMouseLeave()
-{
-}
-
-void MySprite::OnMouseDrag()
-{
-}
-
 void MySprite::ChangeSprite(char* szFullPath)
 {
-	
+	if (!g_pUIManager->GetTexture(szFullPath))
+	{
+		LoadTexture(szFullPath);
+	}
+
+	m_pTextureUI = g_pUIManager->GetTexture(szFullPath);
+	m_stImageInfo = g_pUIManager->GetImageInfo(szFullPath);
+}
+
+void MySprite::SetText(char* text)
+{
+	if (m_pFont) 
+		m_pFont->SetText(text);
+}
+
+void MySprite::SetText(string & text)
+{
+	if (m_pFont) 
+		m_pFont->SetText(text);
 }
 
 void MySprite::SetUp(char* szFullPath, char* szUIName)
@@ -83,14 +88,24 @@ void MySprite::SetUp(char* szFullPath, char* szUIName)
 	if(g_pUIManager->GetTexture(szFullPath))
 	{
 		m_pTextureUI = g_pUIManager->GetTexture(szFullPath);
-		m_stImageInfo = *g_pUIManager->GetImageInfo(szFullPath);
+		m_stImageInfo = g_pUIManager->GetImageInfo(szFullPath);
 		SetRect(&m_rRect, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
 
 		m_szName = szUIName;
+		g_pUIManager->AddSprite(m_szName, this);
 		Update(NULL);
 		return;
 	}
 	
+	LoadTexture(szFullPath);
+
+	m_szName = szUIName;
+	g_pUIManager->AddSprite(m_szName, this);
+	Update(NULL);
+}
+
+void MySprite::LoadTexture(char* szFullPath)
+{
 	D3DXCreateTextureFromFileExA(DEVICE,
 								szFullPath,
 								D3DX_DEFAULT_NONPOW2,
@@ -105,13 +120,10 @@ void MySprite::SetUp(char* szFullPath, char* szUIName)
 								&m_stImageInfo,
 								NULL,
 								&m_pTextureUI);
-
+	
 	SetRect(&m_rRect, 0, 0, m_stImageInfo.Width, m_stImageInfo.Height);
-	m_szName = szUIName;
-	g_pUIManager->AddImageInfo(szFullPath, &m_stImageInfo);
 	g_pUIManager->AddTexture(szFullPath, m_pTextureUI);
-	g_pUIManager->AddSprite(m_szName, this);
-	Update(NULL);
+	g_pUIManager->AddImageInfo(szFullPath, m_stImageInfo);
 }
 
 void MySprite::Update(D3DXMATRIXA16* pmatParent)
@@ -130,6 +142,9 @@ void MySprite::Update(D3DXMATRIXA16* pmatParent)
 		matWorld *= *pmatParent;
 	}
 
+	if (m_pFont)
+		m_pFont->SetDrawArea(GetDrawArea());
+
 	for (auto Child : m_vecChild)
 		Child->Update(&matWorld);
 }
@@ -146,6 +161,9 @@ void MySprite::Render()
 					m_dColor);
 
 	m_pSprite->End();
+	
+	if (m_pFont)
+		m_pFont->Render();
 
 	for (auto Child : m_vecChild)
 		Child->Render();

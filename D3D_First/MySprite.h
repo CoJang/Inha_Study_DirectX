@@ -1,5 +1,7 @@
 #pragma once
 
+class cFont;
+
 class MySprite
 {
 protected:
@@ -18,12 +20,14 @@ protected:
 	D3DCOLOR m_dColor;
 	RECT m_rRect;
 
+	cFont* m_pFont;
 	vector<MySprite*> m_vecChild;
 public:
 	MySprite();
 	virtual ~MySprite();
 
 	virtual void SetUp(char* szFullPath, char* szUIName);
+	virtual void LoadTexture(char* szFullPath);
 	virtual void Update(D3DXMATRIXA16* pmatParent);
 	virtual void Render();
 	virtual void Destroy();
@@ -58,11 +62,14 @@ public:
 		SetRect(&m_rRect, left, top, right, bottom);
 	}
 
-	virtual void OnMouseHover();
-	virtual void OnMouseClick();
-	virtual void OnMouseLeave();
-	virtual void OnMouseDrag();
+	virtual void OnMouseHover() {}
+	virtual void OnMouseClick() {}
+	virtual void OnMouseLeave() {}
+	virtual void OnMouseDrag()  {}
 
 	virtual void ChangeSprite(char* szFullPath);
+
+	virtual void SetText(char* text);
+	virtual void SetText(string & text);
 };
 
