@@ -13,6 +13,7 @@
 
 #include "cShader.h"
 #include "cSkinnedMesh.h"
+#include "cTimerManager.h"
 
 #include "GameScene.h"
 
@@ -297,6 +298,7 @@ void GameScene::InputCheck(float delta)
 void GameScene::Update(float delta)
 {
 	InputCheck(delta);
+	g_pTimeManager->Update();
 	
 	Sun.LightUpdate(delta);
 	FlashLight.LightUpdate(delta);
@@ -522,6 +524,7 @@ void GameScene::SetShader()
 	m_pZealot = new cSkinnedMesh("Zealot", "zealot.X");
 	m_pZealot->SetRandomTrackPosition();
 	if (!m_pZealot) cout << "m_pZealot Load Fail!" << endl;
+	m_pZealot->SetAnimationIndexBlend(1);
 }
 
 void GameScene::RenderShader()
@@ -554,7 +557,6 @@ void GameScene::RenderShader()
 		{
 			m_pShader->BeginPass(i);
 			{
-				// 구체를 그린다.
 				m_pZealot->Render(NULL);
 			}
 			m_pShader->EndPass();
