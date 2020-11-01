@@ -36,11 +36,11 @@
     <ClInclude Include="EventManager.h">
       <Filter>Source Files\00.EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="Subscriber.h">
+    <ClInclude Include="Subject.h">
       <Filter>Source Files\01.Observer</Filter>
     </ClInclude>
     <ClInclude Include="ConcreteObserverA.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +56,11 @@
     <ClCompile Include="EventManager.cpp">
       <Filter>Source Files\00.EventManager</Filter>
     </ClCompile>
-    <ClCompile Include="Subscriber.cpp">
-      <Filter>Source Files\01.Observer</Filter>
-    </ClCompile>
     <ClCompile Include="ConcreteObserverA.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Source Files\01.Observer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

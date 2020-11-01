@@ -6,6 +6,6 @@ public:
 	IObserver() = default;
 	virtual ~IObserver() = default;
 
-	virtual void Update(string event) = 0;
+	virtual void ReceiveEvent(string event) = 0;
 };
 

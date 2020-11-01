@@ -3,18 +3,19 @@
 
 #include "stdafx.h"
 #include "ConcreteObserverA.h"
-#include "Subscriber.h"
+#include "Subject.h"
 
 int main()
 {
 	ConcreteObserverA* ObsA = new ConcreteObserverA;
-	Subscriber* Cojang = new Subscriber;
-
-	Cojang->Subscribe("YouTube", NULL);
-	Cojang->SendEvent("YouTube", "Thumb Up!");
+	Subject* Cojang = new Subject;
 
 
-	
+	ObsA->Subscribe("YouTube", Cojang);
+	Cojang->SendEvent("YouTube", "안녕하세요 유튜브 구독자 여러분");
+
+	delete Cojang;
+	delete ObsA;
     return 0;
 }
 

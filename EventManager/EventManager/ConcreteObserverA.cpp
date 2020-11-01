@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Subscriber.h"
+#include "Subject.h"
 #include "ConcreteObserverA.h"
 
 
@@ -12,21 +12,32 @@ ConcreteObserverA::~ConcreteObserverA()
 {
 }
 
-void ConcreteObserverA::OnSubscribe(string kind, Subscriber* sub)
+void ConcreteObserverA::Subscribe(string kind, Subject* sub)
 {
-	ObsKind = kind;
-	Subs.push_back(sub);
-	sub->Subscribe(kind, this);
+	//if(mapSubs.find(kind) == mapSubs.end())
+	//{
+	//	mapSubs[kind] = sub;
+	//	sub->OnSubscribe(kind, this);
+	//}
+	Publisher = sub;
+	Publisher->OnSubscribe(kind, this);
 }
 
-void ConcreteObserverA::OnUnsubscribe(Subscriber* sub)
+void ConcreteObserverA::Unsubscribe(string kind)
 {
+	//if (mapSubs.find(kind) != mapSubs.end())
+	//{
+	//	mapSubs[kind]->OnUnsubscribe(kind, this);
+	//}
+	Publisher->OnUnsubscribe(kind, this);
 }
 
-void ConcreteObserverA::Update(string msg)
+void ConcreteObserverA::SendEvent(string event)
 {
-	for(auto sub : Subs)
-	{
-		sub->ReciveEvent(msg);
-	}
+	Publisher->ReceiveEvent(event);
+}
+
+void ConcreteObserverA::ReceiveEvent(string event)
+{
+	printf("Received Data : %s\n", event.c_str());
 }
