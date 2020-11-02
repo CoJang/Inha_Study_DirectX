@@ -14,6 +14,6 @@ public:
 	void InitDeviceManager();
 	void Destroy();
 	
-	inline LPDIRECT3DDEVICE9 GetDevice() { return Device; }
+	LPDIRECT3DDEVICE9 GetDevice() { return Device; }
 };
 

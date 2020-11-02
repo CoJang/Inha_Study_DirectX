@@ -24,6 +24,18 @@
     <Filter Include="소스 파일\97.TimeManager">
       <UniqueIdentifier>{1c074076-c43f-42fa-9932-5e5e8868e78d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\04.Grid">
+      <UniqueIdentifier>{fdd8dd05-0737-47ef-8ebf-105bee339965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object">
+      <UniqueIdentifier>{367b8db6-bc12-44f6-afb7-fd0bede1ef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\96.Math">
+      <UniqueIdentifier>{908fd48a-b8a3-49a5-a12b-87c8ae2bb04a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\05.Camera">
+      <UniqueIdentifier>{2007e47b-8e0d-442c-81a7-2dfdce132a85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DxWindow.h">
@@ -46,6 +58,21 @@
     </ClInclude>
     <ClInclude Include="cTimeManager.h">
       <Filter>소스 파일\97.TimeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cGrid.h">
+      <Filter>소스 파일\04.Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>소스 파일\03.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexStruct.h">
+      <Filter>소스 파일\01.CommonHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMath.h">
+      <Filter>소스 파일\96.Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCamera.h">
+      <Filter>소스 파일\05.Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +100,18 @@
     </ClCompile>
     <ClCompile Include="cTimeManager.cpp">
       <Filter>소스 파일\97.TimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cGrid.cpp">
+      <Filter>소스 파일\04.Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects.cpp">
+      <Filter>소스 파일\03.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="MyMath.cpp">
+      <Filter>소스 파일\96.Math</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCamera.cpp">
+      <Filter>소스 파일\05.Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

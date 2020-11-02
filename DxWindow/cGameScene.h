@@ -1,9 +1,13 @@
 #pragma once
 
+class MyGrid;
+class MyCamera;
+
 class cGameScene
 {
 private:
-	
+	MyGrid* m_pGrid;
+	MyCamera* m_pCamera;
 public:
 // Basic Func
 	cGameScene();

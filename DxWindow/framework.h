@@ -46,3 +46,5 @@ extern HWND g_hwnd;
 #else
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #endif
+
+#include "DeviceManager.h"
