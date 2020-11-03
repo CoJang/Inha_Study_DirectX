@@ -326,5 +326,8 @@
     <FxCompile Include="TextureMapping.fx">
       <Filter>Source Files\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="SpecularMapping.fx">
+      <Filter>Source Files\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

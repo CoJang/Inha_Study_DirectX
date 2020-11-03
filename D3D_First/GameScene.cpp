@@ -25,6 +25,7 @@ GameScene::GameScene()
 	, m_pShader(NULL)
 	, m_pZealotDM(NULL)
 	, m_pZealot(NULL)
+	, m_vLightPos(500, 500, -500, 1)
 {
 }
 
@@ -293,6 +294,7 @@ void GameScene::InputCheck(float delta)
 		pos = D3DXVECTOR3(pos.x + delta, pos.y, pos.z);
 		FlashLight.SetPosition(pos);
 	}
+
 }
 
 void GameScene::Update(float delta)
@@ -338,13 +340,16 @@ void GameScene::Update(float delta)
 	
 	//if(SunTimer > 1.0f)
 	{
-		D3DXVECTOR3 dir = Sun.GetDirection();
+		D3DXVECTOR3 dir = m_vLightPos;
 
 		D3DXMATRIXA16 RotMat;
 		D3DXMatrixIdentity(&RotMat);
-		D3DXMatrixRotationZ(&RotMat, 1.0f * delta);
+		D3DXMatrixRotationZ(&RotMat, 3.0f * delta);
 		D3DXVec3TransformNormal(&dir, &dir, &RotMat);
-	
+
+		m_vLightPos.x = dir.x;
+		m_vLightPos.y = dir.y;
+		m_vLightPos.z = dir.z;
 		//Sun.SetDirection(dir);
 		//SunTimer = 0;
 	}
@@ -515,7 +520,8 @@ bool GameScene::IsMeshSphereCulled(MySphere & mesh)
 
 void GameScene::SetShader()
 {
-	m_pShader = LoadShader("TextureMapping.fx");
+	//m_pShader = LoadShader("TextureMapping.fx");
+	m_pShader = LoadShader("SpecularMapping.fx");
 	if (!m_pShader) cout << "m_pShader Load Fail!" << endl;
 
 	m_pZealotDM = LoadTexture("Zealot/Zealot_Diffuse.bmp");
@@ -547,7 +553,12 @@ void GameScene::RenderShader()
 	m_pShader->SetMatrix("gViewMatrix", &matView);
 	m_pShader->SetMatrix("gProjectionMatrix", &matProjection);
 
+	m_pShader->SetVector("gLightColor", &D3DXVECTOR4(1, 1, 1, 1));
 	m_pShader->SetTexture("DiffuseMap_Tex", m_pZealotDM);
+	m_pShader->SetTexture("SpecularMap_Tex", LoadTexture("texture/YellowTexture.png"));
+	//m_pShader->SetTexture("SpecularMap_Tex", LoadTexture("UI/btn-tower-up.png"));
+
+	m_pShader->SetVector("gWorldLightPos", &m_vLightPos);
 
 	// 쉐이더를 시작한다.
 	UINT numPasses = 0;

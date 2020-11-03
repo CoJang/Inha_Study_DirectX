@@ -29,6 +29,7 @@ private:
 	LPD3DXEFFECT			m_pShader;
 	LPDIRECT3DTEXTURE9		m_pZealotDM;
 	cSkinnedMesh*			m_pZealot;
+	D3DXVECTOR4				m_vLightPos;
 	
 // temp
 	BezierCurve* bc;
@@ -69,7 +70,8 @@ public:
 	void Update(float delta);
 	void Render(float delta);
 
-	float MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain);
+	
+	float MapCheck(D3DXVECTOR3& charpos, vector<Group*>& terrain); // 맵과의 충돌 검사
 	Ray CalcPickingRay(POINT MPos);
 	bool IsRayHitInSphere(Ray & ray, MySphere & sphere);
 	void GridRayHitProcess(Ray & ray);
