@@ -3,6 +3,8 @@
 
 #include "framework.h"
 #include "cGameScene.h"
+#include "Scene.h"
+#include "SceneStateManager.h"
 #include "DxWindow.h"
 
 #define MAX_LOADSTRING 100
@@ -46,6 +48,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	g_pGameScene = new cGameScene;
 	g_pGameScene->InitGameScene();
+
+	g_pCurrentScene->Setup();
 	
 	static LARGE_INTEGER LastTime;
 	QueryPerformanceCounter(&LastTime);
@@ -73,8 +77,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			g_pGameScene->Update(deltatime);
-			g_pGameScene->Render(deltatime);
+			//g_pGameScene->Update(deltatime);
+			//g_pGameScene->Render(deltatime);
+			g_pCurrentScene->Update();
+			g_pCurrentScene->Render();
 
 			LARGE_INTEGER CurTime, frequency, DeltaTime;
 			QueryPerformanceFrequency(&frequency);
@@ -98,6 +104,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	SafeDelete(g_pGameScene);
+	g_pSceneStateManager->Destroy();
 
     return (int) msg.wParam;
 }
@@ -193,6 +200,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+	case WM_LBUTTONUP:
+		g_pSceneStateManager->ChangeState(eSceneState::SS_GAME);
+		break;
+	case WM_RBUTTONUP:
+		g_pSceneStateManager->ChangeState(eSceneState::SS_END);
+		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;

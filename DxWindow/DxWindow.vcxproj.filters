@@ -36,6 +36,9 @@
     <Filter Include="소스 파일\05.Camera">
       <UniqueIdentifier>{2007e47b-8e0d-442c-81a7-2dfdce132a85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\00.SceneStateManager">
+      <UniqueIdentifier>{c72485d4-2830-4ad8-ac39-324f8e260610}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DxWindow.h">
@@ -73,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="MyCamera.h">
       <Filter>소스 파일\05.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneState.h">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStateManager.h">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +124,15 @@
     </ClCompile>
     <ClCompile Include="MyCamera.cpp">
       <Filter>소스 파일\05.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneState.cpp">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStateManager.cpp">
+      <Filter>소스 파일\00.SceneStateManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
