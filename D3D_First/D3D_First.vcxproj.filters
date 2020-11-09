@@ -329,5 +329,8 @@
     <FxCompile Include="SpecularMapping.fx">
       <Filter>Source Files\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="ToonShader.fx">
+      <Filter>Source Files\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

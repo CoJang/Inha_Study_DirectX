@@ -521,7 +521,7 @@ bool GameScene::IsMeshSphereCulled(MySphere & mesh)
 void GameScene::SetShader()
 {
 	//m_pShader = LoadShader("TextureMapping.fx");
-	m_pShader = LoadShader("SpecularMapping.fx");
+	m_pShader = LoadShader("ToonShader.fx");
 	if (!m_pShader) cout << "m_pShader Load Fail!" << endl;
 
 	m_pZealotDM = LoadTexture("Zealot/Zealot_Diffuse.bmp");
@@ -544,18 +544,20 @@ void GameScene::RenderShader()
 	DEVICE->GetTransform(D3DTS_PROJECTION, &matProjection);
 
 	// 월드행렬을 만든다.
-	D3DXMATRIXA16			matWorld;
+	D3DXMATRIXA16			matWorld, matInvWorld;
 	DEVICE->GetTransform(D3DTS_WORLD, &matWorld);
 	D3DXMatrixScaling(&matWorld, 10, 10, 10);
+	D3DXMatrixInverse(&matInvWorld, 0, &matWorld);
 
 	// 쉐이더 전역변수들을 설정
 	m_pShader->SetMatrix("gWorldMatrix", &matWorld);
 	m_pShader->SetMatrix("gViewMatrix", &matView);
 	m_pShader->SetMatrix("gProjectionMatrix", &matProjection);
+	m_pShader->SetMatrix("gInvWorldMatrix", &matInvWorld);
 
-	m_pShader->SetVector("gLightColor", &D3DXVECTOR4(1, 1, 1, 1));
+	//m_pShader->SetVector("gLightColor", &D3DXVECTOR4(1, 1, 1, 1));
 	m_pShader->SetTexture("DiffuseMap_Tex", m_pZealotDM);
-	m_pShader->SetTexture("SpecularMap_Tex", LoadTexture("texture/YellowTexture.png"));
+	//m_pShader->SetTexture("SpecularMap_Tex", LoadTexture("texture/YellowTexture.png"));
 	//m_pShader->SetTexture("SpecularMap_Tex", LoadTexture("UI/btn-tower-up.png"));
 
 	m_pShader->SetVector("gWorldLightPos", &m_vLightPos);
