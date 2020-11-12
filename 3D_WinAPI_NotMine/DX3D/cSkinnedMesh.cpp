@@ -270,10 +270,11 @@ void cSkinnedMesh::Load(char* szFolder, char* szFileName)
 	
 	m_vMin = ah.GetMin();
 	m_vMax = ah.GetMax();
-	
+
+	cSkinnedMesh* pSkinnedMesh = new cSkinnedMesh;
 	if(m_pRoot)
 	{
-		SetupBoneMatrixPtrs(m_pRoot);
+		pSkinnedMesh->SetupBoneMatrixPtrs(m_pRoot);
 	}
 }
 

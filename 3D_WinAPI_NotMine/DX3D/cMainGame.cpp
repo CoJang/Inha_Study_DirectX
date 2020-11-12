@@ -154,9 +154,9 @@ void cMainGame::Setup()
 	*/
 
 	Setup_HeightMap();
-	//m_pSkinnedMesh = new cSkinnedMesh;
-	//m_pSkinnedMesh->Setup("Zealot", "zealot.X");
-	//m_pSkinnedMesh->SetAnimationIndex(4);
+	m_pSkinnedMesh = new cSkinnedMesh;
+	m_pSkinnedMesh->Setup("Zealot", "Dolphin1.x");
+	m_pSkinnedMesh->SetAnimationIndex(0);
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 
@@ -185,8 +185,8 @@ void cMainGame::Update()
 	//	m_pRootFrame->Update(m_pRootFrame->GetKeyFrame(), NULL);
 
 	g_pTimeManager->Update();
-	//if (m_pSkinnedMesh)
-	//	m_pSkinnedMesh->Update();
+	if (m_pSkinnedMesh)
+		m_pSkinnedMesh->Update();
 
 	if (m_pMoveZealot)
 		m_pMoveZealot->Update(m_pMap);
@@ -235,8 +235,8 @@ void cMainGame::Render()
 	
 	//PickingObj_Render();
 	
-	//SkinnedMesh_Render();
-	OBB_Render();
+	SkinnedMesh_Render();
+	//OBB_Render();
 	Text_Render();
 	UI_Render();
 

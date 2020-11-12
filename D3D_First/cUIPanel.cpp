@@ -17,7 +17,6 @@ void cUIButton::OnMouseClick()
 void cUIButton::OnMouseHover()
 {
 	ChangeSprite("UI/btn-med-over.png");
-
 }
 
 void cUIButton::OnMouseLeave()

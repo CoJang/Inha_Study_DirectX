@@ -520,8 +520,8 @@ bool GameScene::IsMeshSphereCulled(MySphere & mesh)
 
 void GameScene::SetShader()
 {
-	//m_pShader = LoadShader("TextureMapping.fx");
-	m_pShader = LoadShader("ToonShader.fx");
+	m_pShader = LoadShader("TextureMapping.fx");
+	//m_pShader = LoadShader("ToonShader.fx");
 	if (!m_pShader) cout << "m_pShader Load Fail!" << endl;
 
 	m_pZealotDM = LoadTexture("Zealot/Zealot_Diffuse.bmp");
