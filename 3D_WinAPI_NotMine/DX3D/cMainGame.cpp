@@ -155,7 +155,7 @@ void cMainGame::Setup()
 
 	Setup_HeightMap();
 	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Zealot", "Dolphin1.x");
+	m_pSkinnedMesh->Setup("Zealot", "Model.X");
 	m_pSkinnedMesh->SetAnimationIndex(0);
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
@@ -465,13 +465,19 @@ void cMainGame::PickingObj_Render()
 
 void cMainGame::SkinnedMesh_Render()
 {
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
+	//g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
+	g_pD3DDevice->SetRenderState(D3DRS_CULLMODE, false);
+	
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	g_pD3DDevice->SetTexture(0, g_pTextureManager->GetTexture("Zealot/BlueHP.png"));
+	
 	if (m_pSkinnedMesh)
 		m_pSkinnedMesh->Render(NULL);
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+	//g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
+	g_pD3DDevice->SetTexture(0, NULL);
+	g_pD3DDevice->SetRenderState(D3DRS_CULLMODE, true);
 }
 
 void cMainGame::Setup_HeightMap()

@@ -106,8 +106,11 @@ void cSkinnedMesh::Render(LPD3DXFRAME pFrame)
 			g_pD3DDevice->SetTransform(D3DTS_WORLD, &pBone->CombinedTransformationMatrix);
 			for (size_t i = 0; i < pBoneMesh->vecMtl.size(); ++i) 
 			{
-				g_pD3DDevice->SetTexture(0, pBoneMesh->vecTexture[i]);
-				g_pD3DDevice->SetMaterial(&pBoneMesh->vecMtl[i]);
+				if(!pBoneMesh->vecTexture.empty())
+				{
+					g_pD3DDevice->SetTexture(0, pBoneMesh->vecTexture[i]);
+					g_pD3DDevice->SetMaterial(&pBoneMesh->vecMtl[i]);
+				}
 				pBoneMesh->MeshData.pMesh->DrawSubset(i);
 				g_pD3DDevice->SetTexture(0, NULL);
 			}
