@@ -86,6 +86,9 @@
     <ClInclude Include="SceneStateManager.h">
       <Filter>소스 파일\00.SceneStateManager</Filter>
     </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DxWindow.rc">

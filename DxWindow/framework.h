@@ -42,6 +42,8 @@ extern HWND g_hwnd;
 					return &instance; \
 				}
 
+
+
 #ifdef UNICODE
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
 #else

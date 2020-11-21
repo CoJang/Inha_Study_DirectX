@@ -155,7 +155,7 @@ void cMainGame::Setup()
 
 	Setup_HeightMap();
 	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Zealot", "Model.X");
+	m_pSkinnedMesh->Setup("Zealot", "Basic Attack.X");
 	m_pSkinnedMesh->SetAnimationIndex(0);
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
@@ -471,7 +471,7 @@ void cMainGame::SkinnedMesh_Render()
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
-	g_pD3DDevice->SetTexture(0, g_pTextureManager->GetTexture("Zealot/BlueHP.png"));
+	//g_pD3DDevice->SetTexture(0, g_pTextureManager->GetTexture("Zealot/BlueHP.png"));
 	
 	if (m_pSkinnedMesh)
 		m_pSkinnedMesh->Render(NULL);
