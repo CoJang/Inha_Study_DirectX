@@ -39,6 +39,12 @@
     <Filter Include="소스 파일\00.SceneStateManager">
       <UniqueIdentifier>{c72485d4-2830-4ad8-ac39-324f8e260610}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\95.OBJLoader">
+      <UniqueIdentifier>{08ab2ab4-497e-4d39-b378-d905077cfc32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Box">
+      <UniqueIdentifier>{09b50139-eb90-4eaa-8bb5-003ff7c0e3fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DxWindow.h">
@@ -89,6 +95,13 @@
     <ClInclude Include="Singleton.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ObjLoader.h">
+      <Filter>소스 파일\95.OBJLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjObject.h">
+      <Filter>소스 파일\95.OBJLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DxWindow.rc">
@@ -136,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="SceneStateManager.cpp">
       <Filter>소스 파일\00.SceneStateManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader.cpp">
+      <Filter>소스 파일\95.OBJLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjObject.cpp">
+      <Filter>소스 파일\95.OBJLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

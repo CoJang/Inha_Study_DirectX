@@ -2,6 +2,7 @@
 
 #include "cGrid.h"
 #include "MyCamera.h"
+#include "Box.h"
 
 
 #include "cGameScene.h"
@@ -9,6 +10,7 @@
 cGameScene::cGameScene()
 	:m_pGrid(nullptr)
 	,m_pCamera(nullptr)
+	,m_pBox(nullptr)
 {
 }
 

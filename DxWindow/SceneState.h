@@ -1,5 +1,7 @@
 #pragma once
 
+class cBox;
+
 class ISceneState
 {
 public:
@@ -32,6 +34,7 @@ class SSGame : public ISceneState
 {
 private:
 	MyGrid* m_pGrid;
+	cBox* m_pBox;
 public:
 	SSGame();
 	~SSGame() override;

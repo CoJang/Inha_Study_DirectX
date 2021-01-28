@@ -2,12 +2,14 @@
 
 class MyGrid;
 class MyCamera;
+class cBox;
 
 class cGameScene
 {
 private:
 	MyGrid* m_pGrid;
 	MyCamera* m_pCamera;
+	cBox* m_pBox;
 public:
 // Basic Func
 	cGameScene();

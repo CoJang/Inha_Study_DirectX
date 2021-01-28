@@ -155,7 +155,7 @@ void cMainGame::Setup()
 
 	Setup_HeightMap();
 	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("Zealot", "Basic Attack.X");
+	m_pSkinnedMesh->Setup("Zealot", "zealot.X");
 	m_pSkinnedMesh->SetAnimationIndex(0);
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
