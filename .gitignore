@@ -23,6 +23,7 @@
 [Xx]64/
 [Ii]pch/
 [Dd]ebug/
+[Dd]ebug_Win32/
 [Rr]elease/
 
 # Gradle cache directory
