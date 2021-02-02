@@ -53,6 +53,15 @@ void Context::Update()
 
 void Context::Render()
 {
+	//0202
+	ImGui::SliderFloat3("Camera", (float*)&position, -20, 20);
+	D3DXVECTOR3 forward(0, 0, 1);
+	D3DXVECTOR3 right(1, 0, 0);
+	D3DXVECTOR3 up(0, 1, 0);
+
+	D3DXMatrixLookAtLH(&view, &position, &(position + forward), &up);
+
+	
 	viewport->RSSetViewport();
 }
 

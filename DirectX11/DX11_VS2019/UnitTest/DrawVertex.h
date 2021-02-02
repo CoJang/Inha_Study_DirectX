@@ -19,5 +19,7 @@ private:
 	ID3D11Buffer*	vertexBuffer;
 
 	Color			color;
-	UINT			number;
+	//UINT			number;
+	UINT			indices[6];
+	ID3D11Buffer*	indexBuffer;
 };
