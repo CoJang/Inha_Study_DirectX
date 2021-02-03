@@ -161,6 +161,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)UnitTest\</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Renders\Context.h" />
     <ClInclude Include="Renders\Shader.h" />
@@ -184,6 +185,7 @@ copy /Y "$(SolutionDir)Debug\Framework.pdb" "$(SolutionDir)UnitTest\</Command>
     <ClInclude Include="Viewer\Viewport.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Renders\Context.cpp" />
     <ClCompile Include="Renders\Shader.cpp" />
     <ClCompile Include="Renders\Texture.cpp" />

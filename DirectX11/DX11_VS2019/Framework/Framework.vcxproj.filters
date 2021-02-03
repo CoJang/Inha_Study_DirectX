@@ -76,6 +76,9 @@
       <Filter>Viewer</Filter>
     </ClInclude>
     <ClInclude Include="Framework.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>Viewer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renders\Context.cpp">
@@ -130,6 +133,9 @@
       <Filter>Viewer</Filter>
     </ClCompile>
     <ClCompile Include="Viewer\Viewport.cpp">
+      <Filter>Viewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>Viewer</Filter>
     </ClCompile>
   </ItemGroup>
